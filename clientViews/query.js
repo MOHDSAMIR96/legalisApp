@@ -6,11 +6,8 @@ import { createStackNavigator } from 'react-navigation-stack';
 
 import {PanResponder, Animated} from 'react-native';
 
-
-/*<Button title="SIGUIENTE" color="#747A87" type="clear" onPress={()=> {  this.sendDescription()
-                                                                                                  this.props.navigation.navigate('ChatConsulta')}
-                                                                                                  }/>*/
-
+import {changerUserIdDispatcher} from '../redux/dispatcher.js'
+import store from '../redux/store.js'
 
 export default class Query extends React.Component {//ESTA PARTE ES LA VISTA DE EL INICIO DE LA CONSULTA
 constructor(props){
@@ -74,7 +71,7 @@ constructor(props){
 
 }
 
-  sendDescription(){Alert.alert(this.state.subjects[this.state.activeSubjectCounter])
+  sendDescription(){
 
     let clientData = {
         "users_name": this.state.userName,
@@ -88,10 +85,11 @@ constructor(props){
 
     fetch("http://patoexer.pythonanywhere.com/user", options)
         .then((response)=> response.json())
-        .then((data)=> {Alert.alert(this.state.activeSubject)
+        .then((data)=> {
+         changerUserIdDispatcher(data.lastId.toString())
 
         })
-        .catch(error => console.log(error))
+        .catch(error => Alert.alert(error.message))
 
 
   }
@@ -103,7 +101,6 @@ constructor(props){
   }
 
   componentDidMount(){
-
   }
 
   render() {
@@ -189,3 +186,4 @@ const styles = StyleSheet.create({
 
   },
 });
+

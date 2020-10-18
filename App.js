@@ -1,12 +1,15 @@
 import React, { Component } from 'react';
-import { Platform, StyleSheet, Text, View, Button, Image, List, TextInput, FormLabel, FormInput, FormValidationMessage, ScrollView, PanResponder } from 'react-native';
+import { Platform, StyleSheet, Text, View, Button, Alert, Image, List, TextInput, FormLabel, FormInput, FormValidationMessage, ScrollView, PanResponder } from 'react-native';
 import { ThemeProvider, Avatar, Card, ListItem, Icon, FlatList} from 'react-native-elements';
-import { createAppContainer } from 'react-navigation';
+import { createAppContainer, TabNavigator  } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 
+import { Provider, connect } from 'react-redux';
+import store from './redux/store.js'
+
 import Query from './clientViews/query.js';
-import Home from './clientViews/home.js';
-import QueryChat from './clientViews/queryChat.js';
+import {Home} from './clientViews/home.js';
+import {QueryChat} from './clientViews/queryChat.js';
 import ClientRegister from './clientViews/register.js';
 import ClientProfile from './clientViews/clientProfile.js';
 import CaseChat from './clientViews/caseChat.js';
@@ -24,14 +27,14 @@ const instructions = Platform.select({
 });
 
 
-const AppNavigator = createStackNavigator(
+const AppNavigator = createStackNavigator(//STACKNAVIGATOR TIENE PROBLEMAS CON EL PROVIDER DE REDUX, PUES NO LO TOMA COMO UN COMPONENTE
   {
     Home: Home,
     QueryChat: QueryChat,
     Query: Query,
     ClientRegister: ClientRegister,
     ClientProfile: ClientProfile,
-    CaseChat: CaseChat,//CHAT DE LA CAUSA
+    CaseChat: CaseChat,
     VoiceRecognition: VoiceRecognition,
 
     LawyerRegister: LawyerRegister,
@@ -44,10 +47,19 @@ const AppNavigator = createStackNavigator(
   }
 );
 
+
+
+
+
 const AppContainer = createAppContainer(AppNavigator);
 
 export default class App extends React.Component {
   render() {
-    return <AppContainer />;
+    return(
+        <Provider store={store}>
+            <AppContainer />
+        </Provider>
+
+    )
   }
 }

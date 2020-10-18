@@ -4,11 +4,13 @@ import { ThemeProvider, Avatar, Card, ListItem, Icon, FlatList} from 'react-nati
 import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 
+import { Provider, connect } from 'react-redux';
+import store from '../redux/store.js'
 
 import {Animated} from 'react-native';
 
 
-export default class QueryChat extends React.Component {
+export class QueryChat extends React.Component {
 
     constructor(props){
     super(props)
@@ -25,15 +27,12 @@ export default class QueryChat extends React.Component {
 
   componentDidMount(){
     //----------------------GET TO /USERS
-    const url = ''
-    //axios.get(url, {/*QUERY PARAMS POR URL*/})
-    //.then(response => {
-    //    response.data
-    //})
-    //.catch(e => {
-    //    Alert.alert(e)
-    //})
-
+    /*fetch("http://patoexer.pythonanywhere.com/user")
+    .then((response)=> response.json())
+            .then((data)=> {
+                //this.setState({textoEjemplo: data})
+            })
+            .catch(error => Alert.alert(error.message))*/
     //----------------------POST TO /MESSAGES
 
 
@@ -46,7 +45,7 @@ export default class QueryChat extends React.Component {
   sendMessage(){
 
   //-----------------------GET TO /MESSAGES
-    Alert.alert("funciona")
+
   }
 
   showCase(){
@@ -72,7 +71,7 @@ export default class QueryChat extends React.Component {
             </View>
             <View style={{flex: 35}}>
                 <View style={{flex: 5}}>
-                    <Text onPress={this.showCase} style={styles.welcomeSmall}>RESUMEN CASO</Text>
+                    <Text onPress={this.showCase} style={styles.welcomeSmall}>RESUMEN CASO{this.props.id}</Text>
                     <ScrollView>
                     <Text style={{fontSize: 20, color: "white", textAlign: 'justify', paddingRight:30}}>{this.state.textoEjemplo}</Text>
                     </ScrollView>
@@ -94,7 +93,7 @@ export default class QueryChat extends React.Component {
             </ScrollView>
         </View>
         <View style={{flex: 13, flexDirection: 'row', borderColor: "#4170f9", borderTopWidth: 3}}>
-            <View style={{flex:1, flexDirection:'column'}}><Text>  </Text><Icon size={50} name='credit-card' color='gold'  onPress={() => this.props.navigation.navigate('ClientRegister')}/></View>
+            <View style={{flex:1, flexDirection:'column'}}><Text>  </Text><Icon size={50} name='credit-card' color='gold'  onPress={() => {changerUserIdDispatcher(data.lastId.toString())} /*this.props.navigation.navigate('ClientRegister')*/}/></View>
             <View style={{flex:4}}><Text> </Text><TextInput style={{backgroundColor: "white", borderWidth:2, borderColor:"gray", borderRadius:10, height:60}}/></View>
             <View style={{flex:1}}><Text> </Text><Icon onPress={this.sendMessage} size={50} name='send' color='#4170f9'/></View>
         </View>
@@ -143,3 +142,10 @@ const styles = StyleSheet.create({
     textAlign: 'right'
     },
 });
+
+
+function mapStateToProps(state){
+  return {id: state.userId}
+}
+
+export default connect(mapStateToProps, {})(QueryChat);

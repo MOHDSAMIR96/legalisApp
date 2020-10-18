@@ -1,19 +1,23 @@
 import React, { Component } from 'react';
-import { Platform, StyleSheet, Text, View, Button, Image, List, TextInput, FormLabel, FormInput, FormValidationMessage, ScrollView, PanResponder } from 'react-native';
+import { Platform, Alert, StyleSheet, Text, View, Button, Image, List, TextInput, FormLabel, FormInput, FormValidationMessage, ScrollView, PanResponder } from 'react-native';
 import { ThemeProvider, Avatar, Card, ListItem, Icon, FlatList} from 'react-native-elements';
 import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 
-export default class Home extends Component {
+import { Provider, connect } from 'react-redux';
+import store from '../redux/store.js'
+
+export class Home extends Component {
   render() {
     return (
-         <View style={{flex:1, flexDirection: 'row', backgroundColor: "#4170f9"}}>
+    <Provider store={store}>
+         <View style={{flex:1, flexDirection: 'row', backgroundColor: "#4170f9"}}><Text></Text>
             <View style={{flex:1, backgroundColor: "#4170f9"}}></View>
             <View style={{flex:7}}>
                 <View style={{flex:3, backgroundColor: "#4170f9"}}></View>
                <View style={{flex:15}}>
                     <Image source={require('../images/logo.png')} style={styles.img}/>
-                    <Button color="#747A87" title="Busco abogado" onPress={() => this.props.navigation.navigate('Query')}/>
+                    <Button color="#747A87" title="Busco abogado" onPress={() => {this.props.navigation.navigate('Query')}}/>
                     <Text>  </Text>
                     <Button color="#747A87" title="Ya soy cliente" onPress={() => this.props.navigation.navigate('ClientRegister')}/>
                     <Text>  </Text>
@@ -23,6 +27,7 @@ export default class Home extends Component {
             </View>
             <View style={{flex:1, backgroundColor: "#4170f9"}}></View>
           </View>
+          </Provider>
     );
   }
 }
@@ -41,3 +46,7 @@ const styles = StyleSheet.create({
     fontSize: 40,
   },
 });
+
+export const connectedHomeComponent = connect(state =>({
+id: state.userId
+}))(Home)
