@@ -6,6 +6,7 @@ import { createStackNavigator } from 'react-navigation-stack';
 
 import { Provider, connect } from 'react-redux';
 import store from '../redux/store.js'
+import {changerUserIdDispatcher} from '../redux/dispatcher.js';
 
 import {Animated} from 'react-native';
 
@@ -20,7 +21,7 @@ export class QueryChat extends React.Component {
                 animate: new Animated.Value(4),
                 registerBtnDisplayed: false,
                 messages: [{key:1, value: "Hola como va mi trámite", fromUser: true},{key:2, value: "Hola el lunes sabemos de la inscripcion, a si que todo va de acuerdo al plan ok wn",fromUser: false},{key:3, value: "A pero que bien entonces me avisas",fromUser: true},{key:4, value: "si no te preocupes, saludos", fromUser: false},{key:5, value: "si no te preocupes, saludos", fromUser: true}, {key:6, value: "no me remede", fromUser: false}, {key:7, value: "sdcdskcmdscmdslcmdslcs cdsx dsxdscds csdcds cpksd cds csdpl csd cksd cpds cds cpsd cp dskc dscp", fromUser: true}],
-                textoEjemplo: "On the other hand, we denounce with righteous indignation and dislike men who are so beguiled and demoralized by the charms of pleasure of the moment, so blinded by desire, that they cannot foresee the pain and trouble that are bound to ensue; and equal blame belongs to those who fail in their duty through weakness of will, which is the same as saying through shrinking from toil and pain. These cases are perfectly simple and easy to distinguish. In a free hour, when our power of choice is untrammelled and when nothing prevents our being able to do what we like best, every pleasure is to be welcomed and every pain avoided. But in certain circumstances and owing to the claims of duty or the obligations of business it will frequently occur that pleasures have to be repudiated and annoyances accepted. The wise man therefore always holds in these matters to this principle of selection: he rejects pleasures to secure other greater pleasures, or else he endures pains to avoid worse pains"
+                textoEjemplo: JSON.stringify(this.props)
             }
     }
 
@@ -71,7 +72,7 @@ export class QueryChat extends React.Component {
             </View>
             <View style={{flex: 35}}>
                 <View style={{flex: 5}}>
-                    <Text onPress={this.showCase} style={styles.welcomeSmall}>RESUMEN CASO{this.props.id}</Text>
+                    <Text onPress={this.showCase} style={styles.welcomeSmall}>RESUMEN CASO --->{this.props.userId}</Text>
                     <ScrollView>
                     <Text style={{fontSize: 20, color: "white", textAlign: 'justify', paddingRight:30}}>{this.state.textoEjemplo}</Text>
                     </ScrollView>
@@ -93,7 +94,14 @@ export class QueryChat extends React.Component {
             </ScrollView>
         </View>
         <View style={{flex: 13, flexDirection: 'row', borderColor: "#4170f9", borderTopWidth: 3}}>
-            <View style={{flex:1, flexDirection:'column'}}><Text>  </Text><Icon size={50} name='credit-card' color='gold'  onPress={() => {changerUserIdDispatcher(data.lastId.toString())} /*this.props.navigation.navigate('ClientRegister')*/}/></View>
+            <View style={{flex:1, flexDirection:'column'}}><Text>  </Text><Icon size={50} name='credit-card' color='gold'  onPress={() => {
+            if(this.props.userId == undefined){
+            Alert.alert("undefined")
+            Alert.alert(JSON.stringify(this.props))
+            }
+            changerUserIdDispatcher("funciona")
+
+            } /*this.props.navigation.navigate('ClientRegister')*/}/></View>
             <View style={{flex:4}}><Text> </Text><TextInput style={{backgroundColor: "white", borderWidth:2, borderColor:"gray", borderRadius:10, height:60}}/></View>
             <View style={{flex:1}}><Text> </Text><Icon onPress={this.sendMessage} size={50} name='send' color='#4170f9'/></View>
         </View>
@@ -143,9 +151,9 @@ const styles = StyleSheet.create({
     },
 });
 
+const mapStateToProps = (state) => {
 
-function mapStateToProps(state){
-  return {id: state.userId}
-}
+  return { userId: this.state.userId }
+};//ESTARA BIEN EL FUNCT?
 
-export default connect(mapStateToProps, {})(QueryChat);
+export default connect(mapStateToProps)(QueryChat);
