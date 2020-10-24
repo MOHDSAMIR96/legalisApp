@@ -1,4 +1,8 @@
-export const rootReducer = (state = { userId: 0}, action)=> {
+
+const initialState = {userId: 0}
+
+
+export const rootReducer = (state = initialState, action)=> {
 
     switch(action.type){
 

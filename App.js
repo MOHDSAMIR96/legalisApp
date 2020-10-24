@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import { Platform, StyleSheet, Text, View, Button, Alert, Image, List, TextInput, FormLabel, FormInput, FormValidationMessage, ScrollView, PanResponder } from 'react-native';
-import { ThemeProvider, Avatar, Card, ListItem, Icon, FlatList} from 'react-native-elements';
 import { createAppContainer, TabNavigator  } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 
-import { Provider, connect } from 'react-redux';
+import { Provider } from 'react-redux';
 import store from './redux/store.js'
 
+
+//IMPORTATION OF VIEW COMPONENTS
 import Query from './clientViews/query.js';
 import {Home} from './clientViews/home.js';
 import {QueryChat} from './clientViews/queryChat.js';
@@ -14,7 +14,6 @@ import ClientRegister from './clientViews/register.js';
 import ClientProfile from './clientViews/clientProfile.js';
 import CaseChat from './clientViews/caseChat.js';
 import VoiceRecognition from './specialComponents/VoiceRecognition.js';
-
 import LawyerRegister from './lawyerView/lawyerRegister.js';
 import ThanksMsg from './lawyerView/thanksMsg.js';
 import LawyerProfile from './lawyerView/lawyerProfile.js';
@@ -43,7 +42,7 @@ const AppNavigator = createStackNavigator(//STACKNAVIGATOR TIENE PROBLEMAS CON E
     LawyerCaseChat: LawyerCaseChat,
   },
   {
-    initialRouteName: 'Home',
+    initialRouteName: 'ClientRegister',
   }
 );
 

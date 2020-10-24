@@ -4,13 +4,12 @@ import { ThemeProvider, Avatar, Card, ListItem, Icon, FlatList} from 'react-nati
 import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 
-import { Provider, connect } from 'react-redux';
-import store from '../redux/store.js'
+
 
 export class Home extends Component {
   render() {
     return (
-    <Provider store={store}>
+
          <View style={{flex:1, flexDirection: 'row', backgroundColor: "#4170f9"}}><Text></Text>
             <View style={{flex:1, backgroundColor: "#4170f9"}}></View>
             <View style={{flex:7}}>
@@ -27,7 +26,7 @@ export class Home extends Component {
             </View>
             <View style={{flex:1, backgroundColor: "#4170f9"}}></View>
           </View>
-          </Provider>
+
     );
   }
 }
@@ -47,6 +46,3 @@ const styles = StyleSheet.create({
   },
 });
 
-export const connectedHomeComponent = connect(state =>({
-id: state.userId
-}))(Home)

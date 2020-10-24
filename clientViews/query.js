@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component, useState}  from 'react';
 import { TouchableOpacity, Alert, Platform, StyleSheet, Text, View, Button, Image, TextInput, FormLabel, FormInput, FormValidationMessage, ScrollView } from 'react-native';
 import { ThemeProvider, Avatar, Card, ListItem, Icon} from 'react-native-elements';
 import { createAppContainer } from 'react-navigation';
@@ -6,28 +6,26 @@ import { createStackNavigator } from 'react-navigation-stack';
 
 import {PanResponder, Animated} from 'react-native';
 
-import {changerUserIdDispatcher} from '../redux/dispatcher.js'
-import store from '../redux/store.js'
+import { useSelector, useDispatch } from 'react-redux';
 
-export default class Query extends React.Component {//ESTA PARTE ES LA VISTA DE EL INICIO DE LA CONSULTA
-constructor(props){
-    super(props)
 
-    this.state = {
-    caseDescription: "",
-    userName: "",
-    animatePosition: new Animated.Value(0),
-    subjects: ['CONTRATOS', 'HERENCIA', 'FAMILIA', 'LABORAL', 'PREVISIONAL'],
-    activeSubject: "",
-    activeSubjectCounter: 0,
-    fetchResponse: ""
-    };
-    //REACT REFERENCES
-    this.element = React.createRef();
+export default function Query({navigation}){//ESTA PARTE ES LA VISTA DE EL INICIO DE LA CONSULTA
+
+    const [subjects, setNewSubjects] = useState(['CONTRATOS', 'HERENCIA', 'FAMILIA', 'LABORAL', 'PREVISIONAL']);
+    const [activeSubject, setNewActiveSubject] = useState("");
+    const [activeSubjectCounter, setNewActiveSubjectCounter] = useState(0);
+    const [animatePosition, setNewAnimatePosition] = useState(new Animated.Value(0));
+    const [caseDescription, setNewCaseDescription] = useState("");
+    const [userName, setNewUserName] = useState("");
+    const [fetchResponse, setNewFetchResponse] = useState("");
+
+    //REDUX STATE
+    const store = useSelector(state => state.userId);
+    const dispatch = useDispatch();
 
 
 
-     this._panResponder = PanResponder.create({
+     const _panResponder = PanResponder.create({
           // Ask to be the responder:
           //onStartShouldSetPanResponder: (evt, gestureState) => true,
           //onStartShouldSetPanResponderCapture: (evt, gestureState) => true,
@@ -52,12 +50,12 @@ constructor(props){
           // responder. This typically means a gesture has succeeded
 
             if(gestureState.dx<0){
-                  Animated.timing(this.state.animatePosition, {toValue: this.state.animatePosition.__getValue() + 80, duration: 500}).start()
-                    this.setState({activeSubjectCounter: this.state.activeSubjectCounter +1})
+                  Animated.timing(animatePosition, {toValue: animatePosition.__getValue() + 80, duration: 500}).start()
+                  setNewActiveSubjectCounter(activeSubjectCounter + 1)
                 }
                 else{
-                Animated.timing(this.state.animatePosition, {toValue: this.state.animatePosition.__getValue() - 80, duration: 500}).start()
-                this.setState({activeSubjectCounter: this.state.activeSubjectCounter -1})
+                Animated.timing(animatePosition, {toValue: animatePosition.__getValue() - 80, duration: 500}).start()
+                setNewActiveSubjectCounter(activeSubjectCounter - 1)
                 }
           },
           onPanResponderTerminate: (evt, gestureState) => {
@@ -68,16 +66,14 @@ constructor(props){
 
         })
 
-
-}
-
-  sendDescription(){
+  const sendDescription=()=>{
 
     let clientData = {
-        "users_name": this.state.userName,
-        "users_issue_subject": this.state.subjects[this.state.activeSubjectCounter],
-        "users_issue_description": this.state.caseDescription
+        "users_name": userName,
+        "users_issue_subject": subjects[activeSubjectCounter],
+        "users_issue_description": caseDescription
     }
+
     let options = {
                 method: 'POST',
                 body: JSON.stringify(clientData),
@@ -86,36 +82,32 @@ constructor(props){
     fetch("http://patoexer.pythonanywhere.com/user", options)
         .then((response)=> response.json())
         .then((data)=> {
-         changerUserIdDispatcher(data.lastId.toString())
 
+            dispatch({type: "USERID", doneAction: data.users_id});
         })
-        .catch(error => Alert.alert(error.message))
+        .catch(error => {})
 
 
   }
 
-  handleLayout({nativeEvent}){
+  const handleLayout = ({nativeEvent}) =>{
 
     //console.log(nativeEvent.layout)
 
   }
 
-  componentDidMount(){
-  }
-
-  render() {
     return (
     <View style={{flex: 1, backgroundColor: "#4170f9"}}>
 
-        <View style={{flex: 2}}><Text style={styles.welcome}>¿De qué trata tu problema? {this.state.fetchResponse}</Text></View>
+        <View style={{flex: 2}}><Text style={styles.welcome}>¿De qué trata tu problema? </Text></View>
         <View style={{ flex: 2, flexDirection: 'row'}}>
 
             <View style={{position: 'absolute', zIndex: 3, flex: 1, backgroundColor: "#4170f9"}}><Icon size={60} name='skip-previous' color='white'/></View>
                 <View style={{ width: "100%", flex:3, flexDirection: 'column', backgroundColor: "#4170f9"}}>
 
 
-                    <View   {...this._panResponder.panHandlers}>
-                        <Animated.Text onLayout={this.handleLayout} style={{width: 1540,fontSize: 40 ,right: this.state.animatePosition, color: "white", fontWeight: "bold", textAlign: "center"}}>      {this.state.subjects[this.state.activeSubjectCounter]}         {this.state.subjects[this.state.activeSubjectCounter + 1]}           {this.state.subjects[this.state.activeSubjectCounter + 2]}             {this.state.subjects[this.state.activeSubjectCounter+3]}      {this.state.subjects[this.state.activeSubjectCounter+4]}     </Animated.Text>
+                    <View   {..._panResponder.panHandlers}>
+                        <Animated.Text onLayout={handleLayout} style={{width: 1540, right: animatePosition, fontSize: 40 , color: "white", fontWeight: "bold", textAlign: "center"}}>      {subjects[activeSubjectCounter]}         {subjects[activeSubjectCounter + 1]}           {subjects[activeSubjectCounter + 2]}             {subjects[activeSubjectCounter+3]}      {subjects[activeSubjectCounter+4]}     </Animated.Text>
                     </View>
 
                     <View style={{flex:1, flexDirection: 'row', backgroundColor: "#4170f9"}}>
@@ -139,7 +131,7 @@ constructor(props){
                  <View style={{flex: 3, flexDirection: 'row', backgroundColor: "#4170f9"}}>
                      <View style={{flex: 1}}></View>
                        <View style={[{ flex:10, flexDirection: 'column', backgroundColor: "#4170f9"}]}>
-                          <TextInput multiline={true}  onChangeText={x=>this.setState({caseDescription: x})} style={{backgroundColor: 'white', height: 150, borderRadius:10}} />
+                          <TextInput onChangeText={x=> setNewCaseDescription(x)} multiline={true} style={{backgroundColor: 'white', height: 150, borderRadius:10}} />
 
                           <View style={{flex:1, flexDirection: 'row', backgroundColor: "#4170f9"}}ki>
                             <Text></Text>
@@ -152,7 +144,7 @@ constructor(props){
                 <View style={{flex: 2, flexDirection: 'row', backgroundColor: "#4170f9"}}>
                                      <View style={{flex: 1}}></View>
                                        <View style={[{ flex:10, flexDirection: 'column', backgroundColor: "#4170f9"}]}>
-                                         <TextInput onChangeText={x=>this.setState({userName: x})} style={{backgroundColor: 'white', borderRadius:10, marginTop: 20, marginBottom: 10}} />
+                                         <TextInput onChangeText={x=> setNewUserName(x)} style={{backgroundColor: 'white', borderRadius:10, marginTop: 20, marginBottom: 10}} />
 
                                           <View style={{flex:1, flexDirection: 'row', backgroundColor: "#4170f9"}}ki>
                                             <Text></Text>
@@ -165,8 +157,8 @@ constructor(props){
                 <TouchableOpacity
                         style={{backgroundColor: "#747A87", height: 70, color: 'white', alignItems: "center"}}
                         color="white"
-                        onPress={()=> {  this.sendDescription()
-                        this.props.navigation.navigate('QueryChat')}}
+                        onPress={()=> {  sendDescription()
+                        navigation.navigate('QueryChat')}}
                       >
                       <Text></Text>
                         <Text style={{fontSize:20, color: "white"}}>SIGUIENTE</Text>
@@ -174,7 +166,7 @@ constructor(props){
 
      </View>
     );
-  }
+  //}
 }
 
 const styles = StyleSheet.create({
