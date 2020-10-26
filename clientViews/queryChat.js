@@ -1,4 +1,4 @@
-import React, {Component, useState}  from 'react';
+import React, {Component, useState, useEffect}  from 'react';
 import { Platform, Alert, StyleSheet, Text, View, Button, Image, List, TextInput, FormLabel, FormInput, FormValidationMessage, ScrollView, PanResponder, Link } from 'react-native';
 import { ThemeProvider, Avatar, Card, ListItem, Icon, FlatList} from 'react-native-elements';
 import { createAppContainer } from 'react-navigation';
@@ -9,17 +9,52 @@ import {Animated} from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 
 
-export function QueryChat() {
+export function QueryChat({navigation}) {
+
+    //REDUX STATE
+    const store = useSelector(state => state.userData);
+    const dispatch = useDispatch();
 
     //FUNCTIONAL COMPONENT STATE
     const [registerBtnDisplayed, setNewRegisterBtnDisplayed] = useState(0);
     const [animate, setNewanimate] = useState(new Animated.Value(4));
     const [messages, setNewMessages] = useState([{key:1, value: "Hola como va mi trámite", fromUser: true}]);
-    const [textoEjemplo, setNewTextoEjemplo] = useState("Ejemplo texto....");
+    const [textoEjemplo, setNewTextoEjemplo] = useState(store.users_issue_description);
 
-    //REDUX STATE
-    const store = useSelector(state => state.userId);
-    const dispatch = useDispatch();
+     useEffect(()=>{
+      return ()=>{
+
+          let options = {
+                      method: 'DELETE',
+                      headers: {'Content-Type': 'application/json'}};
+
+          fetch("http://patoexer.pythonanywhere.com/user/" + store.users_id, options)
+              .then((response)=> response.json())
+              .then((data)=> {
+
+                  console.log("user borrado")
+              })
+              .catch(error => {})
+
+            }// return en useffect es como componentWillUnmunt
+
+      });
+
+   const payment = () => {
+
+   let options = {
+                         method: 'DELETE',
+                         headers: {'Content-Type': 'application/json'}};
+
+             fetch("http://patoexer.pythonanywhere.com/user/" + store.users_id, options)
+                 .then((response)=> response.json())
+                 .then((data)=> {
+
+                     console.log("user borrado")
+                     navigation.navigate('ClientRegister')
+                 })
+                 .catch(error => {})
+   }
 
    let showCase =() => {
 
@@ -46,7 +81,7 @@ export function QueryChat() {
             </View>
             <View style={{flex: 35}}>
                 <View style={{flex: 5}}>
-                    <Text onPress={showCase} style={styles.welcomeSmall}>RESUMEN CASO --->{store}</Text>
+                    <Text onPress={showCase} style={styles.welcomeSmall}>RESUMEN CASO</Text>
                     <ScrollView>
                     <Text style={{fontSize: 20, color: "white", textAlign: 'justify', paddingRight:30}}>{textoEjemplo}</Text>
                     </ScrollView>
@@ -71,14 +106,7 @@ export function QueryChat() {
             </ScrollView>
         </View>
         <View style={{flex: 13, flexDirection: 'row', borderColor: "#4170f9", borderTopWidth: 3}}>
-            <View style={{flex:1, flexDirection:'column'}}><Text>  </Text><Icon size={50} name='credit-card' color='gold'  onPress={() => {
-            if(this.props.userId == undefined){
-            Alert.alert("undefined")
-            Alert.alert(JSON.stringify(this.props))
-            }
-            changerUserIdDispatcher("funciona")
-
-            } /*this.props.navigation.navigate('ClientRegister')*/}/></View>
+            <View style={{flex:1, flexDirection:'column'}}><Text>  </Text><Icon size={50} name='credit-card' color='gold'  onPress={() => { payment() }}/></View>
             <View style={{flex:4}}><Text> </Text><TextInput style={{backgroundColor: "white", borderWidth:2, borderColor:"gray", borderRadius:10, height:60}}/></View>
             <View style={{flex:1}}><Text> </Text><Icon /*onPress={this.sendMessage}*/ size={50} name='send' color='#4170f9'/></View>
         </View>

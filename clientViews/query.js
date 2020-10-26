@@ -83,7 +83,8 @@ export default function Query({navigation}){//ESTA PARTE ES LA VISTA DE EL INICI
         .then((response)=> response.json())
         .then((data)=> {
 
-            dispatch({type: "USERID", doneAction: data.users_id});
+            dispatch({type: "USERDATA", doneAction: data});
+            navigation.navigate('QueryChat')
         })
         .catch(error => {})
 
@@ -158,7 +159,7 @@ export default function Query({navigation}){//ESTA PARTE ES LA VISTA DE EL INICI
                         style={{backgroundColor: "#747A87", height: 70, color: 'white', alignItems: "center"}}
                         color="white"
                         onPress={()=> {  sendDescription()
-                        navigation.navigate('QueryChat')}}
+                        }}
                       >
                       <Text></Text>
                         <Text style={{fontSize:20, color: "white"}}>SIGUIENTE</Text>

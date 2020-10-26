@@ -1,13 +1,13 @@
 
-const initialState = {userId: 0}
+const initialState = {userData: ""}
 
 
 export const rootReducer = (state = initialState, action)=> {
 
     switch(action.type){
 
-        case "USERID":
-            return {...state, userId: action.doneAction}
+        case "USERDATA":
+            return {...state, userData: action.doneAction}
          default:
             return state
     }

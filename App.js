@@ -42,7 +42,7 @@ const AppNavigator = createStackNavigator(//STACKNAVIGATOR TIENE PROBLEMAS CON E
     LawyerCaseChat: LawyerCaseChat,
   },
   {
-    initialRouteName: 'ClientRegister',
+    initialRouteName: 'Home',
   }
 );
 
