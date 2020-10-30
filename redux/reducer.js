@@ -1,5 +1,5 @@
 
-const initialState = {userData: ""}
+const initialState = {userData: "", userMessages: []}
 
 
 export const rootReducer = (state = initialState, action)=> {
@@ -8,6 +8,8 @@ export const rootReducer = (state = initialState, action)=> {
 
         case "USERDATA":
             return {...state, userData: action.doneAction}
+        case "NEW_MESSAGE":
+                    return {...state, userMessages: [...action.doneAction]}
          default:
             return state
     }

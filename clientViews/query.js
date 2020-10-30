@@ -1,4 +1,4 @@
-import React, {Component, useState}  from 'react';
+import React, {Component, useState, useEffect}  from 'react';
 import { TouchableOpacity, Alert, Platform, StyleSheet, Text, View, Button, Image, TextInput, FormLabel, FormInput, FormValidationMessage, ScrollView } from 'react-native';
 import { ThemeProvider, Avatar, Card, ListItem, Icon} from 'react-native-elements';
 import { createAppContainer } from 'react-navigation';
@@ -20,10 +20,8 @@ export default function Query({navigation}){//ESTA PARTE ES LA VISTA DE EL INICI
     const [fetchResponse, setNewFetchResponse] = useState("");
 
     //REDUX STATE
-    const store = useSelector(state => state.userId);
+    const store = useSelector(state => state.userData);
     const dispatch = useDispatch();
-
-
 
      const _panResponder = PanResponder.create({
           // Ask to be the responder:

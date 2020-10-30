@@ -37,8 +37,8 @@ export default function ClientRegister({navigation}){
     const [registerProfession, setNewRegisterProfession] = useState("");
     const [registerRut, setNewRegisterRut] = useState("");
 
-    const [user, setNewUSer] = useState("");
-    const [password, setNewPassword] = useState("");
+    const [rut, enterRut] = useState("");
+    const [password, enterPassword] = useState("");
 
     //REDUX STATE
         const store = useSelector(state => state.userData);
@@ -120,16 +120,14 @@ export default function ClientRegister({navigation}){
 
   const singInValidation = () => {
 
-    console.log(user)
-
-    fetch("http://patoexer.pythonanywhere.com/clients")// que uanma haga el get por rut y no por Id
+    fetch("http://patoexer.pythonanywhere.com/client/" + rut)// que uanma haga el get por rut y no por Id
                             .then((response)=> response.json())
                             .then((data)=> {
 
+                            (data.clients_password==password)? navigation.navigate('ClientProfile'): console.log("not verified")
+
                                     })
                             .catch(error => { })
-  //navigation.navigate('ClientProfile')
-
   }
 
 //this.state.flex.registerView fila64
@@ -231,7 +229,7 @@ export default function ClientRegister({navigation}){
         <View style={{flex: 1, flexDirection: 'row', backgroundColor: "#4170f9"}}>
             <View style={{flex:1, backgroundColor: "#4170f9"}}></View>
                      <View style={{flex:4, flexDirection: 'row', backgroundColor: "#4170f9"}}>
-                          <TextInput onChangeText={x=> setNewUSer(x)} placeholder = " NOMBRE" style={{ backgroundColor: "white", height: 40, width: "100%", borderColor: 'gray', borderWidth: 1, fontSize:20, borderRadius: 10 }}/>
+                          <TextInput onChangeText={x=> enterRut(x)} placeholder = " RUT" style={{ backgroundColor: "white", height: 40, width: "100%", borderColor: 'gray', borderWidth: 1, fontSize:20, borderRadius: 10 }}/>
                      </View>
             <View style={{flex:1}}></View>
         </View>
@@ -239,7 +237,7 @@ export default function ClientRegister({navigation}){
         <View style={{flex: 1, flexDirection: 'row', backgroundColor: "#4170f9"}}>
             <View style={{flex:1, backgroundColor: "#4170f9"}}></View>
                  <View style={{flex:4, flexDirection: 'row', backgroundColor: "#4170f9"}}>
-                       <TextInput onChangeText={x=> setNewPassword(x)} placeholder = " CLAVE" style={{ backgroundColor: "white", height: 40, width: "100%", borderColor: 'gray', borderWidth: 1, fontSize:20, borderRadius: 10 }}/>
+                       <TextInput onChangeText={x=> enterPassword(x)} placeholder = " CLAVE" style={{ backgroundColor: "white", height: 40, width: "100%", borderColor: 'gray', borderWidth: 1, fontSize:20, borderRadius: 10 }}/>
                   </View>
             <View style={{flex:1}}></View>
         </View>
