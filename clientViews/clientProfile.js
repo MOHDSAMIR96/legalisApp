@@ -1,20 +1,35 @@
-import React, { Component } from 'react';
+import React, {Component, useState, useEffect }  from 'react';
 import { TouchableOpacity, Alert, Platform, StyleSheet, Text, View, Button, Image, List, TextInput, FormLabel, FormInput, FormValidationMessage, ScrollView, PanResponder } from 'react-native';
 import { ThemeProvider, Avatar, Card, ListItem, Icon, FlatList} from 'react-native-elements';
 import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
+import { useSelector, useDispatch } from 'react-redux';
 
 
-export default class ClientProfile extends Component {
 
-  constructor(props){
+export default function ClientProfile({navigation}) {
+
+
+    //REDUX STATE
+        const store = useSelector(state => state.userData);
+        const dispatch = useDispatch();
+
+
+     useEffect(()=>{
+
+      console.log(JSON.stringify(store))
+
+
+
+     }, [])
+  /*constructor(props){
     super(props)
     this.state={
     incomingData: ""
     }
-  }
+  }*/
 
-  componentDidMount(){
+  /*componentDidMount(){
 
   //---------------GET TO /CLIENTS
   fetch('https://swapi.dev/api/people/1/')
@@ -23,9 +38,9 @@ export default class ClientProfile extends Component {
 
   //---------------GET TO /CASES
 
-  }
+  }*/
 
-  render() {
+  //render() {
     return (
 
 
@@ -40,7 +55,7 @@ export default class ClientProfile extends Component {
                 </View>
                 <View style={{flex:7, flexDirection:'column'}}>
                     <Text style={styles.welcome}>  Patricio Rojas</Text>
-                    <Text style={styles.instructions}>   patito_feo@gmail.com</Text>
+                    <Text style={styles.instructions}>   {JSON.stringify(store.casesResp)}</Text>
                 </View>
               </View>
 
@@ -54,20 +69,20 @@ export default class ClientProfile extends Component {
               <View style={{flex:6, flexDirection:'row'}}>
 
                   <ScrollView>
-                  <TouchableOpacity onPress={()=>{this.props.navigation.navigate('CaseChat')}}  style={styles.button}><Text style={{color: "white", fontSize: 25}}>{this.state.incomingData.name}</Text></TouchableOpacity>
+                  <TouchableOpacity onPress={()=>{navigation.navigate('CaseChat')}}  style={styles.button}><Text style={{color: "white", fontSize: 25}}>this.state.incomingData.name</Text></TouchableOpacity>
                   </ScrollView>
 
               </View>
 
               <View style={{flex:2, flexDirection: 'row'}}>
                 <View style={{flex:5}}></View>
-                <View style={{flex:2}}><Text></Text><Button onPress={()=>{this.props.navigation.navigate('Query')}} title="NUEVA CONSULTA" color="blue" type="clear" style={{width: 100, borderRadius: '100%'}}/></View>
+                <View style={{flex:2}}><Text></Text><Button onPress={()=>{navigation.navigate('Query')}} title="NUEVA CONSULTA" color="blue" type="clear" style={{width: 100, borderRadius: '100%'}}/></View>
                 <View style={{flex:1}}></View>
               </View>
 
            </View>
     );
-  }
+ // }
 }
 
 

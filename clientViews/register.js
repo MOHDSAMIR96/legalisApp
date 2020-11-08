@@ -74,9 +74,7 @@ export default function ClientRegister({navigation}){
     .then((response)=> response.json())
     .then((data)=> {
                 //POST TO CASES/
-
-                     console.log("primero entro, devuelve: " + JSON.stringify(data))
-                     console.log("clients_id " + JSON.stringify(data.clients_id))
+                     let dataToDispatch = {clientsResp: data, casesResp: ""};
 
                      let casesData = {
                                 "cases_date": currentDate,
@@ -93,12 +91,14 @@ export default function ClientRegister({navigation}){
                         fetch("http://patoexer.pythonanywhere.com/case", options2)
                         .then((response)=> response.json())
                         .then((data)=> {
-                                    console.log("segundo entró: " + JSON.stringify(data))
+                                    dataToDispatch.clientsResp = data;
+                                    dispatch({type: "USERDATA", doneAction: dataToDispatch});
+                                    console.log(dataToDispatch)
                                     navigation.navigate("ClientProfile")
                                 })
-                        .catch(error => {console.log("segundo: " + error)})// ARROJA SyntaxError: JSON Parse error: Unrecognized token '<', por server internal error del bakcend
+                        .catch(error => {})
             })
-    .catch(error => { console.log("primero: " + error)})
+    .catch(error => {})
 
   }
 
@@ -120,7 +120,7 @@ export default function ClientRegister({navigation}){
 
   const singInValidation = () => {
 
-    fetch("http://patoexer.pythonanywhere.com/client/" + rut)// que uanma haga el get por rut y no por Id
+    fetch("http://patoexer.pythonanywhere.com/client/" + rut)
                             .then((response)=> response.json())
                             .then((data)=> {
 
@@ -130,8 +130,6 @@ export default function ClientRegister({navigation}){
                             .catch(error => { })
   }
 
-//this.state.flex.registerView fila64
-  //render() {
     return (
       <View style={{flex: 1, flexDirection: 'column', backgroundColor: "#4170f9"}}>
         <View style={{flex:1, backgroundColor: "#4170f9"}}>
@@ -265,7 +263,6 @@ export default function ClientRegister({navigation}){
 
 
     )
-  //}
 }
 
 const styles = StyleSheet.create({

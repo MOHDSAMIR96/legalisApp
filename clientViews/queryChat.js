@@ -1,8 +1,17 @@
-import React, {Component, useState, useEffect}  from 'react';
+import React, {Component, useState, useEffect, useRef }  from 'react';
 import { Platform, Alert, StyleSheet, Text, View, Button, Image, List, TextInput, FormLabel, FormInput, FormValidationMessage, ScrollView, PanResponder, Link } from 'react-native';
 import { ThemeProvider, Avatar, Card, ListItem, Icon, FlatList} from 'react-native-elements';
-import { createAppContainer } from 'react-navigation';
+import { createAppContainer, NavigationActions, StackActions } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
+import { CommonActions } from '@react-navigation/native';
+//IMPORTATION OF VIEW COMPONENTS
+import Query from './query.js';
+import {Home} from './home.js';
+import ClientRegister from './register.js';
+import ClientProfile from './clientProfile.js';
+import CaseChat from './caseChat.js';
+
+
 
 import {Animated} from 'react-native';
 
@@ -21,26 +30,31 @@ export function QueryChat({navigation}) {
     const [textoEjemplo, setNewTextoEjemplo] = useState(store.users_issue_description);
     const [messageInputContent, setMessageInputContent] = useState("");
     const [message, enterMessage] = useState([]);
+    const [returnedMessageId, setReturnedMessageId] = useState(0);
+    const [stillTypingAdvisor, booleanStillTypingAdvisor] = useState(false);
+
+    //REFERENCES
+    const inputRef = useRef(null);
+    const typingRef = useRef(null);
 
      useEffect(()=>{
 
-       let intervalQuery = setInterval(()=>{
-       fetch("http://patoexer.pythonanywhere.com/message/" + store.users_id)
-                                   .then((response)=> response.json())
-                                   .then((data)=> {
-                                    console.log("message[message.length - 1 ]: " + message[message.length - 1 ])
-                                    console.log("data[data.length - 1].messages_content: " + data[data.length - 1].messages_content)
-                                   if(message[message.length - 1 ]!= data[data.length - 1].messages_content){
-                                         enterMessage([...data])
-                                         }
-                                   })
-
-       },1000)
+                      let fetchInterval = setInterval(()=>{
+                                         fetch("http://patoexer.pythonanywhere.com/message/" + store.users_id)
+                                         .then((response)=> response.json())
+                                         .then((data)=>
+                                                       {
+                                                       if(message[message.length - 1 ]!= data[data.length - 1].messages_content){
+                                                             if(data[data.length - 1].messages_content =="typing..."){
+                                                             this.typingRef.current.style = "inline"
+                                                             }
+                                                             else{enterMessage([...data])}
+                                                             }
+                                                       })
+                                       }, 1000);
 
       return ()=>{
-
-          clearInterval(intervalQuery);
-
+          clearInterval(fetchInterval);
           let options = {
                       method: 'DELETE',
                       headers: {'Content-Type': 'application/json'}};
@@ -54,7 +68,36 @@ export function QueryChat({navigation}) {
             }// return en useffect es como componentWillUnmunt
 
       }, []);
-//-----------------------------
+
+   const typing = (x) => {
+       let today = new Date();
+       let currentDate = today.getFullYear() + "-" + (today.getMonth() + 1) + "-" + today.getDate()
+
+       let casesData = {
+                             "messages_date": currentDate,
+                             "messages_content": "typing...",
+                             "messages_origin": "user",
+                             "user_id": store.users_id
+                           }
+
+          let options2 = {
+                             method: 'POST',
+                             body: JSON.stringify(casesData),
+                             headers: {'Content-Type': 'application/json'}};
+
+           if(!stillTypingAdvisor){
+
+           fetch("http://patoexer.pythonanywhere.com/message/1", options2)
+              .then((response)=> response.json())
+              .then((data)=> {
+              setReturnedMessageId(data.messages_id)
+              console.log(JSON.stringify(data))})
+           }
+
+        booleanStillTypingAdvisor(true);
+
+   }
+
    const enterNewMessage = () =>{
 
    let today = new Date();
@@ -62,20 +105,26 @@ export function QueryChat({navigation}) {
    let casesData = {
                       "messages_date": currentDate,
                       "messages_content": messageInputContent,
-                      "user_id": store.users_id
+                      "messages_id": returnedMessageId
                     }
 
    let options2 = {
-                      method: 'POST',
+                      method: 'PUT',
                       body: JSON.stringify(casesData),
                       headers: {'Content-Type': 'application/json'}};
 
-   fetch("http://patoexer.pythonanywhere.com/message/1", options2)
-   .then((response)=> response.json())
-   .then((data)=> {console.log(JSON.stringify(data))})
+    if(stillTypingAdvisor){
+
+    fetch("http://patoexer.pythonanywhere.com/message/1", options2)
+       .then((response)=> response.json())
+       .then((data)=> {console.log(JSON.stringify(data))})
+    }
+
+    booleanStillTypingAdvisor(false);
+    inputRef.current.clear()
 
    }
-//------------------------------------------
+
    const payment = () => {
 
    let options = {
@@ -85,14 +134,14 @@ export function QueryChat({navigation}) {
              fetch("http://patoexer.pythonanywhere.com/user/" + store.users_id, options)
                  .then((response)=> response.json())
                  .then((data)=> {
-
-                     console.log("user borrado")
-                     navigation.navigate('ClientRegister')
+                    return navigation.reset([NavigationActions.navigate({routeName: 'ClientRegister'})]);
                  })
                  .catch(error => {})
+
+
    }
 
-   let showCase =() => {
+   const showCase =() => {
 
    dispatch({type: "USERID", doneAction: 43})
     if(registerBtnDisplayed == 0){
@@ -107,6 +156,7 @@ export function QueryChat({navigation}) {
     }
 
   }
+
 
     return (
 
@@ -128,12 +178,17 @@ export function QueryChat({navigation}) {
             </View>
         </Animated.View >
         <View style={{flex: 70}}>
+        <Text ref={typingRef} style={{display: 'none'}}>El abogado esta escribiendo...</Text>
             <ScrollView style={{flex: 5, flexDirection: 'column', height: 150, backgroundColor: "white"}}>
                 {
                   message.map(
                     function(item, index)
                     {
-                        return <Text key={index} style={styles.lawyerStyle}> {item.messages_content} </Text>
+                        let style;
+                        if(item.messages_origin=="lawyer"){
+                            style = styles.lawyerStyle;
+                        }else{style = styles.clientStyle;}
+                        return <Text key={index} style={style}> {item.messages_content} </Text>
                     }
 
                                 )
@@ -142,7 +197,7 @@ export function QueryChat({navigation}) {
         </View>
         <View style={{flex: 13, flexDirection: 'row', borderColor: "#4170f9", borderTopWidth: 3}}>
             <View style={{flex:1, flexDirection:'column'}}><Text>  </Text><Icon size={50} name='credit-card' color='gold'  onPress={() => { payment() }}/></View>
-            <View style={{flex:4}}><Text> </Text><TextInput onChangeText={x=> setMessageInputContent(x)} style={{backgroundColor: "white", borderWidth:2, borderColor:"gray", borderRadius:10, height:60}}/></View>
+            <View style={{flex:4}}><Text> </Text><TextInput ref={inputRef} onChangeText={x=> {setMessageInputContent(x); typing(x)}} style={{backgroundColor: "white", borderWidth:2, borderColor:"gray", borderRadius:10, height:60}}/></View>
             <View style={{flex:1}}><Text> </Text><Icon onPress={enterNewMessage} size={50} name='send' color='#4170f9'/></View>
         </View>
      </View>
