@@ -50,8 +50,6 @@ export default function ClientRegister({navigation}){
   let currentDate = today.getFullYear() + "-" + (today.getMonth() + 1) + "-" + today.getDate()
 
   //POST TO CLIENTS/
-  console.log("store: " + JSON.stringify(store));
-    console.log("username: " + JSON.stringify(store.users_name));
     let clientData = {
             "clients_address": registerAddress,
              "clients_avatar": registerAvatar,
@@ -91,9 +89,8 @@ export default function ClientRegister({navigation}){
                         fetch("http://patoexer.pythonanywhere.com/case", options2)
                         .then((response)=> response.json())
                         .then((data)=> {
-                                    dataToDispatch.clientsResp = data;
+                                    dataToDispatch.casesResp = data;
                                     dispatch({type: "USERDATA", doneAction: dataToDispatch});
-                                    console.log(dataToDispatch)
                                     navigation.navigate("ClientProfile")
                                 })
                         .catch(error => {})
@@ -123,6 +120,16 @@ export default function ClientRegister({navigation}){
     fetch("http://patoexer.pythonanywhere.com/client/" + rut)
                             .then((response)=> response.json())
                             .then((data)=> {
+                            let dataToDispatch = {clientsResp: data, casesResp: ""};
+
+                            fetch("http://patoexer.pythonanywhere.com/case/" + data.clients_id)
+                                                    .then((response)=> response.json())
+                                                    .then((data)=> {
+                                                                dataToDispatch.casesResp = data;
+                                                                dispatch({type: "USERDATA", doneAction: dataToDispatch});
+                                                                navigation.navigate("ClientProfile")
+                                                            })
+
 
                             (data.clients_password==password)? navigation.navigate('ClientProfile'): console.log("not verified")
 

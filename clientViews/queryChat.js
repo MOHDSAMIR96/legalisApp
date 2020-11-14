@@ -11,6 +11,8 @@ import ClientRegister from './register.js';
 import ClientProfile from './clientProfile.js';
 import CaseChat from './caseChat.js';
 
+import store from '../redux/store.js';
+
 
 
 import {Animated} from 'react-native';
@@ -43,12 +45,15 @@ export function QueryChat({navigation}) {
                                          fetch("http://patoexer.pythonanywhere.com/message/" + store.users_id)
                                          .then((response)=> response.json())
                                          .then((data)=>
-                                                       {
+                                                       { console.log(message[message.length - 1 ] + " vs " + data[data.length - 1].messages_content)
                                                        if(message[message.length - 1 ]!= data[data.length - 1].messages_content){
-                                                             if(data[data.length - 1].messages_content =="typing..."){
-                                                             this.typingRef.current.style = "inline"
+                                                             if(data[data.length - 1].messages_content == "typing..."){
+                                                             this.typingRef.current.style = "inline";
+                                                             console.log("FUNCIONA")
                                                              }
-                                                             else{enterMessage([...data])}
+                                                             else{
+                                                                enterMessage([...data])
+                                                             }
                                                              }
                                                        })
                                        }, 1000);
@@ -105,7 +110,9 @@ export function QueryChat({navigation}) {
    let casesData = {
                       "messages_date": currentDate,
                       "messages_content": messageInputContent,
-                      "messages_id": returnedMessageId
+                      "messages_id": returnedMessageId,
+                      "messages_origin": "user",
+                      "user_id": store.users_id
                     }
 
    let options2 = {

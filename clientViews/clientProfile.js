@@ -1,9 +1,20 @@
-import React, {Component, useState, useEffect }  from 'react';
+import React, {Component, useState, useEffect, useRef }  from 'react';
 import { TouchableOpacity, Alert, Platform, StyleSheet, Text, View, Button, Image, List, TextInput, FormLabel, FormInput, FormValidationMessage, ScrollView, PanResponder } from 'react-native';
 import { ThemeProvider, Avatar, Card, ListItem, Icon, FlatList} from 'react-native-elements';
 import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 import { useSelector, useDispatch } from 'react-redux';
+
+import logo1 from '../images/Avatar1.png'
+import logo2 from '../images/Avatar2.png'
+import logo3 from '../images/Avatar3.png'
+import logo4 from '../images/Avatar4.png'
+import logo5 from '../images/Avatar5.png'
+import logo6 from '../images/Avatar6.png'
+import logo7 from '../images/Avatar7.png'
+import logo8 from '../images/Avatar8.png'
+import logo9 from '../images/Avatar9.png'
+import logo10 from '../images/Avatar10.png'
 
 
 
@@ -14,33 +25,358 @@ export default function ClientProfile({navigation}) {
         const store = useSelector(state => state.userData);
         const dispatch = useDispatch();
 
+    //REFERENCES
+    const ref1 = useRef(null);
+    const ref2 = useRef(null);
+    const ref3 = useRef(null);
+    const ref4 = useRef(null);
+    const ref5 = useRef(null);
+    const ref6 = useRef(null);
+    const ref7 = useRef(null);
+    const ref8 = useRef(null);
+    const ref9 = useRef(null);
+    const ref10 = useRef(null);
+
+
+    // USESTATE
+        const [avatarArr, stateNewAvatarArr] = useState(['../images/Avatar1.png', '../images/Avatar2.png', '../images/Avatar3.png', '../images/Avatar4.png', '../images/Avatar5.png', '../images/Avatar6.png', '../images/Avatar7.png', '../images/Avatar8.png', '../images/Avatar9.png', '../images/Avatar10.png']);
+        const [imgRequireURL, setImgRequire] = useState('../images/Avatar1.png')
 
      useEffect(()=>{
+             if(avatarArr[store.clientsResp.clients_avatar - 1] == '../images/Avatar4.png'){
 
-      console.log(JSON.stringify(store))
+              ref1.current.setNativeProps({
+                                             display: 'none'
+                                          });
+              ref2.current.setNativeProps({
+                                             display: 'none'
+                                        });
+              ref3.current.setNativeProps({
+                                             display: 'none'
+                                        });
+              ref4.current.setNativeProps({
+                                             display: 'flex'
+                                        });
+              ref5.current.setNativeProps({
+                                             display: 'none'
+                                        });
+              ref6.current.setNativeProps({
+                                             display: 'none'
+                                        });
 
+              ref7.current.setNativeProps({
+                                             display: 'none'
+                                        });
+              ref8.current.setNativeProps({
+                                             display: 'none'
+                                        });
+              ref9.current.setNativeProps({
+                                             display: 'none'
+                                        });
+              ref10.current.setNativeProps({
+                                             display: 'none'
+                                        });
+             }
+else if(avatarArr[store.clientsResp.clients_avatar - 1] == '../images/Avatar1.png'){
+              ref1.current.setNativeProps({
+                                             display: 'flex'
+                                          });
+              ref2.current.setNativeProps({
+                                             display: 'none'
+                                        });
+              ref3.current.setNativeProps({
+                                             display: 'none'
+                                        });
+              ref4.current.setNativeProps({
+                                             display: 'none'
+                                        });
+              ref5.current.setNativeProps({
+                                             display: 'none'
+                                        });
+              ref6.current.setNativeProps({
+                                             display: 'none'
+                                        });
 
+              ref7.current.setNativeProps({
+                                             display: 'none'
+                                        });
+              ref8.current.setNativeProps({
+                                             display: 'none'
+                                        });
+              ref9.current.setNativeProps({
+                                             display: 'none'
+                                        });
+              ref10.current.setNativeProps({
+                                             display: 'none'
+                                        });
+             }
+else if(avatarArr[store.clientsResp.clients_avatar - 1] == '../images/Avatar2.png'){
+              ref1.current.setNativeProps({
+                                             display: 'none'
+                                          });
+              ref2.current.setNativeProps({
+                                             display: 'flex'
+                                        });
+              ref3.current.setNativeProps({
+                                             display: 'none'
+                                        });
+              ref4.current.setNativeProps({
+                                             display: 'none'
+                                        });
+              ref5.current.setNativeProps({
+                                             display: 'none'
+                                        });
+              ref6.current.setNativeProps({
+                                             display: 'none'
+                                        });
 
-     }, [])
-  /*constructor(props){
-    super(props)
-    this.state={
-    incomingData: ""
-    }
-  }*/
+              ref7.current.setNativeProps({
+                                             display: 'none'
+                                        });
+              ref8.current.setNativeProps({
+                                             display: 'none'
+                                        });
+              ref9.current.setNativeProps({
+                                             display: 'none'
+                                        });
+              ref10.current.setNativeProps({
+                                             display: 'none'
+                                        });
+             }
+else if(avatarArr[store.clientsResp.clients_avatar - 1] == '../images/Avatar3.png'){
+              ref1.current.setNativeProps({
+                                             display: 'none'
+                                          });
+              ref2.current.setNativeProps({
+                                             display: 'none'
+                                        });
+              ref3.current.setNativeProps({
+                                             display: 'flex'
+                                        });
+              ref4.current.setNativeProps({
+                                             display: 'none'
+                                        });
+              ref5.current.setNativeProps({
+                                             display: 'none'
+                                        });
+              ref6.current.setNativeProps({
+                                             display: 'none'
+                                        });
 
-  /*componentDidMount(){
+              ref7.current.setNativeProps({
+                                             display: 'none'
+                                        });
+              ref8.current.setNativeProps({
+                                             display: 'none'
+                                        });
+              ref9.current.setNativeProps({
+                                             display: 'none'
+                                        });
+              ref10.current.setNativeProps({
+                                             display: 'none'
+                                        });
+             }
+             else if(avatarArr[store.clientsResp.clients_avatar - 1] == '../images/Avatar5.png'){
+              ref1.current.setNativeProps({
+                                             display: 'none'
+                                          });
+              ref2.current.setNativeProps({
+                                             display: 'none'
+                                        });
+              ref3.current.setNativeProps({
+                                             display: 'none'
+                                        });
+              ref4.current.setNativeProps({
+                                             display: 'none'
+                                        });
+              ref5.current.setNativeProps({
+                                             display: 'flex'
+                                        });
+              ref6.current.setNativeProps({
+                                             display: 'none'
+                                        });
 
-  //---------------GET TO /CLIENTS
-  fetch('https://swapi.dev/api/people/1/')
-  .then(response => {return response.json();})
-  .then(data => { this.setState({incomingData: data}) })
+              ref7.current.setNativeProps({
+                                             display: 'none'
+                                        });
+              ref8.current.setNativeProps({
+                                             display: 'none'
+                                        });
+              ref9.current.setNativeProps({
+                                             display: 'none'
+                                        });
+              ref10.current.setNativeProps({
+                                             display: 'none'
+                                        });
+             }
+else if(avatarArr[store.clientsResp.clients_avatar - 1] == '../images/Avatar6.png'){
+              ref1.current.setNativeProps({
+                                             display: 'none'
+                                          });
+              ref2.current.setNativeProps({
+                                             display: 'none'
+                                        });
+              ref3.current.setNativeProps({
+                                             display: 'none'
+                                        });
+              ref4.current.setNativeProps({
+                                             display: 'none'
+                                        });
+              ref5.current.setNativeProps({
+                                             display: 'none'
+                                        });
+              ref6.current.setNativeProps({
+                                             display: 'flex'
+                                        });
 
-  //---------------GET TO /CASES
+              ref7.current.setNativeProps({
+                                             display: 'none'
+                                        });
+              ref8.current.setNativeProps({
+                                             display: 'none'
+                                        });
+              ref9.current.setNativeProps({
+                                             display: 'none'
+                                        });
+              ref10.current.setNativeProps({
+                                             display: 'none'
+                                        });
+             }
+else if(avatarArr[store.clientsResp.clients_avatar - 1] == '../images/Avatar7.png'){
+              ref1.current.setNativeProps({
+                                             display: 'none'
+                                          });
+              ref2.current.setNativeProps({
+                                             display: 'none'
+                                        });
+              ref3.current.setNativeProps({
+                                             display: 'none'
+                                        });
+              ref4.current.setNativeProps({
+                                             display: 'none'
+                                        });
+              ref5.current.setNativeProps({
+                                             display: 'none'
+                                        });
+              ref6.current.setNativeProps({
+                                             display: 'none'
+                                        });
 
-  }*/
+              ref7.current.setNativeProps({
+                                             display: 'flex'
+                                        });
+              ref8.current.setNativeProps({
+                                             display: 'none'
+                                        });
+              ref9.current.setNativeProps({
+                                             display: 'none'
+                                        });
+              ref10.current.setNativeProps({
+                                             display: 'none'
+                                        });
+             }
+      else if(avatarArr[store.clientsResp.clients_avatar - 1] == '../images/Avatar8.png'){
+                    ref1.current.setNativeProps({
+                                                   display: 'none'
+                                                });
+                    ref2.current.setNativeProps({
+                                                   display: 'none'
+                                              });
+                    ref3.current.setNativeProps({
+                                                   display: 'none'
+                                              });
+                    ref4.current.setNativeProps({
+                                                   display: 'none'
+                                              });
+                    ref5.current.setNativeProps({
+                                                   display: 'none'
+                                              });
+                    ref6.current.setNativeProps({
+                                                   display: 'none'
+                                              });
 
-  //render() {
+                    ref7.current.setNativeProps({
+                                                   display: 'none'
+                                              });
+                    ref8.current.setNativeProps({
+                                                   display: 'flex'
+                                              });
+                    ref9.current.setNativeProps({
+                                                   display: 'none'
+                                              });
+                    ref10.current.setNativeProps({
+                                                   display: 'none'
+                                              });
+                   }
+else if(avatarArr[store.clientsResp.clients_avatar - 1] == '../images/Avatar9.png'){
+              ref1.current.setNativeProps({
+                                             display: 'none'
+                                          });
+              ref2.current.setNativeProps({
+                                             display: 'none'
+                                        });
+              ref3.current.setNativeProps({
+                                             display: 'none'
+                                        });
+              ref4.current.setNativeProps({
+                                             display: 'none'
+                                        });
+              ref5.current.setNativeProps({
+                                             display: 'none'
+                                        });
+              ref6.current.setNativeProps({
+                                             display: 'none'
+                                        });
+
+              ref7.current.setNativeProps({
+                                             display: 'none'
+                                        });
+              ref8.current.setNativeProps({
+                                             display: 'none'
+                                        });
+              ref9.current.setNativeProps({
+                                             display: 'flex'
+                                        });
+              ref10.current.setNativeProps({
+                                             display: 'none'
+                                        });
+             }
+else if(avatarArr[store.clientsResp.clients_avatar - 1] == '../images/Avatar10.png'){
+              ref1.current.setNativeProps({
+                                             display: 'none'
+                                          });
+              ref2.current.setNativeProps({
+                                             display: 'none'
+                                        });
+              ref3.current.setNativeProps({
+                                             display: 'none'
+                                        });
+              ref4.current.setNativeProps({
+                                             display: 'none'
+                                        });
+              ref5.current.setNativeProps({
+                                             display: 'none'
+                                        });
+              ref6.current.setNativeProps({
+                                             display: 'none'
+                                        });
+
+              ref7.current.setNativeProps({
+                                             display: 'none'
+                                        });
+              ref8.current.setNativeProps({
+                                             display: 'none'
+                                        });
+              ref9.current.setNativeProps({
+                                             display: 'none'
+                                        });
+              ref10.current.setNativeProps({
+                                             display: 'flex'
+                                        });
+             }
+
+      }, [])
+
     return (
 
 
@@ -48,14 +384,24 @@ export default function ClientProfile({navigation}) {
               <View style={{flex:1}}></View>
               <View style={{flex:2, flexDirection:'row'}}>
                 <View style={{flex:1, flexDirection:'column'}}>
-                   <Text> </Text>
+                   <Text></Text>
                 </View>
                 <View style={{flex:2, flexDirection:'column'}}>
-                    <Image rounded style={{width: 80, height: 80}} source={require('../images/Avatar9.png')}  />
+                    <Image rounded  ref={ref1} style={{width: 80, height: 80, display: 'none'}}  source={require('../images/Avatar1.png')} />
+                    <Image rounded  ref={ref2} style={{width: 80, height: 80, display: 'none'}}  source={require('../images/Avatar2.png')} />
+                    <Image rounded  ref={ref3} style={{width: 80, height: 80, display: 'none'}}  source={require('../images/Avatar3.png')} />
+                    <Image rounded  ref={ref4} style={{width: 80, height: 80, display: 'none'}}  source={require('../images/Avatar4.png')} />
+                    <Image rounded  ref={ref5} style={{width: 80, height: 80, display: 'none'}}  source={require('../images/Avatar5.png')} />
+                    <Image rounded  ref={ref6} style={{width: 80, height: 80, display: 'none'}}  source={require('../images/Avatar6.png')} />
+                    <Image rounded  ref={ref7} style={{width: 80, height: 80, display: 'none'}}  source={require('../images/Avatar7.png')} />
+                    <Image rounded  ref={ref8} style={{width: 80, height: 80, display: 'none'}}  source={require('../images/Avatar8.png')} />
+                    <Image rounded  ref={ref9} style={{width: 80, height: 80, display: 'none'}}  source={require('../images/Avatar9.png')} />
+                    <Image rounded  ref={ref10} style={{width: 80, height: 80, display: 'none'}}  source={require('../images/Avatar10.png')} />
+
                 </View>
                 <View style={{flex:7, flexDirection:'column'}}>
-                    <Text style={styles.welcome}>  Patricio Rojas</Text>
-                    <Text style={styles.instructions}>   {JSON.stringify(store.casesResp)}</Text>
+                    <Text style={styles.welcome}>{store.clientsResp.clients_username}</Text>
+                    <Text style={styles.instructions}>{store.clientsResp.clients_email}</Text>
                 </View>
               </View>
 
@@ -69,7 +415,7 @@ export default function ClientProfile({navigation}) {
               <View style={{flex:6, flexDirection:'row'}}>
 
                   <ScrollView>
-                  <TouchableOpacity onPress={()=>{navigation.navigate('CaseChat')}}  style={styles.button}><Text style={{color: "white", fontSize: 25}}>this.state.incomingData.name</Text></TouchableOpacity>
+                  <TouchableOpacity onPress={()=>{navigation.navigate('CaseChat')}}  style={styles.button}><Text style={{color: "white", fontSize: 25}}>afaf</Text></TouchableOpacity>
                   </ScrollView>
 
               </View>
