@@ -1,4 +1,4 @@
-import React, {Component, useState, useEffect }  from 'react';
+import React, {Component, useState, useEffect, useRef }  from 'react';
 import {Animated, TouchableOpacity, TouchableHighlight, Alert, Platform, StyleSheet, Text, View, Button, Image, List, TextInput, FormLabel, FormInput, FormValidationMessage, ScrollView, PanResponder } from 'react-native';
 import { ThemeProvider, Avatar, Card, ListItem, Icon, FlatList} from 'react-native-elements';
 import { createAppContainer } from 'react-navigation';
@@ -40,11 +40,25 @@ export default function ClientRegister({navigation}){
     const [rut, enterRut] = useState("");
     const [password, enterPassword] = useState("");
 
+    const [letEnterBoolean, setLetEnterBoolean] = useState(false);
+
     //REDUX STATE
         const store = useSelector(state => state.userData);
         const dispatch = useDispatch();
 
+    //REFERENCES
+    const rutRegisterRef = useRef(null);
+
+  useEffect(()=>{// ONLY IF THE USERDATA ARRIVES TO THE STORE THE NAVIGATOR IS UPDATED
+    if(store.hasOwnProperty('clientsResp') && letEnterBoolean ){
+    console.log(JSON.stringify(store))
+    navigation.navigate("ClientProfile");
+    }
+  },[store, letEnterBoolean])
+
   const register=()=>{
+
+  setLetEnterBoolean(false)
 
   let today = new Date();
   let currentDate = today.getFullYear() + "-" + (today.getMonth() + 1) + "-" + today.getDate()
@@ -89,13 +103,21 @@ export default function ClientRegister({navigation}){
                         fetch("http://patoexer.pythonanywhere.com/case", options2)
                         .then((response)=> response.json())
                         .then((data)=> {
-                                    dataToDispatch.casesResp = data;
-                                    dispatch({type: "USERDATA", doneAction: dataToDispatch});
-                                    navigation.navigate("ClientProfile")
+
+                        let lastCasesId= data.client_id
+                        fetch("http://patoexer.pythonanywhere.com/case/" + lastCasesId)
+                        .then(resp =>{return resp.json()})
+                        .then((data)=>{
+                            dataToDispatch.casesResp = data.resp;
+                            setLetEnterBoolean(true)
+                            dispatch({type: "USERDATA", doneAction: dataToDispatch});
+
+                        })
+                        .catch(error => console.log(error))
                                 })
-                        .catch(error => {})
+                        .catch(error => {console.log(error)})
             })
-    .catch(error => {})
+    .catch(error => {console.log(error)})
 
   }
 
@@ -115,24 +137,56 @@ export default function ClientRegister({navigation}){
 
   }
 
+  const RegisterRutificator = (e) => {
+            let targetValue = e;
+            let falseCase;
+
+            let split = targetValue.split("");
+
+            split.includes("-")? split.splice(split.indexOf("-"),1): falseCase= null;
+            split.includes(".")? split.splice(split.indexOf("."),1): falseCase= null;
+            split.includes(".")? split.splice(split.indexOf("."),1): falseCase= null;
+
+            (split.length>=2)?split[split.length-1] = "-" + split[split.length-1]:falseCase= null;
+
+            split.length >5 ? split[split.length-4] = "." + split[split.length-4]: falseCase= null;
+            split.length >7 ? split[split.length-7] = "." + split[split.length-7]: falseCase= null;
+            setNewRegisterRut(split.join(""));
+  }
+  const LoginRutificator = (e) => {
+              let targetValue = e;
+              let falseCase;
+
+              let split = targetValue.split("");
+
+              split.includes("-")? split.splice(split.indexOf("-"),1): falseCase= null;
+              split.includes(".")? split.splice(split.indexOf("."),1): falseCase= null;
+              split.includes(".")? split.splice(split.indexOf("."),1): falseCase= null;
+
+              (split.length>=2)?split[split.length-1] = "-" + split[split.length-1]:falseCase= null;
+
+              split.length >5 ? split[split.length-4] = "." + split[split.length-4]: falseCase= null;
+              split.length >7 ? split[split.length-7] = "." + split[split.length-7]: falseCase= null;
+              enterRut(split.join(""));
+    }
+
   const singInValidation = () => {
 
     fetch("http://patoexer.pythonanywhere.com/client/" + rut)
                             .then((response)=> response.json())
                             .then((data)=> {
+                            console.log("http://patoexer.pythonanywhere.com/client/" + rut)
+                            console.log("respuesta clients: " + JSON.stringify(data))
                             let dataToDispatch = {clientsResp: data, casesResp: ""};
 
                             fetch("http://patoexer.pythonanywhere.com/case/" + data.clients_id)
-                                                    .then((response)=> response.json())
+                                                    .then((response)=>{ return response.json()})
                                                     .then((data)=> {
-                                                                dataToDispatch.casesResp = data;
+                                                                setLetEnterBoolean(false)
+                                                                dataToDispatch.casesResp = data.resp;
                                                                 dispatch({type: "USERDATA", doneAction: dataToDispatch});
-                                                                navigation.navigate("ClientProfile")
+                                                                (dataToDispatch.clientsResp.clients_password==password)? setLetEnterBoolean(true): console.log("not verified")
                                                             })
-
-
-                            (data.clients_password==password)? navigation.navigate('ClientProfile'): console.log("not verified")
-
                                     })
                             .catch(error => { })
   }
@@ -176,7 +230,7 @@ export default function ClientRegister({navigation}){
             <View style={{flex: 1, flexDirection: 'row', backgroundColor: "#4170f9"}}>
               <View style={{flex:1, backgroundColor: "#4170f9"}}></View>
                  <View style={{flex:4, flexDirection: 'row', backgroundColor: "#4170f9"}}>
-                     <TextInput onChangeText={x=> setNewRegisterRut(x)} placeholder = " RUT" style={{ backgroundColor: "white", height: 40, width: "100%", borderColor: 'gray', borderWidth: 1, fontSize:20, borderRadius: 10 }}/>
+                     <TextInput value={registerRut} ref={rutRegisterRef} onChangeText={x=>RegisterRutificator(x)} placeholder = " RUT" style={{ backgroundColor: "white", height: 40, width: "100%", borderColor: 'gray', borderWidth: 1, fontSize:20, borderRadius: 10 }}/>
                  </View>
               <View style={{flex:1}}></View>
             </View>
@@ -216,7 +270,7 @@ export default function ClientRegister({navigation}){
             <View style={{flex: 1, flexDirection: 'row', backgroundColor: "#4170f9"}}>
                <View style={{flex:1, backgroundColor: "#4170f9"}}></View>
                  <View style={{flex:4, flexDirection: 'row', backgroundColor: "#4170f9"}}>
-                      <TextInput onChangeText={x=> setNewRegisterPassword(x)} placeholder = " CLAVE" style={{ backgroundColor: "white", height: 40, width: "100%", borderColor: 'gray', borderWidth: 1, fontSize:20, borderRadius: 10 }}/>
+                      <TextInput secureTextEntry={true} onChangeText={x=> setNewRegisterPassword(x)} placeholder = " CLAVE" style={{ backgroundColor: "white", height: 40, width: "100%", borderColor: 'gray', borderWidth: 1, fontSize:20, borderRadius: 10 }}/>
                  </View>
                <View style={{flex:1}}></View>
             </View>
@@ -234,7 +288,7 @@ export default function ClientRegister({navigation}){
         <View style={{flex: 1, flexDirection: 'row', backgroundColor: "#4170f9"}}>
             <View style={{flex:1, backgroundColor: "#4170f9"}}></View>
                      <View style={{flex:4, flexDirection: 'row', backgroundColor: "#4170f9"}}>
-                          <TextInput onChangeText={x=> enterRut(x)} placeholder = " RUT" style={{ backgroundColor: "white", height: 40, width: "100%", borderColor: 'gray', borderWidth: 1, fontSize:20, borderRadius: 10 }}/>
+                          <TextInput value={rut} onChangeText={x=> LoginRutificator(x)} placeholder = " RUT" style={{ backgroundColor: "white", height: 40, width: "100%", borderColor: 'gray', borderWidth: 1, fontSize:20, borderRadius: 10 }}/>
                      </View>
             <View style={{flex:1}}></View>
         </View>
@@ -242,7 +296,7 @@ export default function ClientRegister({navigation}){
         <View style={{flex: 1, flexDirection: 'row', backgroundColor: "#4170f9"}}>
             <View style={{flex:1, backgroundColor: "#4170f9"}}></View>
                  <View style={{flex:4, flexDirection: 'row', backgroundColor: "#4170f9"}}>
-                       <TextInput onChangeText={x=> enterPassword(x)} placeholder = " CLAVE" style={{ backgroundColor: "white", height: 40, width: "100%", borderColor: 'gray', borderWidth: 1, fontSize:20, borderRadius: 10 }}/>
+                       <TextInput secureTextEntry={true} onChangeText={x=> enterPassword(x)} placeholder = " CLAVE" style={{ backgroundColor: "white", height: 40, width: "100%", borderColor: 'gray', borderWidth: 1, fontSize:20, borderRadius: 10 }}/>
                   </View>
             <View style={{flex:1}}></View>
         </View>

@@ -16,3 +16,7 @@ export function storeUSerId(x){
 export function storeNewMessage(x){
     return {type: "NEW_MESSAGE", doneAction: x }
 }
+
+export function storeSelectedCase(x){
+    return {type: "SELECTED_CASE", doneAction: x }
+}

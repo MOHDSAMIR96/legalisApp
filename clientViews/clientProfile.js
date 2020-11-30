@@ -4,6 +4,7 @@ import { ThemeProvider, Avatar, Card, ListItem, Icon, FlatList} from 'react-nati
 import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 import { useSelector, useDispatch } from 'react-redux';
+import {dispatchSelectCase} from '../redux/dispatcher.js';
 
 import logo1 from '../images/Avatar1.png'
 import logo2 from '../images/Avatar2.png'
@@ -41,6 +42,11 @@ export default function ClientProfile({navigation}) {
     // USESTATE
         const [avatarArr, stateNewAvatarArr] = useState(['../images/Avatar1.png', '../images/Avatar2.png', '../images/Avatar3.png', '../images/Avatar4.png', '../images/Avatar5.png', '../images/Avatar6.png', '../images/Avatar7.png', '../images/Avatar8.png', '../images/Avatar9.png', '../images/Avatar10.png']);
         const [imgRequireURL, setImgRequire] = useState('../images/Avatar1.png')
+
+     const select = (index) => {
+             dispatchSelectCase(store.casesResp[index])
+             navigation.navigate('CaseChat');
+         }
 
      useEffect(()=>{
              if(avatarArr[store.clientsResp.clients_avatar - 1] == '../images/Avatar4.png'){
@@ -377,6 +383,7 @@ else if(avatarArr[store.clientsResp.clients_avatar - 1] == '../images/Avatar10.p
 
       }, [])
 
+
     return (
 
 
@@ -415,7 +422,12 @@ else if(avatarArr[store.clientsResp.clients_avatar - 1] == '../images/Avatar10.p
               <View style={{flex:6, flexDirection:'row'}}>
 
                   <ScrollView>
-                  <TouchableOpacity onPress={()=>{navigation.navigate('CaseChat')}}  style={styles.button}><Text style={{color: "white", fontSize: 25}}>afaf</Text></TouchableOpacity>
+                    {
+
+                    store.casesResp.map((item, index)=>{
+                                            return    <TouchableOpacity key={index} onPress={()=>{select(index)}}  style={styles.button}><Text style={{color: "white", fontSize: 25}}>{item.cases_matter}</Text></TouchableOpacity>
+
+                                        })}
                   </ScrollView>
 
               </View>
