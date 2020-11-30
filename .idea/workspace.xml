@@ -2,14 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="463314cc-0a91-4443-80e1-bb7f89fb1346" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/clientViews/caseChat.js" beforeDir="false" afterPath="$PROJECT_DIR$/clientViews/caseChat.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/clientViews/clientProfile.js" beforeDir="false" afterPath="$PROJECT_DIR$/clientViews/clientProfile.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/clientViews/register.js" beforeDir="false" afterPath="$PROJECT_DIR$/clientViews/register.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/debug.log" beforeDir="false" afterPath="$PROJECT_DIR$/debug.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/redux/actions.js" beforeDir="false" afterPath="$PROJECT_DIR$/redux/actions.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/redux/dispatcher.js" beforeDir="false" afterPath="$PROJECT_DIR$/redux/dispatcher.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/redux/reducer.js" beforeDir="false" afterPath="$PROJECT_DIR$/redux/reducer.js" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -25,8 +18,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/clientViews/register.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="223">
-              <caret line="189" column="38" lean-forward="true" selection-start-line="189" selection-start-column="38" selection-end-line="189" selection-end-column="38" />
+            <state relative-caret-position="130">
+              <caret line="130" column="29" lean-forward="true" selection-start-line="130" selection-start-column="29" selection-end-line="130" selection-end-column="29" />
             </state>
           </provider>
         </entry>
@@ -297,8 +290,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/clientViews/register.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="223">
-          <caret line="189" column="38" lean-forward="true" selection-start-line="189" selection-start-column="38" selection-end-line="189" selection-end-column="38" />
+        <state relative-caret-position="130">
+          <caret line="130" column="29" lean-forward="true" selection-start-line="130" selection-start-column="29" selection-end-line="130" selection-end-column="29" />
         </state>
       </provider>
     </entry>

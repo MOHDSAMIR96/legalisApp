@@ -64,60 +64,104 @@ export default function ClientRegister({navigation}){
   let currentDate = today.getFullYear() + "-" + (today.getMonth() + 1) + "-" + today.getDate()
 
   //POST TO CLIENTS/
-    let clientData = {
-            "clients_address": registerAddress,
-             "clients_avatar": registerAvatar,
-             "clients_civil_status": registerCivilStatus,
-             "clients_email": registerMail,
-             "clients_nationality": registerNationality,
-             "clients_password": registerPassword,
-             "clients_phone": parseInt(registerPhone),
-             "clients_profession": registerProfession,
-             "clients_rut": registerRut,
-             "clients_username": store.users_name
-        }
 
-        let options = {
-                    method: 'POST',
-                    body: JSON.stringify(clientData),
-                    headers: {'Content-Type': 'application/json'}};
+  fetch("http://patoexer.pythonanywhere.com/client/" + registerRut)
+  .then(response =>{return response.json()})
+  .then((data)=>{
 
-    fetch("http://patoexer.pythonanywhere.com/client", options)
-    .then((response)=> response.json())
-    .then((data)=> {
-                //POST TO CASES/
-                     let dataToDispatch = {clientsResp: data, casesResp: ""};
+    if(data.clients_rut!=registerRut){
 
-                     let casesData = {
-                                "cases_date": currentDate,
-                                    "cases_description": store.users_issue_description,
-                                    "cases_matter": store.users_issue_subject,
-                                    "client_id": data.clients_id
-                            }
+            let clientData = {
+                    "clients_address": registerAddress,
+                     "clients_avatar": registerAvatar,
+                     "clients_civil_status": registerCivilStatus,
+                     "clients_email": registerMail,
+                     "clients_nationality": registerNationality,
+                     "clients_password": registerPassword,
+                     "clients_phone": parseInt(registerPhone),
+                     "clients_profession": registerProfession,
+                     "clients_rut": registerRut,
+                     "clients_username": store.users_name
+                }
 
-                            let options2 = {
-                                        method: 'POST',
-                                        body: JSON.stringify(casesData),
-                                        headers: {'Content-Type': 'application/json'}};
+                let options = {
+                            method: 'POST',
+                            body: JSON.stringify(clientData),
+                            headers: {'Content-Type': 'application/json'}};
 
-                        fetch("http://patoexer.pythonanywhere.com/case", options2)
-                        .then((response)=> response.json())
-                        .then((data)=> {
+            fetch("http://patoexer.pythonanywhere.com/client", options)
+            .then((response)=> response.json())
+            .then((data)=> {
+                        //POST TO CASES/
+                             let dataToDispatch = {clientsResp: data, casesResp: ""};
 
-                        let lastCasesId= data.client_id
-                        fetch("http://patoexer.pythonanywhere.com/case/" + lastCasesId)
-                        .then(resp =>{return resp.json()})
-                        .then((data)=>{
-                            dataToDispatch.casesResp = data.resp;
-                            setLetEnterBoolean(true)
-                            dispatch({type: "USERDATA", doneAction: dataToDispatch});
+                             let casesData = {
+                                        "cases_date": currentDate,
+                                            "cases_description": store.users_issue_description,
+                                            "cases_matter": store.users_issue_subject,
+                                            "client_id": data.clients_id
+                                    }
 
-                        })
-                        .catch(error => console.log(error))
+                                    let options2 = {
+                                                method: 'POST',
+                                                body: JSON.stringify(casesData),
+                                                headers: {'Content-Type': 'application/json'}};
+
+                                fetch("http://patoexer.pythonanywhere.com/case", options2)
+                                .then((response)=> response.json())
+                                .then((data)=> {
+
+                                let lastCasesId= data.client_id
+                                fetch("http://patoexer.pythonanywhere.com/case/" + lastCasesId)
+                                .then(resp =>{return resp.json()})
+                                .then((data)=>{
+                                    dataToDispatch.casesResp = data.resp;
+                                    setLetEnterBoolean(true)
+                                    dispatch({type: "USERDATA", doneAction: dataToDispatch});
+
                                 })
-                        .catch(error => {console.log(error)})
-            })
-    .catch(error => {console.log(error)})
+                                .catch(error => console.log(error))
+                                        })
+                                .catch(error => {console.log(error)})
+                    })
+            .catch(error => {console.log(error)})
+
+    } else{
+            let dataToDispatch = {clientsResp: data, casesResp: ""};
+            let casesData = {
+                             "cases_date": currentDate,
+                             "cases_description": store.users_issue_description,
+                             "cases_matter": store.users_issue_subject,
+                             "client_id": data.clients_id
+                                                }
+
+                             let options2 = {
+                                         method: 'POST',
+                                         body: JSON.stringify(casesData),
+                                         headers: {'Content-Type': 'application/json'}
+                                         };
+
+                                         fetch("http://patoexer.pythonanywhere.com/case", options2)
+                                         .then((response)=> response.json())
+                                         .then((data)=> {
+
+                                         let lastCasesId= data.client_id
+                                         fetch("http://patoexer.pythonanywhere.com/case/" + lastCasesId)
+                                         .then(resp =>{return resp.json()})
+                                         .then((data)=>{
+                                         dataToDispatch.casesResp = data.resp;
+                                         setLetEnterBoolean(true)
+                                         dispatch({type: "USERDATA", doneAction: dataToDispatch});
+
+                                            })
+                                            .catch(error => console.log(error))
+                                                    })
+    }
+
+
+  })
+  .catch()
+
 
   }
 
