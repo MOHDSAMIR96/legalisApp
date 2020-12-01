@@ -45,9 +45,9 @@ export function QueryChat({navigation}) {
                                          fetch("http://patoexer.pythonanywhere.com/message/" + store.users_id)
                                          .then((response)=> response.json())
                                          .then((data)=>
-                                                       { console.log(message[message.length - 1 ] + " vs " + data[data.length - 1].messages_content)
+                                                       { console.log("+++++: " + data[data.length - 1].messages_origin + "// " + data[data.length - 1].messages_content  )
                                                        if(message[message.length - 1 ]!= data[data.length - 1].messages_content){
-                                                             if(data[data.length - 1].messages_content == "typing..."){
+                                                             if(data[data.length - 1].messages_content == "typing..." && data[data.length - 1].messages_origin=="lawyer" ){
                                                              this.typingRef.current.style = "inline";
                                                              console.log("FUNCIONA")
                                                              }
@@ -82,7 +82,8 @@ export function QueryChat({navigation}) {
                              "messages_date": currentDate,
                              "messages_content": "typing...",
                              "messages_origin": "user",
-                             "user_id": store.users_id
+                             "user_id": store.users_id,
+                             "lawyer_id": 1
                            }
 
           let options2 = {
@@ -112,7 +113,8 @@ export function QueryChat({navigation}) {
                       "messages_content": messageInputContent,
                       "messages_id": returnedMessageId,
                       "messages_origin": "user",
-                      "user_id": store.users_id
+                      "user_id": store.users_id,
+                      "lawyer_id": 1
                     }
 
    let options2 = {

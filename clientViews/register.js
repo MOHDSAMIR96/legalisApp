@@ -219,8 +219,6 @@ export default function ClientRegister({navigation}){
     fetch("http://patoexer.pythonanywhere.com/client/" + rut)
                             .then((response)=> response.json())
                             .then((data)=> {
-                            console.log("http://patoexer.pythonanywhere.com/client/" + rut)
-                            console.log("respuesta clients: " + JSON.stringify(data))
                             let dataToDispatch = {clientsResp: data, casesResp: ""};
 
                             fetch("http://patoexer.pythonanywhere.com/case/" + data.clients_id)
