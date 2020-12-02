@@ -1,34 +1,32 @@
-import React, { Component } from 'react';
+import React, {Component, useState, useEffect, useRef }  from 'react';
 import { TouchableOpacity, Alert, Platform, StyleSheet, Text, View, Button, Image, List, TextInput, FormLabel, FormInput, FormValidationMessage, ScrollView, PanResponder } from 'react-native';
 import { ThemeProvider, Avatar, Card, ListItem, Icon, FlatList} from 'react-native-elements';
 import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 
-
-export default class LawyerProfile extends Component {
-
-  constructor(props){
-    super(props)
-    this.state={
-    cases: [{materia: "CIVIL", fecha: "13-04-2020", from: 1},{materia: "CIVIL", fecha: "13-04-2020", from: 0},{materia: "CIVIL", fecha: "13-04-2020", from: 1},{materia: "CIVIL", fecha: "13-04-2020", from: 1},{materia: "CIVIL", fecha: "13-04-2020", from: 1},{materia: "CIVIL", fecha: "13-04-2020", from: 0},{materia: "CIVIL", fecha: "13-04-2020", from: 0}, {materia: "LABORAL", fecha: "16-04-2020", from: 1},{materia: "FAMILIA", fecha: "13-03-2020", from: 1},{materia: "CIVIL", fecha: "13-01-2020", from: 0}]
-    }
-  }
-
-  componentDidMount(){
-
-  //---------------GET TO /LAWYERS
+import { useSelector, useDispatch } from 'react-redux';
 
 
-  //---------------GET TO /CLIENT
+export default function LawyerProfile({navigation}) {
+
+    //REDUX STATE
+       const store = useSelector(state => state.userData);
+       const dispatch = useDispatch();
+
+       const [cases, setCases] = useState([]);
+
+        useEffect(()=>{
+
+               fetch("http://patoexer.pythonanywhere.com/lawyer/" + store.lawyers_rut)// es necesario el endpoint the cases con rut abogado
+                     .then(response =>{return response.json()})
+                     .then((data)=>{
+                     console.log(JSON.stringify(data))
+
+                     })
+                     .catch(error => console.log(error))
+           },[])
 
 
-
-  //---------------GET TO /CASES
-
-
-  }
-
-  render() {
     return (
 
 
@@ -42,8 +40,8 @@ export default class LawyerProfile extends Component {
                     <Avatar rounded size="large" icon={{name: 'user', type: 'font-awesome'}} />
                 </View>
                 <View style={{flex:7, flexDirection:'column'}}>
-                    <Text style={styles.welcome}>Patricio Rojas</Text>
-                    <Text style={styles.instructions}>   patito_feo@gmail.com</Text>
+                    <Text style={styles.welcome}>{store.lawyers_name}</Text>
+                    <Text style={styles.instructions}>   {store.lawyers_email}</Text>
                 </View>
               </View>
 
@@ -56,8 +54,8 @@ export default class LawyerProfile extends Component {
               <View style={{flex:9, flexDirection:'row'}}>
 
                   <ScrollView>
-                                    {this.state.cases.map((item, index)=>{
-                                    return <TouchableOpacity onPress={()=>{this.props.navigation.navigate('LawyerCaseChat')}} key={index}  style={styles.button}><Text style={{color: "white", fontSize: 25}}>{item.materia + '/'  + item.fecha}</Text></TouchableOpacity>
+                                    {cases.map((item, index)=>{
+                                    return <TouchableOpacity onPress={()=>{navigation.navigate('LawyerCaseChat')}} key={index}  style={styles.button}><Text style={{color: "white", fontSize: 25}}>{item.materia + '/'  + item.fecha}</Text></TouchableOpacity>
                                     })}
 
                                     </ScrollView>
@@ -67,7 +65,7 @@ export default class LawyerProfile extends Component {
 
            </View>
     );
-  }
+
 }
 
 

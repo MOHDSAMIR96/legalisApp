@@ -3,9 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="463314cc-0a91-4443-80e1-bb7f89fb1346" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/clientViews/queryChat.js" beforeDir="false" afterPath="$PROJECT_DIR$/clientViews/queryChat.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/clientViews/register.js" beforeDir="false" afterPath="$PROJECT_DIR$/clientViews/register.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lawyerView/lawyerRegister.js" beforeDir="false" afterPath="$PROJECT_DIR$/lawyerView/lawyerRegister.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lawyerView/lawyerProfile.js" beforeDir="false" afterPath="$PROJECT_DIR$/lawyerView/lawyerProfile.js" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -18,20 +16,20 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/lawyerView/lawyerRegister.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="242">
-              <caret line="152" lean-forward="true" selection-start-line="152" selection-end-line="152" />
+            <state relative-caret-position="198">
+              <caret line="53" column="6" lean-forward="true" selection-start-line="53" selection-start-column="6" selection-end-line="55" selection-end-column="21" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/clientViews/register.js">
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/lawyerView/lawyerProfile.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="191">
-              <caret line="119" column="56" lean-forward="true" selection-start-line="119" selection-start-column="56" selection-end-line="119" selection-end-column="56" />
+            <state relative-caret-position="220">
+              <caret line="15" column="43" selection-start-line="15" selection-start-column="43" selection-end-line="15" selection-end-column="43" />
             </state>
           </provider>
         </entry>
@@ -59,7 +57,6 @@
       <find>setLetEnter</find>
       <find>lawyer_id</find>
       <find>onpres</find>
-      <find>this.</find>
       <find>this.state</find>
       <find>showre</find>
       <find>registrae</find>
@@ -70,6 +67,7 @@
       <find>RegisterRutificator</find>
       <find>loginRut</find>
       <find>dispatch</find>
+      <find>this.</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -93,6 +91,7 @@
         <option value="$PROJECT_DIR$/clientViews/queryChat.js" />
         <option value="$PROJECT_DIR$/clientViews/register.js" />
         <option value="$PROJECT_DIR$/lawyerView/lawyerRegister.js" />
+        <option value="$PROJECT_DIR$/lawyerView/lawyerProfile.js" />
       </list>
     </option>
   </component>
@@ -116,8 +115,8 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="PackagesPane" />
       <pane id="Scope" />
+      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -185,7 +184,7 @@
     <editor active="true" />
     <layout>
       <window_info id="Captures" order="0" weight="0.25" />
-      <window_info content_ui="combo" id="Project" order="1" visible="true" weight="0.13945803" />
+      <window_info active="true" content_ui="combo" id="Project" order="1" visible="true" weight="0.13945803" />
       <window_info id="Structure" order="2" side_tool="true" />
       <window_info id="Image Layers" order="3" />
       <window_info id="Designer" order="4" />
@@ -194,7 +193,7 @@
       <window_info id="Favorites" order="7" side_tool="true" />
       <window_info anchor="bottom" id="Version Control" order="0" />
       <window_info anchor="bottom" id="TODO" order="1" weight="0.3286119" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="2" sideWeight="0.49966952" visible="true" weight="0.25637394" />
+      <window_info anchor="bottom" id="Terminal" order="2" sideWeight="0.49966952" visible="true" weight="0.23937677" />
       <window_info anchor="bottom" id="Event Log" order="3" sideWeight="0.50033045" side_tool="true" weight="0.26203966" />
       <window_info anchor="bottom" id="Find" order="4" />
       <window_info anchor="right" id="Capture Analysis" order="0" />
@@ -300,14 +299,21 @@
     <entry file="file://$PROJECT_DIR$/clientViews/register.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="191">
-          <caret line="119" column="56" lean-forward="true" selection-start-line="119" selection-start-column="56" selection-end-line="119" selection-end-column="56" />
+          <caret line="119" column="56" selection-start-line="119" selection-start-column="56" selection-end-line="119" selection-end-column="56" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/lawyerView/lawyerRegister.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="242">
-          <caret line="152" lean-forward="true" selection-start-line="152" selection-end-line="152" />
+        <state relative-caret-position="198">
+          <caret line="53" column="6" lean-forward="true" selection-start-line="53" selection-start-column="6" selection-end-line="55" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lawyerView/lawyerProfile.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="220">
+          <caret line="15" column="43" selection-start-line="15" selection-start-column="43" selection-end-line="15" selection-end-column="43" />
         </state>
       </provider>
     </entry>
