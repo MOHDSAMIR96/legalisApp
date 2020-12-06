@@ -17,10 +17,11 @@ export default function LawyerProfile({navigation}) {
 
         useEffect(()=>{
 
-               fetch("http://patoexer.pythonanywhere.com/lawyer/" + store.lawyers_rut)// es necesario el endpoint the cases con rut abogado
+               fetch("http://patoexer.pythonanywhere.com/lawyerCases/" + store.lawyers_id)// es necesario el endpoint the cases con rut abogado
                      .then(response =>{return response.json()})
                      .then((data)=>{
-                     console.log(JSON.stringify(data))
+                     console.log( "ACAAA RESPUETA: " + JSON.stringify(data))
+                     setCases(data.resp)
 
                      })
                      .catch(error => console.log(error))
@@ -41,7 +42,7 @@ export default function LawyerProfile({navigation}) {
                 </View>
                 <View style={{flex:7, flexDirection:'column'}}>
                     <Text style={styles.welcome}>{store.lawyers_name}</Text>
-                    <Text style={styles.instructions}>   {store.lawyers_email}</Text>
+                    <Text style={styles.instructions}>{store.lawyers_email}</Text>
                 </View>
               </View>
 
@@ -55,7 +56,7 @@ export default function LawyerProfile({navigation}) {
 
                   <ScrollView>
                                     {cases.map((item, index)=>{
-                                    return <TouchableOpacity onPress={()=>{navigation.navigate('LawyerCaseChat')}} key={index}  style={styles.button}><Text style={{color: "white", fontSize: 25}}>{item.materia + '/'  + item.fecha}</Text></TouchableOpacity>
+                                    return <TouchableOpacity onPress={()=>{navigation.navigate('LawyerCaseChat')}} key={index}  style={styles.button}><Text style={{color: "white", fontSize: 25}}>{item.client_name}</Text><Text style={{color: "white", fontSize: 10}}>      {item.cases_matter}</Text></TouchableOpacity>
                                     })}
 
                                     </ScrollView>

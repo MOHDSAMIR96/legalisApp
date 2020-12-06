@@ -99,7 +99,8 @@ export default function ClientRegister({navigation}){
                                         "cases_date": currentDate,
                                             "cases_description": store.users_issue_description,
                                             "cases_matter": store.users_issue_subject,
-                                            "client_id": data.clients_id
+                                            "client_id": data.clients_id,
+                                            "lawyer_id": store.lawyer_id
                                     }
 
                                     let options2 = {

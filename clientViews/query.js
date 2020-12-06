@@ -69,7 +69,8 @@ export default function Query({navigation}){//ESTA PARTE ES LA VISTA DE EL INICI
     let clientData = {
         "users_name": userName,
         "users_issue_subject": subjects[activeSubjectCounter],
-        "users_issue_description": caseDescription
+        "users_issue_description": caseDescription,
+        "lawyer_id": 5
     }
 
     let options = {
@@ -79,7 +80,7 @@ export default function Query({navigation}){//ESTA PARTE ES LA VISTA DE EL INICI
 
     fetch("http://patoexer.pythonanywhere.com/user", options)
         .then((response)=> response.json())
-        .then((data)=> {
+        .then((data)=> { console.log("AQUI QL: " + JSON.stringify(data))
 
             dispatch({type: "USERDATA", doneAction: data});
             navigation.navigate('QueryChat')
