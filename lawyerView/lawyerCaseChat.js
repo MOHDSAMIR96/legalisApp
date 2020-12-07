@@ -10,15 +10,18 @@ import {Animated} from 'react-native';
 export default function LawyerCaseChat({navigation}) {
 
     //REDUX STATE
-           const store = useSelector(state => state.userData);
-           const dispatch = useDispatch();
+        const store = useSelector(state => state.userData);
+        const dispatch = useDispatch();
+
+    //REFERENCES
+        const CaseSummaryTextInput = useRef(null);
 
     const [data, setData] = useState({time: 6, title: 'Event 1', description: 'Event 1 Description'});
     const [animateCaseContainer, setAnimateCaseContainer] = useState(new Animated.Value(8));
     const [animateCaseUpdate, setAnimateCaseUpdate] = useState(new Animated.Value(5));
     const [animateCaseSummary, setAnimateCaseSummary] = useState(new Animated.Value(5));
     const [registerBtnDisplayed, setRegisterBtnDisplayed] = useState(false);
-    const [message, enterMessage] = useState([]);
+    const [messages, enterMessage] = useState([]);
 
     const [caseSummary, enterCaseSummary] = useState([]);
     const [timeLine, entertimeLine] = useState([ {succeded: 3},{ id: 1, phase: "Presentación demanda"}, { id: 2, phase: "Ratificación firma"}, {id: 3, phase: "Contestación"}, { id: 4, phase: "Término Probatorio"}, {id: 5, phase: "Dictación de sentencia"}]);
@@ -41,69 +44,69 @@ export default function LawyerCaseChat({navigation}) {
   }
 
   const showCaseSummary=()=>{
-    if(!this.state.registerBtnDisplayed){
+    if(!registerBtnDisplayed){
 
-        Animated.timing(this.state.animateCaseContainer, {toValue: 30, duration: 300}).start()
-        Animated.timing(this.state.animateCaseUpdate, {toValue: 1, duration: 0}).start()
-        this.setState({registerBtnDisplayed: true})
+        Animated.timing(animateCaseContainer, {toValue: 30, duration: 300}).start()
+        Animated.timing(animateCaseUpdate, {toValue: 1, duration: 0}).start()
+        setRegisterBtnDisplayed(true)
     }
-    else if(this.state.registerBtnDisplayed){
+    else if(registerBtnDisplayed){
 
-    Animated.timing(this.state.animateCaseSummary, {toValue: 5, duration: 0}).start()
-      Animated.timing(this.state.animateCaseContainer, {toValue: 8, duration: 300}).start()
-      Animated.timing(this.state.animateCaseUpdate, {toValue: 5, duration: 300}).start()
-       this.setState({registerBtnDisplayed: false})
+    Animated.timing(animateCaseSummary, {toValue: 5, duration: 0}).start()
+      Animated.timing(animateCaseContainer, {toValue: 8, duration: 300}).start()
+      Animated.timing(animateCaseUpdate, {toValue: 5, duration: 300}).start()
+      setRegisterBtnDisplayed(false)
     }
 
   }
 
     const showCaseUpdate=()=>{
-        if(!this.state.registerBtnDisplayed){//--------->
+        if(!registerBtnDisplayed){
 
 
-           Animated.timing(this.state.animateCaseSummary, {toValue: 1, duration: 0}).start()
-            Animated.timing(this.state.animateCaseContainer, {toValue: 25, duration: 300}).start()
-            Animated.timing(this.state.animateCaseUpdate, {toValue: 5, duration: 300}).start()
-            this.setState({registerBtnDisplayed: true})
+           Animated.timing(animateCaseSummary, {toValue: 1, duration: 0}).start()
+            Animated.timing(animateCaseContainer, {toValue: 25, duration: 300}).start()
+            Animated.timing(animateCaseUpdate, {toValue: 5, duration: 300}).start()
+            setRegisterBtnDisplayed(true)
         }
-        else if(this.state.registerBtnDisplayed){
+        else if(registerBtnDisplayed){
 
 
-           Animated.timing(this.state.animateCaseSummary, {toValue: 5, duration: 0}).start()
-           Animated.timing(this.state.animateCaseContainer, {toValue: 8, duration: 300}).start()
-           Animated.timing(this.state.animateCaseUpdate, {toValue: 5, duration: 300}).start()
-            this.setState({registerBtnDisplayed: false})
+           Animated.timing(animateCaseSummary, {toValue: 5, duration: 0}).start()
+           Animated.timing(animateCaseContainer, {toValue: 8, duration: 300}).start()
+           Animated.timing(animateCaseUpdate, {toValue: 5, duration: 300}).start()
+           setRegisterBtnDisplayed(false)
         }
 
       }
 
     const showPhase = (phase) => {
-         console.log("hola" + phase.id)
-        this.setState({phaseShowedOnTimeline: phase.phase})
-        Animated.timing(this.state.animatephaseShowedOnTimeline, {toValue: 0, duration: 0}).start(()=>{
-        Animated.timing(this.state.animatephaseShowedOnTimeline, {toValue: 1, duration: 800}).start()})
 
-        let newTimeLine = [...this.state.timeLine];
+        enteranimatephaseShowedOnTimeline(phase.phase);
+        Animated.timing(animatephaseShowedOnTimeline, {toValue: 0, duration: 0}).start(()=>{
+        Animated.timing(animatephaseShowedOnTimeline, {toValue: 1, duration: 800}).start()})
+
+        let newTimeLine = [...timeLine];
         newTimeLine.shift();
         newTimeLine.unshift({succeded: phase.id})
-        this.setState({timeLine: newTimeLine})
+        entertimeLine(newTimeLine)
 
     }
 
     const editCaseSummary=()=>{
 
-        this.setState({touchableOpacityZindex: 1})
-        this.setState({editableStatus: {color: "#4170f9", backGround: "white"}})
-        this.CaseSummaryTextInput.current.focus()
-        Animated.timing(this.state.animateCaseContainer, {toValue: 100, duration: 300}).start()
+        entertouchableOpacityZindex(1);
+        enterEditableStatus({color: "#4170f9", backGround: "white"});
+        CaseSummaryTextInput.current.focus() //arreglar
+        Animated.timing(animateCaseContainer, {toValue: 100, duration: 300}).start()
     }
 
     const TextInputEnterKeyPressed=(e)=>{
         if (e.nativeEvent.key == "Enter"){
 
-                this.setState({editableStatus: {color: "white", backGround: "#4170f9"}})
-                this.setState({touchableOpacityZindex: 5})
-                Animated.timing(this.state.animateCaseContainer, {toValue: 30, duration: 300}).start()
+                enterEditableStatus({color: "white", backGround: "#4170f9"});
+                entertouchableOpacityZindex(5);
+                Animated.timing(animateCaseContainer, {toValue: 30, duration: 300}).start()
                 Keyboard.dismiss()
                 //fetch() POST TO DE DB
 
@@ -112,16 +115,16 @@ export default function LawyerCaseChat({navigation}) {
 
     return (
     <View style={{flex: 1, flexDirection: 'column', backgroundColor: "white"}}>
-        <Animated.View style={{flex: this.state.animateCaseContainer, flexDirection: 'row', backgroundColor: "#4170f9"}}>
+        <Animated.View style={{flex: animateCaseContainer, flexDirection: 'row', backgroundColor: "#4170f9"}}>
             <View style={{flex: 2, flexDirection:"column"}}>
                 <View style={{flex: 1}}></View>
             </View>
             <View style={{flex: 35}}>
-                <Animated.View style={{flex: this.state.animateCaseSummary}}>
-                    <Text onPress={this.showCaseSummary} style={styles.welcomeSmall}>RESUMEN CASO</Text>
+                <Animated.View style={{flex: animateCaseSummary}}>
+                    <Text onPress={showCaseSummary} style={styles.welcomeSmall}>RESUMEN CASO</Text>
                     <ScrollView style={{flex: 5}}>
-                    <TouchableOpacity  onPress={this.editCaseSummary} style={{opacity:0, zIndex: this.state.touchableOpacityZindex, backgroundColor: 'white', width: '100%', height: '100%', position: 'absolute'}}></TouchableOpacity >
-                    <TextInput onChangeText={(caseSummaryData) => this.setState({caseSummary: caseSummaryData})} onKeyPress={this.TextInputEnterKeyPressed} ref={this.CaseSummaryTextInput} defaultValue={this.state.caseSummary} multiline={true} style={{zIndex: 3, fontSize: 20, color: this.state.editableStatus.color, backgroundColor: this.state.editableStatus.backGround, textAlign: 'justify', paddingRight:30}}/>
+                    <TouchableOpacity  onPress={editCaseSummary} style={{opacity:0, zIndex: touchableOpacityZindex, backgroundColor: 'white', width: '100%', height: '100%', position: 'absolute'}}></TouchableOpacity >
+                    <TextInput onChangeText={(caseSummaryData) => enterCaseSummary(caseSummaryData)} onKeyPress={TextInputEnterKeyPressed} ref={CaseSummaryTextInput} defaultValue={caseSummary} multiline={true} style={{zIndex: 3, fontSize: 20, color: editableStatus.color, backgroundColor: editableStatus.backGround, textAlign: 'justify', paddingRight:30}}/>
 
                     </ScrollView>
                 </Animated.View>
@@ -133,14 +136,14 @@ export default function LawyerCaseChat({navigation}) {
                 />
 
 
-                <Animated.View style={{flex: this.state.animateCaseUpdate}}>
-                    <Text onPress={this.showCaseUpdate} style={styles.welcomeSmall}>AVANCE CASO</Text>
+                <Animated.View style={{flex: animateCaseUpdate}}>
+                    <Text onPress={showCaseUpdate} style={styles.welcomeSmall}>AVANCE CASO</Text>
                                         <View style={{flexDirection: "row", felx: 2}}>
-                                        {this.state.timeLine.map((item)=>{
+                                        {timeLine.map((item)=>{
 
                                         let color= "";
                                         let roundedBorder="";
-                                        let itemSucceded = this.state.timeLine[0].succeded;
+                                        let itemSucceded = timeLine[0].succeded;
 
                                         (item.id == 1)?roundedBorder=20:roundedBorder=0;
                                         (item.id <= itemSucceded)?color="#39E938":color="white";
@@ -150,7 +153,7 @@ export default function LawyerCaseChat({navigation}) {
                                                     <View style={{flex: 1, backgroundColor: color, height: 10, width: 10, marginTop:8, borderTopLeftRadius: roundedBorder, borderBottomLeftRadius: roundedBorder }}>
                                                     </View>
                                                     <View style={{flex: 1, backgroundColor: color, height: 30, borderRadius:30, width: 20}}>
-                                                        <Text className={item.phase} style={{color: color, height: 30, borderRadius:30, width: 20}} onPress={()=> this.showPhase(item)} >o</Text>
+                                                        <Text className={item.phase} style={{color: color, height: 30, borderRadius:30, width: 20}} onPress={()=> showPhase(item)} >o</Text>
                                                     </View>
                                                 </View>
                                                     )
@@ -160,7 +163,7 @@ export default function LawyerCaseChat({navigation}) {
 
                                         </View>
                                         <View style={{flex:1}}>
-                                            <Animated.Text style={{ opacity: this.state.animatephaseShowedOnTimeline, textAlign: 'center', color: 'white', fontSize:30, fontWeight: 'bold'}}>- {this.state.phaseShowedOnTimeline} -</Animated.Text>
+                                            <Animated.Text style={{ opacity: animatephaseShowedOnTimeline, textAlign: 'center', color: 'white', fontSize:30, fontWeight: 'bold'}}>- {phaseShowedOnTimeline} -</Animated.Text>
                                         </View>
                 </Animated.View>
 
@@ -172,7 +175,7 @@ export default function LawyerCaseChat({navigation}) {
         <View style={{flex: 70}}>
             <ScrollView style={{flex: 5, flexDirection: 'column', height: 150, backgroundColor: "white"}}>
                 {
-                this.state.messages.map(
+                messages.map(
                 function(item){if(item.fromUser){return <Text key={item.key} style={styles.clientStyle}> {item.value} </Text>}
                 else{return <Text key={item.key} style={styles.lawyerStyle}> {item.value} </Text>}}
 
@@ -183,7 +186,7 @@ export default function LawyerCaseChat({navigation}) {
         <View style={{flex: 15, flexDirection: 'row', borderColor: "#4170f9", borderTopWidth: 3}}>
             <View style={{flex:1, flexDirection:'column'}}><Text> </Text></View>
             <View style={{flex:8}}><Text> </Text><TextInput style={{backgroundColor: "white", borderWidth:2, borderColor:"gray", borderRadius:10, height:60}}/></View>
-            <View style={{flex:3}}><Text> </Text><Icon onPress={this.sendMessage} size={50} name='send' color='#4170f9'/></View>
+            <View style={{flex:3}}><Text> </Text><Icon onPress={sendMessage} size={50} name='send' color='#4170f9'/></View>
         </View>
      </View>
     );
