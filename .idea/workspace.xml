@@ -3,10 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="463314cc-0a91-4443-80e1-bb7f89fb1346" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/clientViews/query.js" beforeDir="false" afterPath="$PROJECT_DIR$/clientViews/query.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/clientViews/register.js" beforeDir="false" afterPath="$PROJECT_DIR$/clientViews/register.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/debug.log" beforeDir="false" afterPath="$PROJECT_DIR$/debug.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lawyerView/lawyerCaseChat.js" beforeDir="false" afterPath="$PROJECT_DIR$/lawyerView/lawyerCaseChat.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lawyerView/lawyerProfile.js" beforeDir="false" afterPath="$PROJECT_DIR$/lawyerView/lawyerProfile.js" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -23,8 +19,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/lawyerView/lawyerProfile.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="176">
-              <caret line="33" column="33" selection-start-line="33" selection-start-column="33" selection-end-line="33" selection-end-column="33" />
+            <state relative-caret-position="307">
+              <caret line="31" column="88" selection-start-line="31" selection-start-column="88" selection-end-line="31" selection-end-column="88" />
             </state>
           </provider>
         </entry>
@@ -32,7 +28,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/clientViews/register.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-2713">
+            <state relative-caret-position="2046">
               <caret line="93" column="28" selection-start-line="93" selection-start-column="28" selection-end-line="93" selection-end-column="28" />
             </state>
           </provider>
@@ -42,7 +38,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>store</find>
       <find>caseRE</find>
       <find>rut</find>
       <find>rutifi</find>
@@ -55,7 +50,6 @@
       <find>store.users_issue_description</find>
       <find>setNewRegisterAv</find>
       <find>clientProfi</find>
-      <find>console.log</find>
       <find>navigation.navigate('ClientProfile')</find>
       <find>catch</find>
       <find>setLetEnter</find>
@@ -72,6 +66,8 @@
       <find>loginRut</find>
       <find>dispatch</find>
       <find>this.</find>
+      <find>store</find>
+      <find>console.log</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -119,6 +115,8 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
+      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -135,8 +133,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
-      <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -192,7 +188,7 @@
       <window_info id="Favorites" order="7" side_tool="true" />
       <window_info anchor="bottom" id="Version Control" order="0" />
       <window_info anchor="bottom" id="TODO" order="1" weight="0.3286119" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="2" sideWeight="0.49966952" visible="true" weight="0.3569405" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="2" sideWeight="0.49966952" visible="true" weight="0.33569404" />
       <window_info anchor="bottom" id="Event Log" order="3" sideWeight="0.50033045" side_tool="true" weight="0.26203966" />
       <window_info anchor="bottom" id="Find" order="4" />
       <window_info anchor="right" id="Capture Analysis" order="0" />
@@ -302,17 +298,17 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/clientViews/register.js">
+    <entry file="file://$PROJECT_DIR$/lawyerView/lawyerProfile.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-2713">
-          <caret line="93" column="28" selection-start-line="93" selection-start-column="28" selection-end-line="93" selection-end-column="28" />
+        <state relative-caret-position="307">
+          <caret line="31" column="88" selection-start-line="31" selection-start-column="88" selection-end-line="31" selection-end-column="88" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/lawyerView/lawyerProfile.js">
+    <entry file="file://$PROJECT_DIR$/clientViews/register.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="176">
-          <caret line="33" column="33" selection-start-line="33" selection-start-column="33" selection-end-line="33" selection-end-column="33" />
+        <state relative-caret-position="2046">
+          <caret line="93" column="28" selection-start-line="93" selection-start-column="28" selection-end-line="93" selection-end-column="28" />
         </state>
       </provider>
     </entry>

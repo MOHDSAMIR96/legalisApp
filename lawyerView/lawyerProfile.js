@@ -17,14 +17,26 @@ export default function LawyerProfile({navigation}) {
 
         useEffect(()=>{
 
-               fetch("http://patoexer.pythonanywhere.com/lawyerCases/" + store.lawyers_id)// es necesario el endpoint the cases con rut abogado
+               let arrayOfCasesAndQueries = [];
+
+               fetch("http://patoexer.pythonanywhere.com/lawyerCases/" + store.lawyers_id)//WE GET ALL LAWYER'S CASES
                      .then(response =>{return response.json()})
                      .then((data)=>{
-                     console.log( "ACAAA RESPUETA: " + JSON.stringify(data))
-                     setCases(data.resp)
+                      arrayOfCasesAndQueries.push(...data.resp)
+
+                     fetch("http://patoexer.pythonanywhere.com/userByLawyers/5")// WE GET ALL NEW CLIENTS NOT TAKEN BY ANY OTRHER LAWYER
+                                                         .then(response =>{return response.json()})
+                                                         .then((data)=>{
+                                                         arrayOfCasesAndQueries.push(...data.resp)
+                                                         console.log(JSON.stringify(arrayOfCasesAndQueries))
+                                                         setCases(arrayOfCasesAndQueries)
+
+                                                         })
+                                                         .catch(error => console.log(error))
 
                      })
                      .catch(error => console.log(error))
+            console.log(JSON.stringify(cases))
            },[])
 
 
@@ -56,7 +68,7 @@ export default function LawyerProfile({navigation}) {
 
                   <ScrollView>
                                     {cases.map((item, index)=>{
-                                    return <TouchableOpacity onPress={()=>{navigation.navigate('LawyerCaseChat')}} key={index}  style={styles.button}><Text style={{color: "white", fontSize: 25}}>{item.client_name}</Text><Text style={{color: "white", fontSize: 10}}>      {item.cases_matter}</Text></TouchableOpacity>
+                                    return <TouchableOpacity onPress={()=>{navigation.navigate('LawyerCaseChat')}} key={index}  style={("cases_id" in item)? styles.button: styles.newUser }><Text style={{color: "white", fontSize: 25}}>{("cases_id" in item)? item.client_name: item.users_name + " NUEVO" }</Text><Text style={{color: "white", fontSize: 10}}>  {("cases_id" in item)?item.cases_matter: item.users_issue_subject}    </Text></TouchableOpacity>
                                     })}
 
                                     </ScrollView>
@@ -106,5 +118,14 @@ const styles = StyleSheet.create({
         marginRight: 20,
         height: 60,
       },
+      newUser: {
+              alignItems: "center",
+              backgroundColor: "#0024DD",
+              padding: 10,
+              marginTop: 20,
+              marginLeft: 20,
+              marginRight: 20,
+              height: 60,
+            }
 });
 
