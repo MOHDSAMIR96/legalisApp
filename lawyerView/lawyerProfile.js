@@ -6,11 +6,13 @@ import { createStackNavigator } from 'react-navigation-stack';
 
 import { useSelector, useDispatch } from 'react-redux';
 
+import {dispatchListOfCases, dispatchSelectCase} from '../redux/dispatcher.js'
+
 
 export default function LawyerProfile({navigation}) {
 
     //REDUX STATE
-       const store = useSelector(state => state.userData);
+       const store = useSelector(state => state);
        const dispatch = useDispatch();
 
        const [cases, setCases] = useState([]);
@@ -19,7 +21,7 @@ export default function LawyerProfile({navigation}) {
 
                let arrayOfCasesAndQueries = [];
 
-               fetch("http://patoexer.pythonanywhere.com/lawyerCases/" + store.lawyers_id)//WE GET ALL LAWYER'S CASES
+               fetch("http://patoexer.pythonanywhere.com/lawyerCases/" + store.userData.lawyers_id)//WE GET ALL LAWYER'S CASES
                      .then(response =>{return response.json()})
                      .then((data)=>{
                       arrayOfCasesAndQueries.push(...data.resp)
@@ -28,16 +30,24 @@ export default function LawyerProfile({navigation}) {
                                                          .then(response =>{return response.json()})
                                                          .then((data)=>{
                                                          arrayOfCasesAndQueries.push(...data.resp)
-                                                         console.log(JSON.stringify(arrayOfCasesAndQueries))
-                                                         setCases(arrayOfCasesAndQueries)
 
+                                                         setCases(arrayOfCasesAndQueries)
+                                                         dispatchListOfCases(arrayOfCasesAndQueries)
                                                          })
                                                          .catch(error => console.log(error))
 
                      })
                      .catch(error => console.log(error))
-            console.log(JSON.stringify(cases))
+
            },[])
+
+
+    const selectCase =(index) =>{
+
+        console.log(store.listOfCases[index])
+        dispatchSelectCase(store.listOfCases[index])
+        navigation.navigate('LawyerCaseChat')
+    }
 
 
     return (
@@ -53,8 +63,8 @@ export default function LawyerProfile({navigation}) {
                     <Avatar rounded size="large" icon={{name: 'user', type: 'font-awesome'}} />
                 </View>
                 <View style={{flex:7, flexDirection:'column'}}>
-                    <Text style={styles.welcome}>{store.lawyers_name}</Text>
-                    <Text style={styles.instructions}>{store.lawyers_email}</Text>
+                    <Text style={styles.welcome}>{store.userData.lawyers_name}</Text>
+                    <Text style={styles.instructions}>{store.userData.lawyers_email}</Text>
                 </View>
               </View>
 
@@ -68,7 +78,7 @@ export default function LawyerProfile({navigation}) {
 
                   <ScrollView>
                                     {cases.map((item, index)=>{
-                                    return <TouchableOpacity onPress={()=>{navigation.navigate('LawyerCaseChat')}} key={index}  style={("cases_id" in item)? styles.button: styles.newUser }><Text style={{color: "white", fontSize: 25}}>{("cases_id" in item)? item.client_name: item.users_name + " NUEVO" }</Text><Text style={{color: "white", fontSize: 10}}>  {("cases_id" in item)?item.cases_matter: item.users_issue_subject}    </Text></TouchableOpacity>
+                                    return <TouchableOpacity onPress={()=>{selectCase(index)}} key={index}  style={("cases_id" in item)? styles.button: styles.newUser }><Text style={{color: "white", fontSize: 25}}>{("cases_id" in item)? item.client_name: item.users_name + " NUEVO" }</Text><Text style={{color: "white", fontSize: 10}}>  {("cases_id" in item)?item.cases_matter: item.users_issue_subject}    </Text></TouchableOpacity>
                                     })}
 
                                     </ScrollView>

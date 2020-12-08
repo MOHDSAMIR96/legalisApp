@@ -10,7 +10,7 @@ import {Animated} from 'react-native';
 export default function LawyerCaseChat({navigation}) {
 
     //REDUX STATE
-        const store = useSelector(state => state.userData);
+        const store = useSelector(state => state);
         const dispatch = useDispatch();
 
     //REFERENCES
@@ -23,7 +23,7 @@ export default function LawyerCaseChat({navigation}) {
     const [registerBtnDisplayed, setRegisterBtnDisplayed] = useState(false);
     const [messages, enterMessage] = useState([]);
 
-    const [caseSummary, enterCaseSummary] = useState([]);
+    const [caseSummary, enterCaseSummary] = useState(store.selectedCase.cases_description);
     const [timeLine, entertimeLine] = useState([ {succeded: 3},{ id: 1, phase: "Presentación demanda"}, { id: 2, phase: "Ratificación firma"}, {id: 3, phase: "Contestación"}, { id: 4, phase: "Término Probatorio"}, {id: 5, phase: "Dictación de sentencia"}]);
     const [phaseShowedOnTimeline, enterPhaseShowedOnTimeline] = useState("");
     const [animatephaseShowedOnTimeline, enteranimatephaseShowedOnTimeline] = useState(new Animated.Value(0));
@@ -33,6 +33,8 @@ export default function LawyerCaseChat({navigation}) {
 
 
      useEffect(()=>{
+
+    console.log(store.selectedCase)
 
 
                },[])
@@ -103,13 +105,31 @@ export default function LawyerCaseChat({navigation}) {
 
     const TextInputEnterKeyPressed=(e)=>{
         if (e.nativeEvent.key == "Enter"){
-
                 enterEditableStatus({color: "white", backGround: "#4170f9"});
                 entertouchableOpacityZindex(5);
-                Animated.timing(animateCaseContainer, {toValue: 30, duration: 300}).start()
-                Keyboard.dismiss()
-                //fetch() POST TO DE DB
+                Animated.timing(animateCaseContainer, {toValue: 30, duration: 300}).start();
+                Keyboard.dismiss();
+                //fetch() PUT TO DE DB
 
+                 console.log("ahi va...")
+                let putMethodData= {
+                cases_description: caseSummary,
+                cases_id: store.selectedCase.cases_id
+                }
+
+                let options = {
+                                method: 'PUT',
+                                body: JSON.stringify(putMethodData),
+                                headers: {'Content-Type': 'application/json'}
+                                };
+
+
+                fetch("http://patoexer.pythonanywhere.com/case/" + store.selectedCase.client_id, options)
+                .then(resp =>{return resp.json();})
+                .then( data => {
+                    console.log("LLEGO EL DATA: " + data)
+                })
+                .catch(error => console.log("error"))
            }
     }
 
