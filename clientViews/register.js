@@ -121,9 +121,9 @@ export default function ClientRegister({navigation}){
                                     dispatch({type: "USERDATA", doneAction: dataToDispatch});
 
                                 })
-                                .catch(error => console.log(error))
+                                .catch(error => console.log(JSON.stringify(error)))
                                         })
-                                .catch(error => {console.log(error)})
+                                .catch(error => {console.log(JSON.stringify(error))})
                     })
             .catch(error => {console.log(error)})
 

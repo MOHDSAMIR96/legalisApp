@@ -18,5 +18,5 @@ export function dispatchSelectCase(x){
 }
 
 export function dispatchListOfCases(x){
-    store.dispatch(storeListOfCases(x));
+    store.dispatch(storeListOfCases(x))
 }

@@ -6,12 +6,17 @@ import { createStackNavigator } from 'react-navigation-stack';
 import { useSelector, useDispatch } from 'react-redux';
 import {Animated} from 'react-native';
 
+import {dispatchListOfCases, dispatchSelectCase} from '../redux/dispatcher.js'
+
 
 export default function LawyerCaseChat({navigation}) {
 
     //REDUX STATE
         const store = useSelector(state => state);
         const dispatch = useDispatch();
+
+    //REFERENCES
+        const inputRef = useRef(null);
 
     //REFERENCES
         const CaseSummaryTextInput = useRef(null);
@@ -22,6 +27,11 @@ export default function LawyerCaseChat({navigation}) {
     const [animateCaseSummary, setAnimateCaseSummary] = useState(new Animated.Value(5));
     const [registerBtnDisplayed, setRegisterBtnDisplayed] = useState(false);
     const [messages, enterMessage] = useState([]);
+    const [stillTypingAdvisor, booleanStillTypingAdvisor] = useState(false);
+    const [messageInputContent, setMessageInputContent] = useState("");
+    const [returnedMessageId, setReturnedMessageId] = useState(0);
+
+
 
     const [caseSummary, enterCaseSummary] = useState(store.selectedCase.cases_description);
     const [timeLine, entertimeLine] = useState([ {succeded: 3},{ id: 1, phase: "Presentación demanda"}, { id: 2, phase: "Ratificación firma"}, {id: 3, phase: "Contestación"}, { id: 4, phase: "Término Probatorio"}, {id: 5, phase: "Dictación de sentencia"}]);
@@ -34,15 +44,106 @@ export default function LawyerCaseChat({navigation}) {
 
      useEffect(()=>{
 
-    console.log(store.selectedCase)
+                 let fetchInterval = setInterval(()=>{
+                                              fetch("http://patoexer.pythonanywhere.com/message/" + store.selectedCase.client_id )// || store.selectedCase.user_id
+                                              .then((response)=> response.json())
+                                              .then((data)=>
+                                                            {console.log(JSON.stringify(messages))
+                                                            if(messages[messages.length - 1 ]!= data[data.length - 1].messages_content){
+                                                                  if(data[data.length - 1].messages_content == "typing..." && data[data.length - 1].messages_origin=="lawyer" ){
+                                                                  this.typingRef.current.style = "inline";
+                                                                  console.log("FUNCIONA")
+                                                                  }
+                                                                  else{
+                                                                     enterMessage([...data])
+                                                                  }
+                                                                  }
+                                                            })
+                                            }, 1000);
 
+        return ()=>{
+             clearInterval(fetchInterval);
+             let arrayOfCasesAndQueries = [];
 
+                           fetch("http://patoexer.pythonanywhere.com/lawyerCases/" + store.userData.lawyers_id)//WE GET ALL LAWYER'S CASES
+                                 .then(response =>{return response.json()})
+                                 .then((data)=>{
+                                  arrayOfCasesAndQueries.push(...data.resp)
+
+                                 fetch("http://patoexer.pythonanywhere.com/userByLawyers/5")// WE GET ALL NEW CLIENTS NOT TAKEN BY ANY OTHER LAWYER
+                                                                     .then(response =>{return response.json()})
+                                                                     .then((data)=>{
+                                                                     arrayOfCasesAndQueries.push(...data.resp)
+                                                                     dispatchListOfCases(arrayOfCasesAndQueries)
+                                                                     })
+                                                                     .catch(error => console.log(error))
+
+                                 })
+                                 .catch(error => console.log(error))
+                }
                },[])
+
+
+     const typing = (x) => { console.log("entro")
+         let today = new Date();
+                let currentDate = today.getFullYear() + "-" + (today.getMonth() + 1) + "-" + today.getDate()
+
+                let casesData = {
+                                      "messages_date": currentDate,
+                                      "messages_content": "typing...",
+                                      "messages_origin": "client",
+                                      "user_id": store.users_id,
+                                      "lawyer_id": 1 //SE PUSO EL LAWYER FIJO MIENTRAS
+                                    }
+
+                   let options2 = {
+                                      method: 'POST',
+                                      body: JSON.stringify(casesData),
+                                      headers: {'Content-Type': 'application/json'}};
+                     console.log("++++++++++++ user " + store.users_id)
+                    if(!stillTypingAdvisor){
+
+                    fetch("http://patoexer.pythonanywhere.com/message/1", options2)
+                       .then((response)=> { return response.json()})
+                       .then((data)=> {
+                       setReturnedMessageId(data.messages_id)
+                       console.log(JSON.stringify(data))})
+                       .catch(error => console.log(JSON.stringify(error)))
+                       booleanStillTypingAdvisor(true);
+                    }
+
+
+     }
+
+
 
   const sendMessage=()=>{
 
-  //-----------------------GET TO /MESSAGES
-    Alert.alert("funciona")
+  let today = new Date();
+     let currentDate = today.getFullYear() + "-" + (today.getMonth() + 1) + "-" + today.getDate()
+     let casesData = {
+                        "messages_date": currentDate,
+                        "messages_content": messageInputContent,
+                        "messages_id": returnedMessageId,
+                        "messages_origin": "user",
+                        "user_id": store.users_id,
+                        "lawyer_id": 5
+                      }
+
+     let options2 = {
+                        method: 'PUT',
+                        body: JSON.stringify(casesData),
+                        headers: {'Content-Type': 'application/json'}};
+
+      if(stillTypingAdvisor){
+
+      fetch("http://patoexer.pythonanywhere.com/message/1", options2)
+         .then((response)=> response.json())
+         .then((data)=> {console.log(JSON.stringify(data))})
+      }
+
+      booleanStillTypingAdvisor(false);
+      inputRef.current.clear()
   }
 
   const showCaseSummary=()=>{
@@ -111,7 +212,6 @@ export default function LawyerCaseChat({navigation}) {
                 Keyboard.dismiss();
                 //fetch() PUT TO DE DB
 
-                 console.log("ahi va...")
                 let putMethodData= {
                 cases_description: caseSummary,
                 cases_id: store.selectedCase.cases_id
@@ -125,11 +225,13 @@ export default function LawyerCaseChat({navigation}) {
 
 
                 fetch("http://patoexer.pythonanywhere.com/case/" + store.selectedCase.client_id, options)
-                .then(resp =>{return resp.json();})
+                .then((response)=>{ return response.json();})
                 .then( data => {
-                    console.log("LLEGO EL DATA: " + data)
+                    console.log("data modified " + JSON.stringify(data))
+                    enterCaseSummary(data.modifiedFields[0].cases_description)
+                    console.log("case sumary " + caseSummary)
                 })
-                .catch(error => console.log("error"))
+                .catch(error => console.log(JSON.stringify(error)))
            }
     }
 
@@ -205,7 +307,7 @@ export default function LawyerCaseChat({navigation}) {
         </View>
         <View style={{flex: 15, flexDirection: 'row', borderColor: "#4170f9", borderTopWidth: 3}}>
             <View style={{flex:1, flexDirection:'column'}}><Text> </Text></View>
-            <View style={{flex:8}}><Text> </Text><TextInput style={{backgroundColor: "white", borderWidth:2, borderColor:"gray", borderRadius:10, height:60}}/></View>
+            <View style={{flex:8}}><Text> </Text><TextInput ref={inputRef} onChangeText={x=> {setMessageInputContent(x); typing(x)}} style={{backgroundColor: "white", borderWidth:2, borderColor:"gray", borderRadius:10, height:60}}/></View>
             <View style={{flex:3}}><Text> </Text><Icon onPress={sendMessage} size={50} name='send' color='#4170f9'/></View>
         </View>
      </View>

@@ -5,7 +5,7 @@ import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 
 import { useSelector, useDispatch } from 'react-redux';
-
+import {dispatchListOfCases, dispatchSelectCase} from '../redux/dispatcher.js'
 import {Animated} from 'react-native';
 
 let arr = [1,2,3]
@@ -37,8 +37,30 @@ export default function LawyerRegister({navigation}) {
 
 
    useEffect(()=>{// ONLY IF THE USERDATA ARRIVES TO THE STORE THE NAVIGATOR IS UPDATED
-       if( letEnterBoolean ){
-             navigation.navigate('LawyerProfile')
+
+
+       if( letEnterBoolean ){//arreglar
+
+            let arrayOfCasesAndQueries = [];
+
+                           fetch("http://patoexer.pythonanywhere.com/lawyerCases/" + store.lawyers_id)//WE GET ALL LAWYER'S CASES
+                                 .then(response =>{return response.json()})
+                                 .then((data)=>{
+                                  arrayOfCasesAndQueries.push(...data.resp)
+
+                                 fetch("http://patoexer.pythonanywhere.com/userByLawyers/5")// WE GET ALL NEW CLIENTS NOT TAKEN BY ANY OTRHER LAWYER
+                                                                     .then(response =>{return response.json()})
+                                                                     .then((data)=>{
+                                                                     arrayOfCasesAndQueries.push(...data.resp)
+
+                                                                     dispatchListOfCases(arrayOfCasesAndQueries)
+                                                                     navigation.navigate('LawyerProfile')
+                                                                     })
+                                                                     .catch(error => console.log(error))
+
+                                 })
+                                 .catch(error => console.log(error))
+
          }
    },[letEnterBoolean])
 
@@ -79,7 +101,7 @@ export default function LawyerRegister({navigation}) {
                 fetch("http://patoexer.pythonanywhere.com/lawyer/1", options)
                             .then((response)=>{ return response.json()})
                             .then((data)=> {
-                                console.log(JSON.stringify(data))
+                                console.log("JSON.stringify(data)")
                                 navigation.navigate('ThanksMsg')
                             })
                             .catch(error => {console.log(error)})

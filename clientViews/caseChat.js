@@ -23,22 +23,81 @@ export default function CaseChat() {
      const [animateCaseUpdate, setAnimateCaseUpdate]=useState(new Animated.Value(5));
      const [animateCaseSummary, setAnimateCaseSummary]=useState(new Animated.Value(5));
      const [registerBtnDisplayed, setRegisterBtnDisplayed] = useState(false);
-     const [messages, setMessages]= useState([])
      const [caseBrief, setCaseBrief]= useState(selectedCase.cases_description)//store.userData.casesResp[store.userData.selectedCase].cases_description)
      const [timeLine, setTimeLine]= useState([{ succeded: true ,id: 1, phase: "Presentación demanda"}, { succeded: true, id: 2, phase: "Ratificación firma"}, {succeded: true, id: 3, phase: "Contestación"}, {succeded: false,  id: 4, phase: "Término Probatorio"}, {succeded: false, id: 5, phase: "Dictación de sentencia"}]);
      const [phaseShowedOnTimeline, setPhaseShowedOnTimeline]= useState("");
      const [animatephaseShowedOnTimeline, setAnimatephaseShowedOnTimeline]= useState(new Animated.Value(0));
 
+     const [messageInputContent, setMessageInputContent] = useState("");
+     const [returnedMessageId, setReturnedMessageId] = useState(0);
+     const [stillTypingAdvisor, booleanStillTypingAdvisor] = useState(false);
+     const [message, enterMessage] = useState([]);
 
-    useEffect(()=>{
 
-    console.log(JSON.stringify("selectedCase: " + JSON.stringify(selectedCase)))
+    //REFERENCES
+        const inputRef = useRef(null);
+        const typingRef = useRef(null);
 
-    }, [])
+  useEffect(()=>{
+
+                        let fetchInterval = setInterval(()=>{
+                                                                 fetch("http://patoexer.pythonanywhere.com/message/0/" + store.userData.clientsResp.clients_id )
+                                                                 .then((response)=> response.json())
+                                                                 .then((data)=>
+                                                                               { console.log(JSON.stringify(data))
+                                                                               if(message[message.length - 1 ]!= data[data.length - 1].messages_content){
+                                                                                     if(data[data.length - 1].messages_content == "typing..." && data[data.length - 1].messages_origin=="lawyer" ){
+                                                                                     this.typingRef.current.style = "inline";
+                                                                                     console.log("FUNCIONA")
+                                                                                     }
+                                                                                     else{
+                                                                                        enterMessage([...data])
+                                                                                     }
+                                                                                     }
+                                                                               })
+                                                               }, 1000);
+        // return en useffect es como componentWillUnmunt
+        return ()=>{
+            clearInterval(fetchInterval);
+            }
+
+
+        }, []);
+
+
+
+
+
   const sendMessage = () => {
 
-  //-----------------------GET TO /MESSAGES
-    Alert.alert("funciona")
+ let today = new Date();
+    let currentDate = today.getFullYear() + "-" + (today.getMonth() + 1) + "-" + today.getDate()
+    let casesData = {
+                       "messages_date": currentDate,
+                       "messages_content": messageInputContent,
+                       "messages_id": returnedMessageId,
+                       "messages_origin": "user",
+                       "user_id": store.users_id,
+                       "clients_id": 0, //KEEPS THIS STATIC COS THE BACKEND TRANSLATE LIKE NULL ON TABLE
+                       "lawyer_id": 1
+                     }
+
+    let options2 = {
+                       method: 'PUT',
+                       body: JSON.stringify(casesData),
+                       headers: {'Content-Type': 'application/json'}};
+
+     if(stillTypingAdvisor){//si entra
+
+     fetch("http://patoexer.pythonanywhere.com/message/1/0", options2)
+        .then((response)=> response.json())
+        .then((data)=> {console.log(JSON.stringify(data))})
+        inputRef.current.clear()
+     }
+
+     booleanStillTypingAdvisor(false);
+
+
   }
 
   const showCaseSummary = () => {
@@ -84,6 +143,39 @@ export default function CaseChat() {
         Animated.timing(animatephaseShowedOnTimeline, {toValue: 0, duration: 0}).start(()=>{
         Animated.timing(animatephaseShowedOnTimeline, {toValue: 1, duration: 800}).start()})
     }
+
+    const typing = (x) => { console.log(store.userData.clientsResp.clients_id)
+           let today = new Date();
+           let currentDate = today.getFullYear() + "-" + (today.getMonth() + 1) + "-" + today.getDate()
+
+           let casesData = {
+                                 "messages_date": currentDate,
+                                 "messages_content": "typing...",
+                                 "messages_origin": "client",
+                                 "client_id": store.userData.clientsResp.clients_id, //KEEPS THIS STATIC COS THE BACKEND TRANSLATE LIKE NULL ON TABLE
+                                 "user_id": 0,
+                                 "lawyer_id": 1 //SE PUSO EL LAWYER FIJO MIENTRAS
+                               }
+
+              let options2 = {
+                                 method: 'POST',
+                                 body: JSON.stringify(casesData),
+                                 headers: {'Content-Type': 'application/json'}};
+
+               if(!stillTypingAdvisor){
+
+               fetch("http://patoexer.pythonanywhere.com/message/1/0", options2)
+                  .then((response)=> { return response.json()})
+                  .then((data)=> {
+                  setReturnedMessageId(data.resp.messages_id)
+                  console.log(JSON.stringify(data))
+                  })
+                  .catch(error => console.log(JSON.stringify(error)))
+                  booleanStillTypingAdvisor(true);
+               }
+       }
+
+
 
 
     return (
@@ -141,9 +233,11 @@ export default function CaseChat() {
                 <View style={{flex: 70}}>
                     <ScrollView style={{flex: 5, flexDirection: 'column', height: 150, backgroundColor: "white"}}>
                         {
-                        messages.map(
-                        function(item){if(item.fromUser){return <Text key={item.key} style={styles.clientStyle}> {item.value} </Text>}
-                        else{return <Text key={item.key} style={styles.lawyerStyle}> {item.value} </Text>}}
+                        message.map(
+                        function(item){ console.log(JSON.stringify(item))
+
+                        if(item.fromUser){return <Text key={item.key} style={styles.clientStyle}> {item.messages_content} </Text>}
+                        else{return <Text key={item.key} style={styles.lawyerStyle}> {item.messages_content} </Text>}}
 
                         )
                         }
@@ -151,7 +245,7 @@ export default function CaseChat() {
                 </View>
                 <View style={{flex: 15, flexDirection: 'row', borderColor: "#4170f9", borderTopWidth: 3}}>
                     <View style={{flex:1, flexDirection:'column'}}><Text> </Text></View>
-                    <View style={{flex:8}}><Text> </Text><TextInput style={{backgroundColor: "white", borderWidth:2, borderColor:"gray", borderRadius:10, height:60}}/></View>
+                    <View style={{flex:8}}><Text> </Text><TextInput ref={inputRef} onChangeText={x=> {setMessageInputContent(x); typing(x)}} style={{backgroundColor: "white", borderWidth:2, borderColor:"gray", borderRadius:10, height:60}}/></View>
                     <View style={{flex:3}}><Text> </Text><Icon onPress={sendMessage} size={50} name='send' color='#4170f9'/></View>
                 </View>
              </View>

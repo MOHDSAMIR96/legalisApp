@@ -41,11 +41,11 @@ export function QueryChat({navigation}) {
 
      useEffect(()=>{
 
-                      let fetchInterval = setInterval(()=>{
-                                         fetch("http://patoexer.pythonanywhere.com/message/" + store.users_id)
+                      let fetchInterval = setInterval(()=>{console.log(store.users_id )
+                                         fetch("http://patoexer.pythonanywhere.com/message/" + store.users_id  + "/0")
                                          .then((response)=> response.json())
                                          .then((data)=>
-                                                       { console.log("+++++: " + data[data.length - 1].messages_origin + "// " + data[data.length - 1].messages_content  )
+                                                       { console.log("********************" + store.users_id  + " " + JSON.stringify(data))
                                                        if(message[message.length - 1 ]!= data[data.length - 1].messages_content){
                                                              if(data[data.length - 1].messages_content == "typing..." && data[data.length - 1].messages_origin=="lawyer" ){
                                                              this.typingRef.current.style = "inline";
@@ -57,7 +57,7 @@ export function QueryChat({navigation}) {
                                                              }
                                                        })
                                        }, 1000);
-
+      // return en useffect es como componentWillUnmunt
       return ()=>{
           clearInterval(fetchInterval);
           let options = {
@@ -67,10 +67,20 @@ export function QueryChat({navigation}) {
           fetch("http://patoexer.pythonanywhere.com/user/" + store.users_id, options)
               .then((response)=> response.json())
               .then((data)=> {
+
+                let options = {
+                                      method: 'DELETE',
+                                      headers: {'Content-Type': 'application/json'}};
+
+                          fetch("http://patoexer.pythonanywhere.com/message/" + store.users_id, options)
+                              .then((response)=> response.json())
+                              .then((data)=> {
+                              })
+                              .catch(error => {})
               })
               .catch(error => {})
 
-            }// return en useffect es como componentWillUnmunt
+            }
 
       }, []);
 
@@ -82,8 +92,9 @@ export function QueryChat({navigation}) {
                              "messages_date": currentDate,
                              "messages_content": "typing...",
                              "messages_origin": "user",
+                             "clients_id": 0, //KEEPS THIS STATIC COS THE BACKEND TRANSLATE LIKE NULL ON TABLE
                              "user_id": store.users_id,
-                             "lawyer_id": 1
+                             "lawyer_id": 1 //SE PUSO EL LAWYER FIJO MIENTRAS
                            }
 
           let options2 = {
@@ -93,15 +104,15 @@ export function QueryChat({navigation}) {
 
            if(!stillTypingAdvisor){
 
-           fetch("http://patoexer.pythonanywhere.com/message/1", options2)
-              .then((response)=> response.json())
+           fetch("http://patoexer.pythonanywhere.com/message/1/0", options2)
+              .then((response)=> { return response.json()})
               .then((data)=> {
-              setReturnedMessageId(data.messages_id)
-              console.log(JSON.stringify(data))})
+              setReturnedMessageId(data.resp.messages_id)
+              console.log(JSON.stringify(data))
+              })
+              .catch(error => console.log(JSON.stringify(error)))
+              booleanStillTypingAdvisor(true);
            }
-
-        booleanStillTypingAdvisor(true);
-
    }
 
    const enterNewMessage = () =>{
@@ -114,6 +125,7 @@ export function QueryChat({navigation}) {
                       "messages_id": returnedMessageId,
                       "messages_origin": "user",
                       "user_id": store.users_id,
+                      "clients_id": 0, //KEEPS THIS STATIC COS THE BACKEND TRANSLATE LIKE NULL ON TABLE
                       "lawyer_id": 1
                     }
 
@@ -122,15 +134,16 @@ export function QueryChat({navigation}) {
                       body: JSON.stringify(casesData),
                       headers: {'Content-Type': 'application/json'}};
 
-    if(stillTypingAdvisor){
+    if(stillTypingAdvisor){//si entra
 
-    fetch("http://patoexer.pythonanywhere.com/message/1", options2)
+    fetch("http://patoexer.pythonanywhere.com/message/1/0", options2)
        .then((response)=> response.json())
        .then((data)=> {console.log(JSON.stringify(data))})
+       inputRef.current.clear()
     }
 
     booleanStillTypingAdvisor(false);
-    inputRef.current.clear()
+
 
    }
 
@@ -159,7 +172,7 @@ export function QueryChat({navigation}) {
         Animated.timing(animate, {toValue: 100, duration: 300}).start()
     }
     else if(registerBtnDisplayed == 1){
-       //this.setState({flex:{registerView:0}, registerBtnDisplayed: false})
+
        setNewRegisterBtnDisplayed(0)
        Animated.timing(animate, {toValue: 4, duration: 300}).start()
     }
@@ -196,7 +209,7 @@ export function QueryChat({navigation}) {
                         let style;
                         if(item.messages_origin=="lawyer"){
                             style = styles.lawyerStyle;
-                        }else{style = styles.clientStyle;}
+                        }else if(item.messages_origin=="user"){style = styles.clientStyle;}
                         return <Text key={index} style={style}> {item.messages_content} </Text>
                     }
 
