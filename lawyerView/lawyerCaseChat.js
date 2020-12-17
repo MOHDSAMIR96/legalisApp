@@ -52,7 +52,7 @@ export default function LawyerCaseChat({navigation}) {
                                                                       if(messages[messages.length - 1 ]!= data[data.length - 1].messages_content){console.log("entro")
                                                                       if(data[data.length - 1].messages_content == "typing..." && data[data.length - 1].messages_origin=="client" ){
                                                                       this.typingRef.current.style = "inline";
-                                                                      console.log("FUNCIONA")
+
                                                                       }
                                                                       else{
                                                                         enterMessage([...data])
@@ -104,7 +104,7 @@ export default function LawyerCaseChat({navigation}) {
 
                     if(!stillTypingAdvisor){
 
-                    fetch("http://patoexer.pythonanywhere.com/message/1/0", options2)
+                    fetch("http://patoexer.pythonanywhere.com/message/0/0/1", options2)
                        .then((response)=> { return response.json()})
                        .then((data)=> {
                        setReturnedMessageId(data.resp.messages_id)
@@ -123,7 +123,7 @@ export default function LawyerCaseChat({navigation}) {
                          "messages_date": currentDate,
                          "messages_content": messageInputContent,
                          "messages_id": returnedMessageId,
-                         "messages_origin": "user",
+                         "messages_origin": "lawyer",
                          "user_id": store.users_id,
                          "clients_id": 0, //KEEPS THIS STATIC COS THE BACKEND TRANSLATE LIKE NULL ON TABLE
                          "lawyer_id": 1
@@ -134,9 +134,9 @@ export default function LawyerCaseChat({navigation}) {
                          body: JSON.stringify(casesData),
                          headers: {'Content-Type': 'application/json'}};
 
-       if(stillTypingAdvisor){//si entra
+       if(stillTypingAdvisor){
 
-       fetch("http://patoexer.pythonanywhere.com/message/1/0", options2)
+       fetch("http://patoexer.pythonanywhere.com/message/0/0/1", options2)
           .then((response)=> response.json())
           .then((data)=> {console.log(JSON.stringify(data))})
           inputRef.current.clear()
@@ -299,8 +299,8 @@ export default function LawyerCaseChat({navigation}) {
             <ScrollView style={{flex: 5, flexDirection: 'column', height: 150, backgroundColor: "white"}}>
                 {
                 messages.map((item)=>{
-                if(item.messages_origin=="client" || item.messages_origin=="user"){return <Text key={item.key} style={styles.clientStyle}> {item.messages_content} </Text>}
-                else if(item.messages_origin=="lawyer"){return <Text key={item.key} style={styles.lawyerStyle}> {item.messages_content} </Text>}}
+                if(item.messages_origin=="client" || item.messages_origin=="user"){return <Animated.Text key={item.key} style={styles.lawyerStyle}> {item.messages_content} </Animated.Text>}
+                else if(item.messages_origin=="lawyer"){return <Animated.Text key={item.key} style={styles.clientStyle}> {item.messages_content} </Animated.Text>}}
 
                 )
                 }

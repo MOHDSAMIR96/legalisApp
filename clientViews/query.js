@@ -70,7 +70,8 @@ export default function Query({navigation}){//ESTA PARTE ES LA VISTA DE EL INICI
         "users_name": userName,
         "users_issue_subject": subjects[activeSubjectCounter],
         "users_issue_description": caseDescription,
-        "lawyer_id": 1
+        "lawyer_id": 1,
+        "taken": false
     }
 
     let options = {

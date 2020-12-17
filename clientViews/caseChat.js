@@ -41,16 +41,16 @@ export default function CaseChat() {
   useEffect(()=>{
 
                         let fetchInterval = setInterval(()=>{
-                                                                 fetch("http://patoexer.pythonanywhere.com/message/0/" + store.userData.clientsResp.clients_id )
+                                                                 fetch("http://patoexer.pythonanywhere.com/message/0/" + store.userData.clientsResp.clients_id + "/0" )
                                                                  .then((response)=> response.json())
                                                                  .then((data)=>
                                                                                { console.log(JSON.stringify(data))
                                                                                if(message[message.length - 1 ]!= data[data.length - 1].messages_content){
                                                                                      if(data[data.length - 1].messages_content == "typing..." && data[data.length - 1].messages_origin=="lawyer" ){
                                                                                      this.typingRef.current.style = "inline";
-                                                                                     console.log("FUNCIONA")
+
                                                                                      }
-                                                                                     else{
+                                                                                     else{console.log("entro contenido")
                                                                                         enterMessage([...data])
                                                                                      }
                                                                                      }
@@ -76,7 +76,7 @@ export default function CaseChat() {
                        "messages_date": currentDate,
                        "messages_content": messageInputContent,
                        "messages_id": returnedMessageId,
-                       "messages_origin": "user",
+                       "messages_origin": "client",
                        "user_id": store.users_id,
                        "clients_id": 0, //KEEPS THIS STATIC COS THE BACKEND TRANSLATE LIKE NULL ON TABLE
                        "lawyer_id": 1
@@ -89,7 +89,7 @@ export default function CaseChat() {
 
      if(stillTypingAdvisor){//si entra
 
-     fetch("http://patoexer.pythonanywhere.com/message/1/0", options2)
+     fetch("http://patoexer.pythonanywhere.com/message/0/1/0", options2)
         .then((response)=> response.json())
         .then((data)=> {console.log(JSON.stringify(data))})
         inputRef.current.clear()
@@ -164,7 +164,7 @@ export default function CaseChat() {
 
                if(!stillTypingAdvisor){
 
-               fetch("http://patoexer.pythonanywhere.com/message/1/0", options2)
+               fetch("http://patoexer.pythonanywhere.com/message/0/1/0", options2)
                   .then((response)=> { return response.json()})
                   .then((data)=> {
                   setReturnedMessageId(data.resp.messages_id)

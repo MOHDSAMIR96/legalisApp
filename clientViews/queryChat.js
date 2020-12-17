@@ -41,8 +41,8 @@ export function QueryChat({navigation}) {
 
      useEffect(()=>{
 
-                      let fetchInterval = setInterval(()=>{console.log(store.users_id )
-                                         fetch("http://patoexer.pythonanywhere.com/message/" + store.users_id  + "/0")
+                      let fetchInterval = setInterval(()=>{
+                                         fetch("http://patoexer.pythonanywhere.com/message/" + store.users_id  + "/0/0")
                                          .then((response)=> response.json())
                                          .then((data)=>
                                                        { console.log("********************" + store.users_id  + " " + JSON.stringify(data))
@@ -104,7 +104,7 @@ export function QueryChat({navigation}) {
 
            if(!stillTypingAdvisor){
 
-           fetch("http://patoexer.pythonanywhere.com/message/1/0", options2)
+           fetch("http://patoexer.pythonanywhere.com/message/1/0/0", options2)
               .then((response)=> { return response.json()})
               .then((data)=> {
               setReturnedMessageId(data.resp.messages_id)
@@ -134,9 +134,9 @@ export function QueryChat({navigation}) {
                       body: JSON.stringify(casesData),
                       headers: {'Content-Type': 'application/json'}};
 
-    if(stillTypingAdvisor){//si entra
+    if(stillTypingAdvisor){
 
-    fetch("http://patoexer.pythonanywhere.com/message/1/0", options2)
+    fetch("http://patoexer.pythonanywhere.com/message/1/0/0", options2)
        .then((response)=> response.json())
        .then((data)=> {console.log(JSON.stringify(data))})
        inputRef.current.clear()

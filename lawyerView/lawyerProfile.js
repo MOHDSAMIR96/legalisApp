@@ -26,7 +26,7 @@ export default function LawyerProfile({navigation}) {
                      .then((data)=>{
                       arrayOfCasesAndQueries.push(...data.resp)
 
-                     fetch("http://patoexer.pythonanywhere.com/userByLawyers/5")// WE GET ALL NEW CLIENTS NOT TAKEN BY ANY OTRHER LAWYER
+                     fetch("http://patoexer.pythonanywhere.com/userByLawyers/1")// WE GET ALL NEW CLIENTS NOT TAKEN BY ANY OTRHER LAWYER
                                                          .then(response =>{return response.json()})
                                                          .then((data)=>{
                                                          arrayOfCasesAndQueries.push(...data.resp)
@@ -44,9 +44,36 @@ export default function LawyerProfile({navigation}) {
 
     const selectCase =(index) =>{
 
-        console.log(store.listOfCases[index])
         dispatchSelectCase(store.listOfCases[index])
-        navigation.navigate('LawyerCaseChat')
+        console.log(JSON.stringify(store.listOfCases[index].users_id))
+
+        if("users_name" in store.listOfCases[index] && store.listOfCases[index].taken == false){
+
+
+        let updateUserData = {
+                "lawyer_id": store.userData.lawyers_id,
+                "taken": 1
+            }
+
+            let options = {
+                        method: 'PUT',
+                        body: JSON.stringify(updateUserData),
+                        headers: {'Content-Type': 'application/json'}};
+
+            fetch("http://patoexer.pythonanywhere.com/user/" + store.listOfCases[index].users_id, options)
+                .then((response)=> {return response.json()})
+                .then((data)=> {
+
+                    dispatch({type: "USERDATA", doneAction: data});
+                    navigation.navigate('LawyerCaseChat')
+                })
+                .catch(error => {console.log(JSON.stringify(error))})
+
+        }
+        else{
+        console.log("NO user or Taken user")
+        }
+
     }
 
 
