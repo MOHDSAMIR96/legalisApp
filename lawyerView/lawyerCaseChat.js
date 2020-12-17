@@ -45,21 +45,21 @@ export default function LawyerCaseChat({navigation}) {
      useEffect(()=>{
 
                  let fetchInterval = setInterval(()=>{
-                                              fetch("http://patoexer.pythonanywhere.com/message/" + store.selectedCase.client_id )// || store.selectedCase.user_id
-                                              .then((response)=> response.json())
-                                              .then((data)=>
-                                                            {console.log(JSON.stringify(messages))
-                                                            if(messages[messages.length - 1 ]!= data[data.length - 1].messages_content){
-                                                                  if(data[data.length - 1].messages_content == "typing..." && data[data.length - 1].messages_origin=="lawyer" ){
-                                                                  this.typingRef.current.style = "inline";
-                                                                  console.log("FUNCIONA")
-                                                                  }
-                                                                  else{
-                                                                     enterMessage([...data])
-                                                                  }
-                                                                  }
-                                                            })
-                                            }, 1000);
+                                                       fetch("http://patoexer.pythonanywhere.com/message/0/0/" + store.userData.lawyers_id )
+                                                       .then((response)=> response.json())
+                                                       .then((data)=>
+                                                                    {
+                                                                      if(messages[messages.length - 1 ]!= data[data.length - 1].messages_content){console.log("entro")
+                                                                      if(data[data.length - 1].messages_content == "typing..." && data[data.length - 1].messages_origin=="client" ){
+                                                                      this.typingRef.current.style = "inline";
+                                                                      console.log("FUNCIONA")
+                                                                      }
+                                                                      else{
+                                                                        enterMessage([...data])
+                                                                        }
+                                                                     }
+                                                                        })
+                                                                                }, 1000);
 
         return ()=>{
              clearInterval(fetchInterval);
@@ -84,67 +84,68 @@ export default function LawyerCaseChat({navigation}) {
                },[])
 
 
-     const typing = (x) => { console.log("entro")
-         let today = new Date();
+     const typing = (x) => {
+                let today = new Date();
                 let currentDate = today.getFullYear() + "-" + (today.getMonth() + 1) + "-" + today.getDate()
 
                 let casesData = {
                                       "messages_date": currentDate,
                                       "messages_content": "typing...",
-                                      "messages_origin": "client",
-                                      "user_id": store.users_id,
-                                      "lawyer_id": 1 //SE PUSO EL LAWYER FIJO MIENTRAS
+                                      "messages_origin": "lawyer",
+                                      "client_id": store.selectedCase.client_id, //KEEPS THIS STATIC COS THE BACKEND TRANSLATE LIKE NULL ON TABLE
+                                      "user_id": 0,
+                                      "lawyer_id": store.userData.lawyers_id //SE PUSO EL LAWYER FIJO MIENTRAS
                                     }
 
                    let options2 = {
                                       method: 'POST',
                                       body: JSON.stringify(casesData),
                                       headers: {'Content-Type': 'application/json'}};
-                     console.log("++++++++++++ user " + store.users_id)
+
                     if(!stillTypingAdvisor){
 
-                    fetch("http://patoexer.pythonanywhere.com/message/1", options2)
+                    fetch("http://patoexer.pythonanywhere.com/message/1/0", options2)
                        .then((response)=> { return response.json()})
                        .then((data)=> {
-                       setReturnedMessageId(data.messages_id)
-                       console.log(JSON.stringify(data))})
+                       setReturnedMessageId(data.resp.messages_id)
+
+                       })
                        .catch(error => console.log(JSON.stringify(error)))
                        booleanStillTypingAdvisor(true);
                     }
+            }
+
+  const sendMessage = () => {
+
+   let today = new Date();
+      let currentDate = today.getFullYear() + "-" + (today.getMonth() + 1) + "-" + today.getDate()
+      let casesData = {
+                         "messages_date": currentDate,
+                         "messages_content": messageInputContent,
+                         "messages_id": returnedMessageId,
+                         "messages_origin": "user",
+                         "user_id": store.users_id,
+                         "clients_id": 0, //KEEPS THIS STATIC COS THE BACKEND TRANSLATE LIKE NULL ON TABLE
+                         "lawyer_id": 1
+                       }
+
+      let options2 = {
+                         method: 'PUT',
+                         body: JSON.stringify(casesData),
+                         headers: {'Content-Type': 'application/json'}};
+
+       if(stillTypingAdvisor){//si entra
+
+       fetch("http://patoexer.pythonanywhere.com/message/1/0", options2)
+          .then((response)=> response.json())
+          .then((data)=> {console.log(JSON.stringify(data))})
+          inputRef.current.clear()
+       }
+
+       booleanStillTypingAdvisor(false);
 
 
-     }
-
-
-
-  const sendMessage=()=>{
-
-  let today = new Date();
-     let currentDate = today.getFullYear() + "-" + (today.getMonth() + 1) + "-" + today.getDate()
-     let casesData = {
-                        "messages_date": currentDate,
-                        "messages_content": messageInputContent,
-                        "messages_id": returnedMessageId,
-                        "messages_origin": "user",
-                        "user_id": store.users_id,
-                        "lawyer_id": 5
-                      }
-
-     let options2 = {
-                        method: 'PUT',
-                        body: JSON.stringify(casesData),
-                        headers: {'Content-Type': 'application/json'}};
-
-      if(stillTypingAdvisor){
-
-      fetch("http://patoexer.pythonanywhere.com/message/1", options2)
-         .then((response)=> response.json())
-         .then((data)=> {console.log(JSON.stringify(data))})
-      }
-
-      booleanStillTypingAdvisor(false);
-      inputRef.current.clear()
-  }
+    }
 
   const showCaseSummary=()=>{
     if(!registerBtnDisplayed){
@@ -297,9 +298,9 @@ export default function LawyerCaseChat({navigation}) {
         <View style={{flex: 70}}>
             <ScrollView style={{flex: 5, flexDirection: 'column', height: 150, backgroundColor: "white"}}>
                 {
-                messages.map(
-                function(item){if(item.fromUser){return <Text key={item.key} style={styles.clientStyle}> {item.value} </Text>}
-                else{return <Text key={item.key} style={styles.lawyerStyle}> {item.value} </Text>}}
+                messages.map((item)=>{
+                if(item.messages_origin=="client" || item.messages_origin=="user"){return <Text key={item.key} style={styles.clientStyle}> {item.messages_content} </Text>}
+                else if(item.messages_origin=="lawyer"){return <Text key={item.key} style={styles.lawyerStyle}> {item.messages_content} </Text>}}
 
                 )
                 }

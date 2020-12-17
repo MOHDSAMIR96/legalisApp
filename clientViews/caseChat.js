@@ -70,7 +70,7 @@ export default function CaseChat() {
 
   const sendMessage = () => {
 
- let today = new Date();
+    let today = new Date();
     let currentDate = today.getFullYear() + "-" + (today.getMonth() + 1) + "-" + today.getDate()
     let casesData = {
                        "messages_date": currentDate,
@@ -236,8 +236,8 @@ export default function CaseChat() {
                         message.map(
                         function(item){ console.log(JSON.stringify(item))
 
-                        if(item.fromUser){return <Text key={item.key} style={styles.clientStyle}> {item.messages_content} </Text>}
-                        else{return <Text key={item.key} style={styles.lawyerStyle}> {item.messages_content} </Text>}}
+                        if(item.messages_origin=="client"){return <Text key={item.key} style={styles.clientStyle}> {item.messages_content} </Text>}
+                        else if(item.messages_origin=="lawyer"){return <Text key={item.key} style={styles.lawyerStyle}> {item.messages_content} </Text>}}
 
                         )
                         }

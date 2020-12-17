@@ -4,13 +4,8 @@
     <list default="true" id="463314cc-0a91-4443-80e1-bb7f89fb1346" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/clientViews/caseChat.js" beforeDir="false" afterPath="$PROJECT_DIR$/clientViews/caseChat.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/clientViews/query.js" beforeDir="false" afterPath="$PROJECT_DIR$/clientViews/query.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/clientViews/queryChat.js" beforeDir="false" afterPath="$PROJECT_DIR$/clientViews/queryChat.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/clientViews/register.js" beforeDir="false" afterPath="$PROJECT_DIR$/clientViews/register.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/debug.log" beforeDir="false" afterPath="$PROJECT_DIR$/debug.log" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lawyerView/lawyerCaseChat.js" beforeDir="false" afterPath="$PROJECT_DIR$/lawyerView/lawyerCaseChat.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/lawyerView/lawyerRegister.js" beforeDir="false" afterPath="$PROJECT_DIR$/lawyerView/lawyerRegister.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/redux/dispatcher.js" beforeDir="false" afterPath="$PROJECT_DIR$/redux/dispatcher.js" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -26,17 +21,26 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/clientViews/queryChat.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="374">
-              <caret line="33" selection-start-line="33" selection-end-line="34" />
+            <state relative-caret-position="142">
+              <caret line="209" column="27" lean-forward="true" selection-start-line="209" selection-start-column="27" selection-end-line="209" selection-end-column="57" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/clientViews/caseChat.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="156">
+              <caret line="239" column="61" lean-forward="true" selection-start-line="239" selection-start-column="61" selection-end-line="239" selection-end-column="61" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/clientViews/caseChat.js">
+        <entry file="file://$PROJECT_DIR$/lawyerView/lawyerCaseChat.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="239">
-              <caret line="238" column="111" selection-start-line="238" selection-start-column="111" selection-end-line="238" selection-end-column="111" />
+            <state relative-caret-position="236">
+              <caret line="300" column="38" lean-forward="true" selection-start-line="300" selection-start-column="38" selection-end-line="300" selection-end-column="38" />
             </state>
           </provider>
         </entry>
@@ -45,8 +49,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>RegisterRutificator</find>
-      <find>loginRut</find>
       <find>dispatch</find>
       <find>this.</find>
       <find>console.log</find>
@@ -63,7 +65,6 @@
       <find>conso</find>
       <find>store.usr</find>
       <find>setCase</find>
-      <find>consol</find>
       <find>inputRef</find>
       <find>returnedMessageId</find>
       <find>booleanStillTypingAdvisor</find>
@@ -75,6 +76,9 @@
       <find>5</find>
       <find>ql</find>
       <find>aqui</find>
+      <find>clientsRe</find>
+      <find>fromUser</find>
+      <find>consol</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -95,10 +99,10 @@
         <option value="$PROJECT_DIR$/redux/reducer.js" />
         <option value="$PROJECT_DIR$/lawyerView/lawyerRegister.js" />
         <option value="$PROJECT_DIR$/clientViews/register.js" />
-        <option value="$PROJECT_DIR$/lawyerView/lawyerCaseChat.js" />
         <option value="$PROJECT_DIR$/clientViews/query.js" />
         <option value="$PROJECT_DIR$/clientViews/queryChat.js" />
         <option value="$PROJECT_DIR$/clientViews/caseChat.js" />
+        <option value="$PROJECT_DIR$/lawyerView/lawyerCaseChat.js" />
       </list>
     </option>
   </component>
@@ -122,7 +126,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
+      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -149,7 +153,7 @@
           <select />
         </subPane>
       </pane>
-      <pane id="PackagesPane" />
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -205,7 +209,7 @@
       <window_info id="Favorites" order="7" side_tool="true" />
       <window_info anchor="bottom" id="Version Control" order="0" />
       <window_info anchor="bottom" id="TODO" order="1" weight="0.3286119" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="2" sideWeight="0.49966952" visible="true" weight="0.30169973" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="2" sideWeight="0.49966952" visible="true" weight="0.4206799" />
       <window_info anchor="bottom" id="Event Log" order="3" sideWeight="0.50033045" side_tool="true" weight="0.26203966" />
       <window_info anchor="bottom" id="Find" order="4" />
       <window_info anchor="right" id="Capture Analysis" order="0" />
@@ -319,13 +323,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/lawyerView/lawyerCaseChat.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="54">
-          <caret line="308" column="80" lean-forward="true" selection-start-line="308" selection-start-column="80" selection-end-line="308" selection-end-column="80" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/clientViews/query.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="166">
@@ -335,15 +332,22 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/clientViews/queryChat.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="374">
-          <caret line="33" selection-start-line="33" selection-end-line="34" />
+        <state relative-caret-position="142">
+          <caret line="209" column="27" lean-forward="true" selection-start-line="209" selection-start-column="27" selection-end-line="209" selection-end-column="57" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/clientViews/caseChat.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="239">
-          <caret line="238" column="111" selection-start-line="238" selection-start-column="111" selection-end-line="238" selection-end-column="111" />
+        <state relative-caret-position="156">
+          <caret line="239" column="61" lean-forward="true" selection-start-line="239" selection-start-column="61" selection-end-line="239" selection-end-column="61" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lawyerView/lawyerCaseChat.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="236">
+          <caret line="300" column="38" lean-forward="true" selection-start-line="300" selection-start-column="38" selection-end-line="300" selection-end-column="38" />
         </state>
       </provider>
     </entry>
