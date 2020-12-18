@@ -42,14 +42,14 @@ export function QueryChat({navigation}) {
      useEffect(()=>{
 
                       let fetchInterval = setInterval(()=>{
-                                         fetch("http://patoexer.pythonanywhere.com/message/" + store.users_id  + "/0/0")
+                                         fetch("http://patoexer.pythonanywhere.com/message/" + store.users_id  + "/0/" + store.lawyer_id)
                                          .then((response)=> response.json())
                                          .then((data)=>
-                                                       { console.log("********************" + store.users_id  + " " + JSON.stringify(data))
+                                                       {
                                                        if(message[message.length - 1 ]!= data[data.length - 1].messages_content){
                                                              if(data[data.length - 1].messages_content == "typing..." && data[data.length - 1].messages_origin=="lawyer" ){
                                                              this.typingRef.current.style = "inline";
-                                                             console.log("FUNCIONA")
+
                                                              }
                                                              else{
                                                                 enterMessage([...data])

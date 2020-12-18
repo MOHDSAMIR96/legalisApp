@@ -17,7 +17,7 @@ export default function LawyerProfile({navigation}) {
 
        const [cases, setCases] = useState([]);
 
-        useEffect(()=>{
+        useEffect(()=>{ console.log("STORE ON PROFILE: " + JSON.stringify(store))
 
                let arrayOfCasesAndQueries = [];
 
@@ -45,9 +45,8 @@ export default function LawyerProfile({navigation}) {
     const selectCase =(index) =>{
 
         dispatchSelectCase(store.listOfCases[index])
-        console.log(JSON.stringify(store.listOfCases[index].users_id))
 
-        if("users_name" in store.listOfCases[index] && store.listOfCases[index].taken == false){
+        if("users_name" in store.listOfCases[index] && store.listOfCases[index].taken == false){// BECAUSE IT'S A USER, HE HAVE TO MARK IT AS TAKEN, FOR ANY ANOTHER LAWYER TAKE THE USER
 
 
         let updateUserData = {
@@ -64,14 +63,14 @@ export default function LawyerProfile({navigation}) {
                 .then((response)=> {return response.json()})
                 .then((data)=> {
 
-                    dispatch({type: "USERDATA", doneAction: data});
                     navigation.navigate('LawyerCaseChat')
                 })
                 .catch(error => {console.log(JSON.stringify(error))})
 
         }
         else{
-        console.log("NO user or Taken user")
+
+        navigation.navigate('LawyerCaseChat')
         }
 
     }
@@ -105,7 +104,9 @@ export default function LawyerProfile({navigation}) {
 
                   <ScrollView>
                                     {cases.map((item, index)=>{
-                                    return <TouchableOpacity onPress={()=>{selectCase(index)}} key={index}  style={("cases_id" in item)? styles.button: styles.newUser }><Text style={{color: "white", fontSize: 25}}>{("cases_id" in item)? item.client_name: item.users_name + " NUEVO" }</Text><Text style={{color: "white", fontSize: 10}}>  {("cases_id" in item)?item.cases_matter: item.users_issue_subject}    </Text></TouchableOpacity>
+                                    if(!item.taken){
+                                        return <TouchableOpacity onPress={()=>{selectCase(index)}} key={index}  style={("cases_id" in item)? styles.button: styles.newUser }><Text style={{color: "white", fontSize: 25}}>{("cases_id" in item)? item.client_name: item.users_name + " NUEVO" }</Text><Text style={{color: "white", fontSize: 10}}>  {("cases_id" in item)?item.cases_matter: item.users_issue_subject}    </Text></TouchableOpacity>
+                                    }
                                     })}
 
                                     </ScrollView>

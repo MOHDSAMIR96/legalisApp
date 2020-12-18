@@ -42,14 +42,17 @@ export default function LawyerCaseChat({navigation}) {
 
 
 
-     useEffect(()=>{
+     useEffect(()=>{ console.log("STORE ON CASE CHAT: " + JSON.stringify(store.userData))
+     let url;
+     if("users_id" in store.selectedCase){ url = "http://patoexer.pythonanywhere.com/message/" + store.selectedCase.users_id + "/0/" + store.userData.lawyers_id}
+     else{ url = "http://patoexer.pythonanywhere.com/message/0/" + store.selectedCase.client_id + "/" + store.userData.lawyers_id;}
 
-                 let fetchInterval = setInterval(()=>{
-                                                       fetch("http://patoexer.pythonanywhere.com/message/0/0/" + store.userData.lawyers_id )
+                 let fetchInterval = setInterval(()=>{ console.log("URL: " + url)
+                                                       fetch(url)
                                                        .then((response)=> response.json())
                                                        .then((data)=>
                                                                     {
-                                                                      if(messages[messages.length - 1 ]!= data[data.length - 1].messages_content){console.log("entro")
+                                                                      if(messages[messages.length - 1 ]!= data[data.length - 1].messages_content){
                                                                       if(data[data.length - 1].messages_content == "typing..." && data[data.length - 1].messages_origin=="client" ){
                                                                       this.typingRef.current.style = "inline";
 
@@ -87,15 +90,29 @@ export default function LawyerCaseChat({navigation}) {
      const typing = (x) => {
                 let today = new Date();
                 let currentDate = today.getFullYear() + "-" + (today.getMonth() + 1) + "-" + today.getDate()
+                let casesData;
+                if("users_id" in store.selectedCase){
+                    casesData = {
+                                 "messages_date": currentDate,
+                                 "messages_content": "typing...",
+                                 "messages_origin": "lawyer",
+                                 "client_id": 0, //KEEPS THIS STATIC COS THE BACKEND TRANSLATE LIKE NULL ON TABLE
+                                 "user_id": store.selectedCase.users_id,
+                                 "lawyer_id": store.userData.lawyers_id //SE PUSO EL LAWYER FIJO MIENTRAS
+                                                 }
 
-                let casesData = {
-                                      "messages_date": currentDate,
-                                      "messages_content": "typing...",
-                                      "messages_origin": "lawyer",
-                                      "client_id": store.selectedCase.client_id, //KEEPS THIS STATIC COS THE BACKEND TRANSLATE LIKE NULL ON TABLE
-                                      "user_id": 0,
-                                      "lawyer_id": store.userData.lawyers_id //SE PUSO EL LAWYER FIJO MIENTRAS
-                                    }
+                }
+                else{
+                 casesData = {
+                               "messages_date": currentDate,
+                               "messages_content": "typing...",
+                               "messages_origin": "lawyer",
+                               "client_id": store.selectedCase.client_id, //KEEPS THIS STATIC COS THE BACKEND TRANSLATE LIKE NULL ON TABLE
+                               "user_id": 0,
+                               "lawyer_id": store.userData.lawyers_id //SE PUSO EL LAWYER FIJO MIENTRAS
+                             }
+
+                }
 
                    let options2 = {
                                       method: 'POST',
@@ -298,9 +315,9 @@ export default function LawyerCaseChat({navigation}) {
         <View style={{flex: 70}}>
             <ScrollView style={{flex: 5, flexDirection: 'column', height: 150, backgroundColor: "white"}}>
                 {
-                messages.map((item)=>{
-                if(item.messages_origin=="client" || item.messages_origin=="user"){return <Animated.Text key={item.key} style={styles.lawyerStyle}> {item.messages_content} </Animated.Text>}
-                else if(item.messages_origin=="lawyer"){return <Animated.Text key={item.key} style={styles.clientStyle}> {item.messages_content} </Animated.Text>}}
+                messages.map((item, index)=>{
+                if(item.messages_origin=="client" || item.messages_origin=="user"){return <Animated.Text key={index} style={styles.lawyerStyle}> {item.messages_content} </Animated.Text>}
+                else if(item.messages_origin=="lawyer"){return <Animated.Text key={index} style={styles.clientStyle}> {item.messages_content} </Animated.Text>}}
 
                 )
                 }

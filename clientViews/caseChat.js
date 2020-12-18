@@ -41,16 +41,16 @@ export default function CaseChat() {
   useEffect(()=>{
 
                         let fetchInterval = setInterval(()=>{
-                                                                 fetch("http://patoexer.pythonanywhere.com/message/0/" + store.userData.clientsResp.clients_id + "/0" )
+                                                                 fetch("http://patoexer.pythonanywhere.com/message/0/" + store.userData.clientsResp.clients_id + "/" + store.selectedCase.lawyer_id )
                                                                  .then((response)=> response.json())
                                                                  .then((data)=>
-                                                                               { console.log(JSON.stringify(data))
+                                                                               { console.log(JSON.stringify(store.selectedCase))
                                                                                if(message[message.length - 1 ]!= data[data.length - 1].messages_content){
                                                                                      if(data[data.length - 1].messages_content == "typing..." && data[data.length - 1].messages_origin=="lawyer" ){
                                                                                      this.typingRef.current.style = "inline";
 
                                                                                      }
-                                                                                     else{console.log("entro contenido")
+                                                                                     else{
                                                                                         enterMessage([...data])
                                                                                      }
                                                                                      }
