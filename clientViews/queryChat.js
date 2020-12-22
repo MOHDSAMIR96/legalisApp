@@ -4,6 +4,11 @@ import { ThemeProvider, Avatar, Card, ListItem, Icon, FlatList} from 'react-nati
 import { createAppContainer, NavigationActions, StackActions } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 import { CommonActions } from '@react-navigation/native';
+import store from '../redux/store.js';
+import {Animated} from 'react-native';
+import { useSelector, useDispatch } from 'react-redux';
+import CountDown from 'react-native-countdown-component'; // DOCUMENTATION ON https://github.com/talalmajali/react-native-countdown-component
+
 //IMPORTATION OF VIEW COMPONENTS
 import Query from './query.js';
 import {Home} from './home.js';
@@ -11,13 +16,7 @@ import ClientRegister from './register.js';
 import ClientProfile from './clientProfile.js';
 import CaseChat from './caseChat.js';
 
-import store from '../redux/store.js';
 
-
-
-import {Animated} from 'react-native';
-
-import { useSelector, useDispatch } from 'react-redux';
 
 
 export function QueryChat({navigation}) {
@@ -35,13 +34,20 @@ export function QueryChat({navigation}) {
     const [returnedMessageId, setReturnedMessageId] = useState(0);
     const [stillTypingAdvisor, booleanStillTypingAdvisor] = useState(false);
 
+
     //REFERENCES
     const inputRef = useRef(null);
     const typingRef = useRef(null);
+    const timerRef = useRef(null);
+
+
 
      useEffect(()=>{
+                      // WE trigger the startCountDown method
+
 
                       let fetchInterval = setInterval(()=>{
+
                                          fetch("http://patoexer.pythonanywhere.com/message/" + store.users_id  + "/0/" + store.lawyer_id)
                                          .then((response)=> response.json())
                                          .then((data)=>
@@ -159,8 +165,6 @@ export function QueryChat({navigation}) {
                     return navigation.reset([NavigationActions.navigate({routeName: 'ClientRegister'})]);
                  })
                  .catch(error => {})
-
-
    }
 
    const showCase =() => {
@@ -189,14 +193,14 @@ export function QueryChat({navigation}) {
             </View>
             <View style={{flex: 35}}>
                 <View style={{flex: 5}}>
-                    <Text onPress={showCase} style={styles.welcomeSmall}>RESUMEN CASO</Text>
+                    <Text onPress={showCase} style={styles.welcomeSmall}>RESUMEN CASO </Text>
                     <ScrollView>
+
                     <Text style={{fontSize: 20, color: "white", textAlign: 'justify', paddingRight:30}}>{textoEjemplo}</Text>
                     </ScrollView>
                 </View>
             </View>
-            <View style={{flex: 1}}>
-
+            <View style={{flex: 20}}>
             </View>
         </Animated.View >
         <View style={{flex: 70}}>
@@ -217,7 +221,23 @@ export function QueryChat({navigation}) {
                 }
             </ScrollView>
         </View>
+        <CountDown
+            until={420}
+            onFinish={() => alert('finished')}
+            style={{marginRight: 320, backgroundColor: "#4170f9"}}
+            size={20}
+            timeToShow={['M','S']}
+            digitStyle={{marginRight: 0, padding: 0 , backgroundColor: '#4170f9', borderColor: '#4170f9'}}
+            digitTxtStyle={{color: 'white'}}
+            timeLabelStyle={{color: '#4170f9', fontWeight: 'bold'}}
+            separatorStyle={{color: 'white'}}
+            timeLabels={{m: null, s: null}}
+            showSeparator={true}
+
+
+                                                                                  />
         <View style={{flex: 13, flexDirection: 'row', borderColor: "#4170f9", borderTopWidth: 3}}>
+
             <View style={{flex:1, flexDirection:'column'}}><Text>  </Text><Icon size={50} name='credit-card' color='gold'  onPress={() => { payment() }}/></View>
             <View style={{flex:4}}><Text> </Text><TextInput ref={inputRef} onChangeText={x=> {setMessageInputContent(x); typing(x)}} style={{backgroundColor: "white", borderWidth:2, borderColor:"gray", borderRadius:10, height:60}}/></View>
             <View style={{flex:1}}><Text> </Text><Icon onPress={enterNewMessage} size={50} name='send' color='#4170f9'/></View>

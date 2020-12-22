@@ -5,6 +5,8 @@ import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 import { useSelector, useDispatch } from 'react-redux';
 import {Animated} from 'react-native';
+import CountDown from 'react-native-countdown-component'; // DOCUMENTATION ON https://github.com/talalmajali/react-native-countdown-component
+import { ModalPortal, Modal, ModalContent } from 'react-native-modals';
 
 import {dispatchListOfCases, dispatchSelectCase} from '../redux/dispatcher.js'
 
@@ -30,6 +32,7 @@ export default function LawyerCaseChat({navigation}) {
     const [stillTypingAdvisor, booleanStillTypingAdvisor] = useState(false);
     const [messageInputContent, setMessageInputContent] = useState("");
     const [returnedMessageId, setReturnedMessageId] = useState(0);
+    const [modalVisibility, setModalVisibility] = useState(false);
 
 
 
@@ -42,12 +45,12 @@ export default function LawyerCaseChat({navigation}) {
 
 
 
-     useEffect(()=>{ console.log("STORE ON CASE CHAT: " + JSON.stringify(store.userData))
+     useEffect(()=>{
      let url;
      if("users_id" in store.selectedCase){ url = "http://patoexer.pythonanywhere.com/message/" + store.selectedCase.users_id + "/0/" + store.userData.lawyers_id}
      else{ url = "http://patoexer.pythonanywhere.com/message/0/" + store.selectedCase.client_id + "/" + store.userData.lawyers_id;}
 
-                 let fetchInterval = setInterval(()=>{ console.log("URL: " + url)
+                 let fetchInterval = setInterval(()=>{
                                                        fetch(url)
                                                        .then((response)=> response.json())
                                                        .then((data)=>
@@ -323,11 +326,42 @@ export default function LawyerCaseChat({navigation}) {
                 }
             </ScrollView>
         </View>
+        <CountDown
+                    until={420}
+                    onFinish={() => setModalVisibility(true)}
+                    style={("users_id" in store.selectedCase)?{marginRight: 320, backgroundColor: "#4170f9"}:{display: "none"}}
+                    size={20}
+                    timeToShow={['M','S']}
+                    digitStyle={{marginRight: 0, padding: 0 , backgroundColor: '#4170f9', borderColor: '#4170f9'}}
+                    digitTxtStyle={{color: 'white'}}
+                    timeLabelStyle={{color: '#4170f9', fontWeight: 'bold'}}
+                    separatorStyle={{color: 'white'}}
+                    timeLabels={{m: null, s: null}}
+                    showSeparator={true}
+
+
+                                                                                          />
         <View style={{flex: 15, flexDirection: 'row', borderColor: "#4170f9", borderTopWidth: 3}}>
             <View style={{flex:1, flexDirection:'column'}}><Text> </Text></View>
             <View style={{flex:8}}><Text> </Text><TextInput ref={inputRef} onChangeText={x=> {setMessageInputContent(x); typing(x)}} style={{backgroundColor: "white", borderWidth:2, borderColor:"gray", borderRadius:10, height:60}}/></View>
             <View style={{flex:3}}><Text> </Text><Icon onPress={sendMessage} size={50} name='send' color='#4170f9'/></View>
         </View>
+        <ModalPortal />
+        <Modal
+            visible={modalVisibility}
+            onTouchOutside={() => {
+
+            }}
+          >
+            <ModalContent>
+              <Text style={styles.modalStyle}>Se ha acabado el tiempo!</Text>
+              <Text> </Text>
+              <Text style={styles.modalStyle}>Si hay buenas posibilidades de que este pueda ser un cliente, desbloquea el chat por $1.000</Text>
+              <Text> </Text>
+                <Text> </Text>
+              <Button title="DESBLOQUEAR" color="green" onPress={()=>{console.log("link pago")}}/>
+            </ModalContent>
+          </Modal>
      </View>
     );
 }
@@ -370,5 +404,13 @@ const styles = StyleSheet.create({
     padding:15,
     paddingRight: 5,
     textAlign: 'right'
+    },
+    modalStyle:{
+       color:"black",
+       borderWidth:1,
+       borderColor: 'white',
+       borderRadius: 10,
+       fontSize:25,
+       textAlign: 'center',
     },
 });
