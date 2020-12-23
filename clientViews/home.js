@@ -16,12 +16,42 @@ constructor(props) {
   }
 
   prueba(){
-       let url = "https://sandbox.flow.cl/api/payment/getStatus";
-       let secretKey = "734f08c367a3dfc6aaf0cd4b505dd5201c7114b6";
-       let stringToSign = "amount5000apiKey3D7F0D8C-B26D-408A-88B5-53A5DLC77890currencyCLP";
 
-       let sign = CryptoJS.AES.encrypt(stringToSign, secretKey).toString();
-       console.log(sign)
+      var AES = require("react-native-crypto-js").AES;
+      var SHA256 = require("react-native-crypto-js").SHA256;
+
+      //let ciphertext = CryptoJS.SHA256("meesage");
+      console.log(CryptoJS)
+
+      const requestPath = encodeURIComponent('/api/transaction');
+
+      //ARRANGING THE PARAMETERS
+      const data = {
+        email: 'gnpiedrabuena@defensa-ciudadana.com',
+        urlreturn: 'https://you_website/url_return',
+        urlnotify: 'https://you_website/url_notify',
+        order:  11,
+        subject: 'pago de prueba',
+        amount: 5000,
+        payment: 1
+      };
+
+      const orderedData = {};
+      Object.keys(data).sort().forEach(function(key) {
+        orderedData[key] = data[key];
+      });
+
+      //TURN PARAMS ON URL FORMAT
+      const arrayConcat = new URLSearchParams(orderedData).toString();
+
+      //CONCATENATING PARAMETERS WITH ENDPOINT
+      const concat = requestPath + "&" + arrayConcat;
+
+      // SIGN
+      //const sign = CryptoJS.HmacSHA256(concat, "d7243a0609351f4e7024ad497790efce").toString();
+
+      //console.log(sign)
+
 
 
   }

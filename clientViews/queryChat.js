@@ -8,6 +8,7 @@ import store from '../redux/store.js';
 import {Animated} from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import CountDown from 'react-native-countdown-component'; // DOCUMENTATION ON https://github.com/talalmajali/react-native-countdown-component
+import { ModalPortal, Modal, ModalContent } from 'react-native-modals';
 
 //IMPORTATION OF VIEW COMPONENTS
 import Query from './query.js';
@@ -33,6 +34,8 @@ export function QueryChat({navigation}) {
     const [message, enterMessage] = useState([]);
     const [returnedMessageId, setReturnedMessageId] = useState(0);
     const [stillTypingAdvisor, booleanStillTypingAdvisor] = useState(false);
+    const [startCountDown, InitCountDown] = useState(false);
+    const [modalVisibility, setModalVisibility] = useState(false);
 
 
     //REFERENCES
@@ -47,6 +50,18 @@ export function QueryChat({navigation}) {
 
 
                       let fetchInterval = setInterval(()=>{
+
+                                         fetch("http://patoexer.pythonanywhere.com/user/" + store.users_id)
+                                         .then((response)=> { return response.json()})
+                                         .then((data)=>{ console.log("data: " + data.taken)
+
+                                             if(data.taken){
+                                             console.log("fue tomado")
+                                             InitCountDown(true)
+                                             }
+
+                                         })
+                                         .catch((error)=>{})
 
                                          fetch("http://patoexer.pythonanywhere.com/message/" + store.users_id  + "/0/" + store.lawyer_id)
                                          .then((response)=> response.json())
@@ -223,8 +238,8 @@ export function QueryChat({navigation}) {
         </View>
         <CountDown
             until={420}
-            onFinish={() => alert('finished')}
-            style={{marginRight: 320, backgroundColor: "#4170f9"}}
+            onFinish={() => setModalVisibility(true)}
+            style={(startCountDown)?{marginRight: 320, backgroundColor: "#4170f9"}:{display: "none"}}//{{marginRight: 320, backgroundColor: "#4170f9"}}
             size={20}
             timeToShow={['M','S']}
             digitStyle={{marginRight: 0, padding: 0 , backgroundColor: '#4170f9', borderColor: '#4170f9'}}
@@ -242,6 +257,22 @@ export function QueryChat({navigation}) {
             <View style={{flex:4}}><Text> </Text><TextInput ref={inputRef} onChangeText={x=> {setMessageInputContent(x); typing(x)}} style={{backgroundColor: "white", borderWidth:2, borderColor:"gray", borderRadius:10, height:60}}/></View>
             <View style={{flex:1}}><Text> </Text><Icon onPress={enterNewMessage} size={50} name='send' color='#4170f9'/></View>
         </View>
+
+        <ModalPortal />
+                <Modal
+                    visible={modalVisibility}
+                    onTouchOutside={() => {
+
+                    }}
+                  >
+                    <ModalContent>
+                      <Text style={styles.modalStyle}>Se ha acabado el tiempo!</Text>
+                      <Text> </Text>
+                      <Text style={styles.modalStyle}>Si su caso le interesó a su abogado, éste debloqueará el chat ilimitado</Text>
+                      <Text> </Text>
+                        <Text style={styles.modalStyle}>Por favor espere unos minutos, no salga de la aplicación</Text>
+                    </ModalContent>
+                  </Modal>
      </View>
 
     );
@@ -287,5 +318,13 @@ const styles = StyleSheet.create({
     paddingRight: 5,
     textAlign: 'right'
     },
+    modalStyle:{
+           color:"black",
+           borderWidth:1,
+           borderColor: 'white',
+           borderRadius: 10,
+           fontSize:25,
+           textAlign: 'center',
+        },
 });
 
