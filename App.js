@@ -14,6 +14,7 @@ import ClientRegister from './clientViews/register.js';
 import ClientProfile from './clientViews/clientProfile.js';
 import CaseChat from './clientViews/caseChat.js';
 import VoiceRecognition from './specialComponents/VoiceRecognition.js';
+import VideoComponent from './specialComponents/videoComponent.js';
 import LawyerRegister from './lawyerView/lawyerRegister.js';
 import ThanksMsg from './lawyerView/thanksMsg.js';
 import LawyerProfile from './lawyerView/lawyerProfile.js';
@@ -28,7 +29,7 @@ const instructions = Platform.select({
 
 const AppNavigator = createStackNavigator(//STACKNAVIGATOR TIENE PROBLEMAS CON EL PROVIDER DE REDUX, PUES NO LO TOMA COMO UN COMPONENTE
   {
-    Home: Home,
+    Home: VideoComponent,
     QueryChat: QueryChat,
     Query: Query,
     ClientRegister: ClientRegister,

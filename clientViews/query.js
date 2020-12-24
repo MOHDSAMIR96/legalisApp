@@ -5,10 +5,9 @@ import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 
 import {PanResponder, Animated} from 'react-native';
+import { Video } from 'expo-av';
 
 import { useSelector, useDispatch } from 'react-redux';
-
-import Video from 'react-native-video';
 
 
 export default function Query({navigation}){//ESTA PARTE ES LA VISTA DE EL INICIO DE LA CONSULTA
@@ -151,7 +150,9 @@ export default function Query({navigation}){//ESTA PARTE ES LA VISTA DE EL INICI
                           </View>
                        </View>
 
-                     <View style={{flex: 1}}></View>
+                     <View style={{flex: 1}}>
+
+                     </View>
                  </View>
 
                 <View style={(hourOfTheDay<=20)?{flex: 2, flexDirection: 'row', backgroundColor: "#4170f9"}:{ display:'none'}}>
@@ -164,7 +165,9 @@ export default function Query({navigation}){//ESTA PARTE ES LA VISTA DE EL INICI
                                           </View>
                                        </View>
 
-                                     <View style={{flex: 1}}></View>
+                                     <View style={{flex: 1}}>
+
+                                      </View>
                                  </View>
 
                 <TouchableOpacity

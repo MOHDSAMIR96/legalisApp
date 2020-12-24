@@ -7,6 +7,7 @@ import { createStackNavigator } from 'react-navigation-stack';
 import CryptoJS from "react-native-crypto-js";
 
 
+
 export class Home extends Component {
 
 constructor(props) {
