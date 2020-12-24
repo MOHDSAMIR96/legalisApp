@@ -8,6 +8,8 @@ import {PanResponder, Animated} from 'react-native';
 
 import { useSelector, useDispatch } from 'react-redux';
 
+import Video from 'react-native-video';
+
 
 export default function Query({navigation}){//ESTA PARTE ES LA VISTA DE EL INICIO DE LA CONSULTA
 
@@ -18,10 +20,19 @@ export default function Query({navigation}){//ESTA PARTE ES LA VISTA DE EL INICI
     const [caseDescription, setNewCaseDescription] = useState("");
     const [userName, setNewUserName] = useState("");
     const [fetchResponse, setNewFetchResponse] = useState("");
+    const [hourOfTheDay, sethourOfTheDay] = useState(0);
 
     //REDUX STATE
     const store = useSelector(state => state.userData);
     const dispatch = useDispatch();
+
+    useEffect(()=>{
+    let hour = new Date().getHours()
+    console.log(hour)
+    sethourOfTheDay(hour)
+
+
+    },[])
 
      const _panResponder = PanResponder.create({
           // Ask to be the responder:
@@ -94,20 +105,21 @@ export default function Query({navigation}){//ESTA PARTE ES LA VISTA DE EL INICI
   const handleLayout = ({nativeEvent}) =>{
 
     //console.log(nativeEvent.layout)
-
   }
 
     return (
     <View style={{flex: 1, backgroundColor: "#4170f9"}}>
 
-        <View style={{flex: 2}}><Text style={styles.welcome}>¿De qué trata tu problema? </Text></View>
-        <View style={{ flex: 2, flexDirection: 'row'}}>
+        <View style={(hourOfTheDay>=20)?{flex: 2, backgroundColor: "#4170f9"}:{ display:'none'}}><Text style={styles.welcome}>Estamos descanzando</Text></View>
+        <View style={(hourOfTheDay>=20)?{flex: 5, backgroundColor: "#4170f9"}:{ display:'none'}}><Text style={styles.instructions}>Los sentimos, nuestros abgados estan descanzando. Nuestra hora de atención es de 8:00 a 20:00 hrs. Por favor, vuelva más tarde. </Text></View>
+
+        <View style={(hourOfTheDay<=20)?{ flex: 2, flexDirection: 'row'}:{ display:'none'}} >
 
             <View style={{position: 'absolute', zIndex: 3, flex: 1, backgroundColor: "#4170f9"}}><Icon size={60} name='skip-previous' color='white'/></View>
                 <View style={{ width: "100%", flex:3, flexDirection: 'column', backgroundColor: "#4170f9"}}>
 
 
-                    <View   {..._panResponder.panHandlers}>
+                    <View   {..._panResponder.panHandlers} >
                         <Animated.Text onLayout={handleLayout} style={{width: 1540, right: animatePosition, fontSize: 40 , color: "white", fontWeight: "bold", textAlign: "center"}}>      {subjects[activeSubjectCounter]}         {subjects[activeSubjectCounter + 1]}           {subjects[activeSubjectCounter + 2]}             {subjects[activeSubjectCounter+3]}      {subjects[activeSubjectCounter+4]}     </Animated.Text>
                     </View>
 
@@ -118,7 +130,7 @@ export default function Query({navigation}){//ESTA PARTE ES LA VISTA DE EL INICI
                  <View style={{ flex: 1, backgroundColor: "#4170f9"}}><Icon size={60} name='skip-next' color='white'/></View>
             </View>
 
-            <View style={{flex: 2, flexDirection: 'row', backgroundColor: "#4170f9"}}>
+            <View style={(hourOfTheDay<=20)?{flex: 2, flexDirection: 'row', backgroundColor: "#4170f9"}:{ display:'none'}}>
                    <View style={{flex: 2}}></View>
                    <View style={[{ width: "100%", flex:1, flexDirection: 'column', backgroundColor: "#4170f9"}]}>
                              <View style={{backgroundColor: "#747A87", borderRadius: 100, width: 90, height:90, paddingTop:10}}><Icon size={60} name='mic' color='white' /></View>
@@ -129,7 +141,7 @@ export default function Query({navigation}){//ESTA PARTE ES LA VISTA DE EL INICI
                    <View style={{flex: 2}}></View>
             </View>
 
-                 <View style={{flex: 3, flexDirection: 'row', backgroundColor: "#4170f9"}}>
+                 <View style={(hourOfTheDay<=20)?{flex: 3, flexDirection: 'row', backgroundColor: "#4170f9"}:{ display:'none'}} >
                      <View style={{flex: 1}}></View>
                        <View style={[{ flex:10, flexDirection: 'column', backgroundColor: "#4170f9"}]}>
                           <TextInput onChangeText={x=> setNewCaseDescription(x)} multiline={true} style={{backgroundColor: 'white', height: 150, borderRadius:10}} />
@@ -142,7 +154,7 @@ export default function Query({navigation}){//ESTA PARTE ES LA VISTA DE EL INICI
                      <View style={{flex: 1}}></View>
                  </View>
 
-                <View style={{flex: 2, flexDirection: 'row', backgroundColor: "#4170f9"}}>
+                <View style={(hourOfTheDay<=20)?{flex: 2, flexDirection: 'row', backgroundColor: "#4170f9"}:{ display:'none'}}>
                                      <View style={{flex: 1}}></View>
                                        <View style={[{ flex:10, flexDirection: 'column', backgroundColor: "#4170f9"}]}>
                                          <TextInput onChangeText={x=> setNewUserName(x)} style={{backgroundColor: 'white', borderRadius:10, marginTop: 20, marginBottom: 10}} />
@@ -156,7 +168,7 @@ export default function Query({navigation}){//ESTA PARTE ES LA VISTA DE EL INICI
                                  </View>
 
                 <TouchableOpacity
-                        style={{backgroundColor: "#747A87", height: 70, color: 'white', alignItems: "center"}}
+                        style={(hourOfTheDay<=20)?{backgroundColor: "#747A87", height: 70, color: 'white', alignItems: "center"}:{ display:'none'}}
                         color="white"
                         onPress={()=> {  sendDescription()
                         }}
@@ -174,9 +186,19 @@ const styles = StyleSheet.create({
   welcome: {
     textAlign: 'center',
     margin: 0,
+    padding: 20,
     color: "white",
     fontSize: 35,
 
   },
+  instructions: {
+      color: 'white',
+      backgroundColor: "#4170f9",
+      borderColor: '#fff',
+      fontSize:25,
+      textAlign: "justify",
+      padding: 20
+
+    },
 });
 
