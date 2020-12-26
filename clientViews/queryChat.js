@@ -29,6 +29,7 @@ export function QueryChat({navigation}) {
     //FUNCTIONAL COMPONENT STATE
     const [registerBtnDisplayed, setNewRegisterBtnDisplayed] = useState(0);
     const [animate, setNewanimate] = useState(new Animated.Value(4));
+    const [messageAnimation, setMessageAnimation] = useState(new Animated.Value(0));
     const [textoEjemplo, setNewTextoEjemplo] = useState(store.users_issue_description);
     const [messageInputContent, setMessageInputContent] = useState("");
     const [message, enterMessage] = useState([]);
@@ -43,20 +44,21 @@ export function QueryChat({navigation}) {
     const typingRef = useRef(null);
     const timerRef = useRef(null);
 
-
+    useEffect(()=>{
+    Animated.timing(messageAnimation,{toValue: 350,duration: 1000}).start();
+    },[message])
 
      useEffect(()=>{
-                      // WE trigger the startCountDown method
+
 
 
                       let fetchInterval = setInterval(()=>{
 
                                          fetch("http://patoexer.pythonanywhere.com/user/" + store.users_id)
                                          .then((response)=> { return response.json()})
-                                         .then((data)=>{ console.log("data: " + data.taken)
+                                         .then((data)=>{
 
                                              if(data.taken){
-                                             console.log("fue tomado")
                                              InitCountDown(true)
                                              }
 
@@ -70,10 +72,12 @@ export function QueryChat({navigation}) {
                                                        if(message[message.length - 1 ]!= data[data.length - 1].messages_content){
                                                              if(data[data.length - 1].messages_content == "typing..." && data[data.length - 1].messages_origin=="lawyer" ){
                                                              this.typingRef.current.style = "inline";
+                                                             Animated.timing(messageAnimation,{toValue: 350,duration: 500}).start();
 
                                                              }
                                                              else{
                                                                 enterMessage([...data])
+                                                                Animated.timing(messageAnimation,{toValue: 350,duration: 500}).start();
                                                              }
                                                              }
                                                        })
@@ -226,10 +230,11 @@ export function QueryChat({navigation}) {
                     function(item, index)
                     {
                         let style;
+                        let initialValue = 0;
                         if(item.messages_origin=="lawyer"){
                             style = styles.lawyerStyle;
                         }else if(item.messages_origin=="user"){style = styles.clientStyle;}
-                        return <Text key={index} style={style}> {item.messages_content} </Text>
+                        return <Animated.Text key={index} style={[style, {width: messageAnimation}]}> {item.messages_content} </Animated.Text>
                     }
 
                                 )
@@ -316,7 +321,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
     padding:15,
     paddingRight: 5,
-    textAlign: 'right'
+    textAlign: 'right',
     },
     modalStyle:{
            color:"black",

@@ -109,10 +109,12 @@ export default function Query({navigation}){//ESTA PARTE ES LA VISTA DE EL INICI
     return (
     <View style={{flex: 1, backgroundColor: "#4170f9"}}>
 
-        <View style={(hourOfTheDay>=24)?{flex: 2, backgroundColor: "#4170f9"}:{ display:'none'}}><Text style={styles.welcome}>Estamos descanzando</Text></View>
-        <View style={(hourOfTheDay>=24)?{flex: 5, backgroundColor: "#4170f9"}:{ display:'none'}}><Text style={styles.instructions}>Los sentimos, nuestros abgados estan descanzando. Nuestra hora de atención es de 8:00 a 20:00 hrs. Por favor, vuelva más tarde. </Text></View>
+        <View style={(hourOfTheDay<=20)?{flex: 2, backgroundColor: "#4170f9"}:{ display:'none'}}><Text style={styles.welcome}>Cuéntanos tu problema</Text></View>
 
-        <View style={(hourOfTheDay<=24)?{ flex: 2, flexDirection: 'row'}:{ display:'none'}} >
+        <View style={(hourOfTheDay>=20)?{flex: 2, backgroundColor: "#4170f9"}:{ display:'none'}}><Text style={styles.welcome}>Estamos descanzando</Text></View>
+        <View style={(hourOfTheDay>=20)?{flex: 5, backgroundColor: "#4170f9"}:{ display:'none'}}><Text style={styles.instructions}>Los sentimos, nuestros abgados estan descanzando. Nuestra hora de atención es de 8:00 a 20:00 hrs. Por favor, vuelva más tarde. </Text></View>
+
+        <View style={(hourOfTheDay<=20)?{ flex: 2, flexDirection: 'row'}:{ display:'none'}} >
 
             <View style={{position: 'absolute', zIndex: 3, flex: 1, backgroundColor: "#4170f9"}}><Icon size={60} name='skip-previous' color='white'/></View>
                 <View style={{ width: "100%", flex:3, flexDirection: 'column', backgroundColor: "#4170f9"}}>
@@ -129,7 +131,7 @@ export default function Query({navigation}){//ESTA PARTE ES LA VISTA DE EL INICI
                  <View style={{ flex: 1, backgroundColor: "#4170f9"}}><Icon size={60} name='skip-next' color='white'/></View>
             </View>
 
-            <View style={(hourOfTheDay<=24)?{flex: 2, flexDirection: 'row', backgroundColor: "#4170f9"}:{ display:'none'}}>
+            <View style={(hourOfTheDay<=20)?{flex: 2, flexDirection: 'row', backgroundColor: "#4170f9"}:{ display:'none'}}>
                    <View style={{flex: 2}}></View>
                    <View style={[{ width: "100%", flex:1, flexDirection: 'column', backgroundColor: "#4170f9"}]}>
                              <View style={{backgroundColor: "#747A87", borderRadius: 100, width: 90, height:90, paddingTop:10}}><Icon size={60} name='mic' color='white' /></View>
@@ -140,10 +142,10 @@ export default function Query({navigation}){//ESTA PARTE ES LA VISTA DE EL INICI
                    <View style={{flex: 2}}></View>
             </View>
 
-                 <View style={(hourOfTheDay<=24)?{flex: 3, flexDirection: 'row', backgroundColor: "#4170f9"}:{ display:'none'}} >
+                 <View style={(hourOfTheDay<=20)?{flex: 3, flexDirection: 'row', backgroundColor: "#4170f9"}:{ display:'none'}} >
                      <View style={{flex: 1}}></View>
                        <View style={[{ flex:10, flexDirection: 'column', backgroundColor: "#4170f9"}]}>
-                          <TextInput onChangeText={x=> setNewCaseDescription(x)} multiline={true} style={{backgroundColor: 'white', height: 150, borderRadius:10}} />
+                          <TextInput placeholder="                   ¿CUAL ES TU PROBLEMA LEGAL?" onChangeText={x=> setNewCaseDescription(x)} multiline={true} style={{backgroundColor: 'white', height: 150, borderRadius:10}} />
 
                           <View style={{flex:1, flexDirection: 'row', backgroundColor: "#4170f9"}}ki>
                             <Text></Text>
@@ -155,10 +157,10 @@ export default function Query({navigation}){//ESTA PARTE ES LA VISTA DE EL INICI
                      </View>
                  </View>
 
-                <View style={(hourOfTheDay<=24)?{flex: 2, flexDirection: 'row', backgroundColor: "#4170f9"}:{ display:'none'}}>
+                <View style={(hourOfTheDay<=20)?{flex: 2, flexDirection: 'row', backgroundColor: "#4170f9"}:{ display:'none'}}>
                                      <View style={{flex: 1}}></View>
                                        <View style={[{ flex:10, flexDirection: 'column', backgroundColor: "#4170f9"}]}>
-                                         <TextInput onChangeText={x=> setNewUserName(x)} style={{backgroundColor: 'white', borderRadius:10, marginTop: 20, marginBottom: 10}} />
+                                         <TextInput placeholder=" NOMBRE" onChangeText={x=> setNewUserName(x)} style={{backgroundColor: 'white', borderRadius:10, marginTop: 20, marginBottom: 10}} />
 
                                           <View style={{flex:1, flexDirection: 'row', backgroundColor: "#4170f9"}}ki>
                                             <Text></Text>
@@ -171,7 +173,7 @@ export default function Query({navigation}){//ESTA PARTE ES LA VISTA DE EL INICI
                                  </View>
 
                 <TouchableOpacity
-                        style={(hourOfTheDay<=24)?{backgroundColor: "#747A87", height: 70, color: 'white', alignItems: "center"}:{ display:'none'}}
+                        style={(hourOfTheDay<=20)?{backgroundColor: "#747A87", height: 70, color: 'white', alignItems: "center"}:{ display:'none'}}
                         color="white"
                         onPress={()=> {  sendDescription()
                         }}

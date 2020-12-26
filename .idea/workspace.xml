@@ -3,12 +3,10 @@
   <component name="ChangeListManager">
     <list default="true" id="463314cc-0a91-4443-80e1-bb7f89fb1346" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/App.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/peliculaConstitucion.mp4" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/clientViews/home.js" beforeDir="false" afterPath="$PROJECT_DIR$/clientViews/home.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/assets/legalis-usuario.mp4" beforeDir="false" afterPath="$PROJECT_DIR$/assets/legalis-usuario.mp4" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/clientViews/query.js" beforeDir="false" afterPath="$PROJECT_DIR$/clientViews/query.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/clientViews/queryChat.js" beforeDir="false" afterPath="$PROJECT_DIR$/clientViews/queryChat.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/debug.log" beforeDir="false" afterPath="$PROJECT_DIR$/debug.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/specialComponents/videoComponent.js" beforeDir="false" afterPath="$PROJECT_DIR$/specialComponents/videoComponent.js" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -21,29 +19,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/App.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="220">
-              <caret line="38" column="35" lean-forward="true" selection-start-line="38" selection-start-column="35" selection-end-line="38" selection-end-column="35" />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/clientViews/home.js">
+        <entry file="file://$PROJECT_DIR$/clientViews/queryChat.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="220">
-              <caret line="68" column="74" selection-start-line="68" selection-start-column="74" selection-end-line="68" selection-end-column="74" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/clientViews/query.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="187">
-              <caret line="172" column="16" selection-start-line="172" selection-start-column="16" selection-end-line="180" selection-end-column="41" />
+            <state relative-caret-position="-2073">
+              <caret line="58" column="57" selection-start-line="58" selection-start-column="57" selection-end-line="58" selection-end-column="57" />
             </state>
           </provider>
         </entry>
@@ -52,8 +32,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>message</find>
-      <find>5</find>
       <find>ql</find>
       <find>aqui</find>
       <find>clientsRe</find>
@@ -82,6 +60,8 @@
       <find>querycha</find>
       <find>video</find>
       <find>navigationA</find>
+      <find>start</find>
+      <find>animate</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -102,16 +82,16 @@
         <option value="$PROJECT_DIR$/clientViews/caseChat.js" />
         <option value="$PROJECT_DIR$/lawyerView/lawyerProfile.js" />
         <option value="$PROJECT_DIR$/lawyerView/lawyerCaseChat.js" />
-        <option value="$PROJECT_DIR$/clientViews/queryChat.js" />
         <option value="$PROJECT_DIR$/node_modules/react-native/template/android/app/build.gradle" />
         <option value="$PROJECT_DIR$/node_modules/react-native/template/android/app/src/main/java/com/helloworld/MainApplication.java" />
         <option value="$PROJECT_DIR$/node_modules/react-native/template/android/settings.gradle" />
         <option value="$PROJECT_DIR$/node_modules/react-native/template/ios/HelloWorldTests/Info.plist" />
         <option value="$PROJECT_DIR$/node_modules/react-native/template/android/app/src/main/AndroidManifest.xml" />
-        <option value="$PROJECT_DIR$/clientViews/query.js" />
-        <option value="$PROJECT_DIR$/specialComponents/videoComponent.js" />
         <option value="$PROJECT_DIR$/App.js" />
         <option value="$PROJECT_DIR$/clientViews/home.js" />
+        <option value="$PROJECT_DIR$/specialComponents/videoComponent.js" />
+        <option value="$PROJECT_DIR$/clientViews/query.js" />
+        <option value="$PROJECT_DIR$/clientViews/queryChat.js" />
       </list>
     </option>
   </component>
@@ -135,17 +115,13 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
             <path>
               <item name="legalisApp" type="b2602c69:ProjectViewProjectNode" />
               <item name="legalisApp" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="legalisApp" type="b2602c69:ProjectViewProjectNode" />
-              <item name="legalisApp" type="462c0819:PsiDirectoryNode" />
-              <item name="assets" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="legalisApp" type="b2602c69:ProjectViewProjectNode" />
@@ -162,7 +138,6 @@
         </subPane>
       </pane>
       <pane id="PackagesPane" />
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -364,20 +339,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/clientViews/query.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="187">
-          <caret line="172" column="16" selection-start-line="172" selection-start-column="16" selection-end-line="180" selection-end-column="41" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/specialComponents/videoComponent.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="132">
-          <caret line="24" column="9" selection-start-line="24" selection-start-column="9" selection-end-line="24" selection-end-column="9" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/clientViews/clientProfile.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="143">
@@ -392,24 +353,38 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/clientViews/queryChat.js">
+    <entry file="file://$PROJECT_DIR$/clientViews/home.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="66">
-          <caret line="3" selection-start-line="3" selection-end-line="3" selection-end-column="87" />
+        <state relative-caret-position="220">
+          <caret line="68" column="74" selection-start-line="68" selection-start-column="74" selection-end-line="68" selection-end-column="74" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/specialComponents/videoComponent.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="616">
+          <caret line="37" column="29" lean-forward="true" selection-start-line="37" selection-start-column="29" selection-end-line="37" selection-end-column="29" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/App.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="220">
-          <caret line="38" column="35" lean-forward="true" selection-start-line="38" selection-start-column="35" selection-end-line="38" selection-end-column="35" />
+        <state relative-caret-position="377">
+          <caret line="38" column="35" selection-start-line="38" selection-start-column="35" selection-end-line="38" selection-end-column="35" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/clientViews/home.js">
+    <entry file="file://$PROJECT_DIR$/clientViews/query.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="220">
-          <caret line="68" column="74" selection-start-line="68" selection-start-column="74" selection-end-line="68" selection-end-column="74" />
+        <state relative-caret-position="2882">
+          <caret line="151" column="33" lean-forward="true" selection-start-line="151" selection-start-column="33" selection-end-line="151" selection-end-column="33" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/clientViews/queryChat.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-2073">
+          <caret line="58" column="57" selection-start-line="58" selection-start-column="57" selection-end-line="58" selection-end-column="57" />
         </state>
       </provider>
     </entry>
