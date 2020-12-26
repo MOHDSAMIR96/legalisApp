@@ -61,7 +61,7 @@ constructor(props) {
   render() {
     return (
 
-         <View style={{flex:1, flexDirection: 'row', backgroundColor: "#4170f9"}}><Text onPress={this.prueba}>hola</Text>
+         <View style={{flex:1, flexDirection: 'row', backgroundColor: "#4170f9"}}><Text onPress={this.prueba}></Text>
             <View style={{flex:1, backgroundColor: "#4170f9"}}></View>
             <View style={{flex:7}}>
                 <View style={{flex:3, backgroundColor: "#4170f9"}}></View>

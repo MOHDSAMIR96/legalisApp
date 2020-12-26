@@ -1,7 +1,7 @@
 import React, {Component, useState, useEffect}  from 'react';
 import { TouchableOpacity, Alert, Platform, StyleSheet, Text, View, Button, Image, TextInput, FormLabel, FormInput, FormValidationMessage, ScrollView } from 'react-native';
 import { ThemeProvider, Avatar, Card, ListItem, Icon} from 'react-native-elements';
-import { createAppContainer } from 'react-navigation';
+import { createAppContainer, NavigationActions, StackActions } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 
 import {PanResponder, Animated} from 'react-native';
@@ -12,7 +12,7 @@ import { useSelector, useDispatch } from 'react-redux';
 
 export default function VideoComponent({navigation}){//ESTA PARTE ES LA VISTA DE EL INICIO DE LA CONSULTA
 
-    const [subjects, setNewSubjects] = useState(['CONTRATOS', 'HERENCIA', 'FAMILIA', 'LABORAL', 'PREVISIONAL']);
+    const [skip, setSkip] = useState(false);
 
     //REDUX STATE
     const store = useSelector(state => state.userData);
@@ -20,22 +20,29 @@ export default function VideoComponent({navigation}){//ESTA PARTE ES LA VISTA DE
 
     useEffect(()=>{
 
+    setTimeout(()=>{ setSkip(true);
+    navigation.reset([NavigationActions.navigate({routeName: 'QueryChat'})]);
+    }, 48000)
 
     },[])
 
 
     return (
-
+        <>
         <Video
-           source={{ uri: 'http://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4' }}//require('../assets/peliculaConstitucion.mp4')}
+           source={require('../assets/legalis-usuario.mp4')}//require('../assets/Legalis-Usuario.mp4')}
            rate={1.0}
            volume={2.0}
            isMuted={false}
            shouldPlay
-           isLooping
            resizeMode="cover"
-           style={{flex:1, backgroundColor: 'red'}} //, transform: [{ rotate: '90deg'}]
+           style={{flex:1, backgroundColor: 'red'}}
          />
+             <TouchableOpacity onPress={()=>{ (!skip)?navigation.reset([NavigationActions.navigate({routeName: 'QueryChat'})]):console.log("skiped already!")}} style={{backgroundColor: "#747A87", height: 70, color: 'white', alignItems: "center"}} color="white" >
+                               <Text></Text>
+                                 <Text style={{fontSize:20, color: "white"}}>SALTAR VIDEO</Text>
+             </TouchableOpacity>
+         </>
 
     );
   //}

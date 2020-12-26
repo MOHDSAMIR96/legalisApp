@@ -29,13 +29,14 @@ const instructions = Platform.select({
 
 const AppNavigator = createStackNavigator(//STACKNAVIGATOR TIENE PROBLEMAS CON EL PROVIDER DE REDUX, PUES NO LO TOMA COMO UN COMPONENTE
   {
-    Home: VideoComponent,
+    Home: Home,
     QueryChat: QueryChat,
     Query: Query,
     ClientRegister: ClientRegister,
     ClientProfile: ClientProfile,
     CaseChat: CaseChat,
     VoiceRecognition: VoiceRecognition,
+    videoComponent: VideoComponent,
 
     LawyerRegister: LawyerRegister,
     ThanksMsg: ThanksMsg,
