@@ -4,7 +4,7 @@ import { ThemeProvider, Avatar, Card, ListItem, Icon, FlatList} from 'react-nati
 import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 
-import CryptoJS from "react-native-crypto-js";
+import { JSHash, JSHmac, CONSTANTS } from "react-native-hash";
 
 
 
@@ -12,56 +12,12 @@ export class Home extends Component {
 
 constructor(props) {
     super(props);
-
-    this.prueba = this.prueba.bind(this);
   }
-
-  prueba(){
-
-      var AES = require("react-native-crypto-js").AES;
-      var SHA256 = require("react-native-crypto-js").SHA256;
-
-      //let ciphertext = CryptoJS.SHA256("meesage");
-      console.log(CryptoJS)
-
-      const requestPath = encodeURIComponent('/api/transaction');
-
-      //ARRANGING THE PARAMETERS
-      const data = {
-        email: 'gnpiedrabuena@defensa-ciudadana.com',
-        urlreturn: 'https://you_website/url_return',
-        urlnotify: 'https://you_website/url_notify',
-        order:  11,
-        subject: 'pago de prueba',
-        amount: 5000,
-        payment: 1
-      };
-
-      const orderedData = {};
-      Object.keys(data).sort().forEach(function(key) {
-        orderedData[key] = data[key];
-      });
-
-      //TURN PARAMS ON URL FORMAT
-      const arrayConcat = new URLSearchParams(orderedData).toString();
-
-      //CONCATENATING PARAMETERS WITH ENDPOINT
-      const concat = requestPath + "&" + arrayConcat;
-
-      // SIGN
-      //const sign = CryptoJS.HmacSHA256(concat, "d7243a0609351f4e7024ad497790efce").toString();
-
-      //console.log(sign)
-
-
-
-  }
-
 
   render() {
     return (
 
-         <View style={{flex:1, flexDirection: 'row', backgroundColor: "#4170f9"}}><Text onPress={this.prueba}></Text>
+         <View style={{flex:1, flexDirection: 'row', backgroundColor: "#4170f9"}}>
             <View style={{flex:1, backgroundColor: "#4170f9"}}></View>
             <View style={{flex:7}}>
                 <View style={{flex:3, backgroundColor: "#4170f9"}}></View>

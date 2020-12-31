@@ -17,7 +17,7 @@ export default function LawyerProfile({navigation}) {
 
        const [cases, setCases] = useState([]);
 
-        useEffect(()=>{ console.log("STORE ON PROFILE: " + JSON.stringify(store))
+        useEffect(()=>{
 
                let arrayOfCasesAndQueries = [];
 

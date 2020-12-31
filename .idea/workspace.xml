@@ -3,10 +3,13 @@
   <component name="ChangeListManager">
     <list default="true" id="463314cc-0a91-4443-80e1-bb7f89fb1346" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/assets/legalis-usuario.mp4" beforeDir="false" afterPath="$PROJECT_DIR$/assets/legalis-usuario.mp4" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/clientViews/home.js" beforeDir="false" afterPath="$PROJECT_DIR$/clientViews/home.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/clientViews/query.js" beforeDir="false" afterPath="$PROJECT_DIR$/clientViews/query.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/clientViews/queryChat.js" beforeDir="false" afterPath="$PROJECT_DIR$/clientViews/queryChat.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/debug.log" beforeDir="false" afterPath="$PROJECT_DIR$/debug.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lawyerView/lawyerCaseChat.js" beforeDir="false" afterPath="$PROJECT_DIR$/lawyerView/lawyerCaseChat.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lawyerView/lawyerProfile.js" beforeDir="false" afterPath="$PROJECT_DIR$/lawyerView/lawyerProfile.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/yarn.lock" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -20,10 +23,10 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/clientViews/queryChat.js">
+        <entry file="file://$PROJECT_DIR$/lawyerView/lawyerCaseChat.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-2073">
-              <caret line="58" column="57" selection-start-line="58" selection-start-column="57" selection-end-line="58" selection-end-column="57" />
+            <state relative-caret-position="150">
+              <caret line="390" column="80" selection-start-line="390" selection-start-column="80" selection-end-line="390" selection-end-column="80" />
             </state>
           </provider>
         </entry>
@@ -32,26 +35,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>ql</find>
-      <find>aqui</find>
-      <find>clientsRe</find>
-      <find>fromUser</find>
-      <find>consol</find>
-      <find>messages_origin</find>
-      <find>anima</find>
-      <find>entro</find>
-      <find>console</find>
-      <find>typingRef</find>
-      <find>timer</find>
-      <find>_id</find>
-      <find>in</find>
-      <find>store.</find>
-      <find>console.lo</find>
-      <find>cosn</find>
-      <find>resumen del</find>
-      <find>cryp</find>
-      <find>crypt</find>
-      <find>main</find>
       <find>depend</find>
       <find>compile</find>
       <find>mic</find>
@@ -62,6 +45,26 @@
       <find>navigationA</find>
       <find>start</find>
       <find>animate</find>
+      <find>console.log</find>
+      <find>1.000</find>
+      <find>count</find>
+      <find>cou</find>
+      <find>modal</find>
+      <find>store.</find>
+      <find>nombre</find>
+      <find>lawyers</find>
+      <find>doe</find>
+      <find>jsh</find>
+      <find>paymen</find>
+      <find>desblo</find>
+      <find>payment</find>
+      <find>linki</find>
+      <find>prueba</find>
+      <find>linkin</find>
+      <find>url</find>
+      <find>*100</find>
+      <find>store on</find>
+      <find>user_id</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -80,18 +83,18 @@
         <option value="$PROJECT_DIR$/lawyerView/lawyerRegister.js" />
         <option value="$PROJECT_DIR$/clientViews/register.js" />
         <option value="$PROJECT_DIR$/clientViews/caseChat.js" />
-        <option value="$PROJECT_DIR$/lawyerView/lawyerProfile.js" />
-        <option value="$PROJECT_DIR$/lawyerView/lawyerCaseChat.js" />
         <option value="$PROJECT_DIR$/node_modules/react-native/template/android/app/build.gradle" />
         <option value="$PROJECT_DIR$/node_modules/react-native/template/android/app/src/main/java/com/helloworld/MainApplication.java" />
         <option value="$PROJECT_DIR$/node_modules/react-native/template/android/settings.gradle" />
         <option value="$PROJECT_DIR$/node_modules/react-native/template/ios/HelloWorldTests/Info.plist" />
         <option value="$PROJECT_DIR$/node_modules/react-native/template/android/app/src/main/AndroidManifest.xml" />
+        <option value="$PROJECT_DIR$/specialComponents/videoComponent.js" />
+        <option value="$PROJECT_DIR$/clientViews/queryChat.js" />
         <option value="$PROJECT_DIR$/App.js" />
         <option value="$PROJECT_DIR$/clientViews/home.js" />
-        <option value="$PROJECT_DIR$/specialComponents/videoComponent.js" />
         <option value="$PROJECT_DIR$/clientViews/query.js" />
-        <option value="$PROJECT_DIR$/clientViews/queryChat.js" />
+        <option value="$PROJECT_DIR$/lawyerView/lawyerProfile.js" />
+        <option value="$PROJECT_DIR$/lawyerView/lawyerCaseChat.js" />
       </list>
     </option>
   </component>
@@ -115,7 +118,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -131,6 +133,11 @@
             <path>
               <item name="legalisApp" type="b2602c69:ProjectViewProjectNode" />
               <item name="legalisApp" type="462c0819:PsiDirectoryNode" />
+              <item name="lawyerView" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="legalisApp" type="b2602c69:ProjectViewProjectNode" />
+              <item name="legalisApp" type="462c0819:PsiDirectoryNode" />
               <item name="specialComponents" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
@@ -138,6 +145,7 @@
         </subPane>
       </pane>
       <pane id="PackagesPane" />
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -185,7 +193,7 @@
     <editor active="true" />
     <layout>
       <window_info id="Captures" order="0" weight="0.25" />
-      <window_info active="true" content_ui="combo" id="Project" order="1" visible="true" weight="0.13945803" />
+      <window_info content_ui="combo" id="Project" order="1" visible="true" weight="0.13945803" />
       <window_info id="Structure" order="2" side_tool="true" />
       <window_info id="Image Layers" order="3" />
       <window_info id="Designer" order="4" />
@@ -194,7 +202,7 @@
       <window_info id="Favorites" order="7" side_tool="true" />
       <window_info anchor="bottom" id="Version Control" order="0" />
       <window_info anchor="bottom" id="TODO" order="1" weight="0.3286119" />
-      <window_info anchor="bottom" id="Terminal" order="2" sideWeight="0.49966952" visible="true" weight="0.33002833" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="2" sideWeight="0.49966952" visible="true" weight="0.31728044" />
       <window_info anchor="bottom" id="Event Log" order="3" sideWeight="0.50033045" side_tool="true" weight="0.26203966" />
       <window_info anchor="bottom" id="Find" order="4" />
       <window_info anchor="right" id="Capture Analysis" order="0" />
@@ -259,31 +267,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/clientViews/caseChat.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="216">
-          <caret line="43" column="195" selection-start-line="43" selection-start-column="195" selection-end-line="43" selection-end-column="195" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/lawyerView/lawyerRegister.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-66">
           <caret line="54" lean-forward="true" selection-start-line="54" selection-end-line="54" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lawyerView/lawyerProfile.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1364">
-          <caret line="62" column="56" selection-start-line="62" selection-start-column="56" selection-end-line="62" selection-end-column="56" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/lawyerView/lawyerCaseChat.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="90">
-          <caret line="408" column="13" selection-start-line="408" selection-start-column="13" selection-end-line="408" selection-end-column="13" />
         </state>
       </provider>
     </entry>
@@ -318,13 +305,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/package.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="330">
-          <caret line="27" column="23" selection-start-line="27" selection-start-column="23" selection-end-line="27" selection-end-column="23" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/node_modules/react-native/template/ios/HelloWorldTests/Info.plist">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="294">
@@ -353,13 +333,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/clientViews/home.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="220">
-          <caret line="68" column="74" selection-start-line="68" selection-start-column="74" selection-end-line="68" selection-end-column="74" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/specialComponents/videoComponent.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="616">
@@ -367,24 +340,59 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/App.js">
+    <entry file="file://$PROJECT_DIR$/package.json">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="377">
-          <caret line="38" column="35" selection-start-line="38" selection-start-column="35" selection-end-line="38" selection-end-column="35" />
+        <state relative-caret-position="206">
+          <caret line="17" column="27" lean-forward="true" selection-start-line="17" selection-start-column="27" selection-end-line="17" selection-end-column="27" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/clientViews/query.js">
+    <entry file="file://$PROJECT_DIR$/clientViews/caseChat.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2882">
-          <caret line="151" column="33" lean-forward="true" selection-start-line="151" selection-start-column="33" selection-end-line="151" selection-end-column="33" />
+        <state relative-caret-position="216">
+          <caret line="43" column="195" selection-start-line="43" selection-start-column="195" selection-end-line="43" selection-end-column="195" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/App.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="333">
+          <caret line="45" column="3" lean-forward="true" selection-start-line="45" selection-start-column="3" selection-end-line="45" selection-end-column="3" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/clientViews/queryChat.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-2073">
-          <caret line="58" column="57" selection-start-line="58" selection-start-column="57" selection-end-line="58" selection-end-column="57" />
+        <state relative-caret-position="121">
+          <caret line="258" column="8" selection-start-line="258" selection-start-column="8" selection-end-line="263" selection-end-column="15" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/clientViews/home.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="196">
+          <caret line="19" column="71" lean-forward="true" selection-start-line="19" selection-start-column="71" selection-end-line="19" selection-end-column="78" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/clientViews/query.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="462">
+          <caret line="89" column="13" selection-start-line="89" selection-start-column="13" selection-end-line="89" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lawyerView/lawyerProfile.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="164">
+          <caret line="19" column="23" selection-start-line="19" selection-start-column="23" selection-end-line="19" selection-end-column="23" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/lawyerView/lawyerCaseChat.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="150">
+          <caret line="390" column="80" selection-start-line="390" selection-start-column="80" selection-end-line="390" selection-end-column="80" />
         </state>
       </provider>
     </entry>

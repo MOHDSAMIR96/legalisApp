@@ -4,11 +4,12 @@ import { ThemeProvider, Avatar, Card, ListItem, Icon, FlatList} from 'react-nati
 import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 import { useSelector, useDispatch } from 'react-redux';
-import {Animated} from 'react-native';
+import {Animated, Linking} from 'react-native';
 import CountDown from 'react-native-countdown-component'; // DOCUMENTATION ON https://github.com/talalmajali/react-native-countdown-component
 import { ModalPortal, Modal, ModalContent } from 'react-native-modals';
 
 import {dispatchListOfCases, dispatchSelectCase} from '../redux/dispatcher.js'
+import { JSHash, JSHmac, CONSTANTS } from "react-native-hash";
 
 
 export default function LawyerCaseChat({navigation}) {
@@ -33,6 +34,7 @@ export default function LawyerCaseChat({navigation}) {
     const [messageInputContent, setMessageInputContent] = useState("");
     const [returnedMessageId, setReturnedMessageId] = useState(0);
     const [modalVisibility, setModalVisibility] = useState(false);
+    const [unlocked, setUnlocked] = useState(false);
 
 
 
@@ -65,6 +67,12 @@ export default function LawyerCaseChat({navigation}) {
                                                                         }
                                                                      }
                                                                         })
+
+                                                       fetch('http://patoexer.pythonanywhere.com/user/' + store.selectedCase.users_id)
+                                                       .then((resp)=>{return resp.json()})
+                                                       .then((data) => {
+                                                        (data.unlocked === true)? setUnlocked(true): setUnlocked(false)
+                                                       })
                                                                                 }, 1000);
 
         return ()=>{
@@ -256,6 +264,57 @@ export default function LawyerCaseChat({navigation}) {
            }
     }
 
+    const payment = () => { console.log("PAGANDOSE......")
+
+       // hay dos paginas para probar la api, que entregan token diferentes. Una es para el sandbox y la otra para transacciones reales. Intenga ocupar los token para cada fin específico
+       // una vez hecho el post confirma transacción con get, poniendo en authorization del header el token público ej: Bearer 87933aa65bc6af7ceae8fda096054dc3
+       // la respueta 200 trae url que es donde se inicia el proceso de pago, una vez concluye proceso y se paga efectivamente, lo que pusiste como returnurl se ejecuta luego del pago y trae al cliente allá
+           const basePath = encodeURIComponent('/api/transaction');//"https://des.payku.cl/api/transaction";
+           const secretKey = "07c81310fe1dbc717a6f77218d0be7c4";// token privado
+
+
+           const data = {
+               email: store.userData.lawyers_email,// el correo del pagador
+               urlreturn: 'http://patoexer.pythonanywhere.com/paymentOk/' + store.selectedCase.users_id , // colocar un identificador de pago, hacer tabla de pagos, endpoint flask de tabla pagos
+               urlnotify: 'https://des.payku.cl/', // cuando el banco confirma el proceso del pago, se envía a una url los detalles de confirmacion de pago. HAy que hacer bkan con python para almacenar en base de datos
+               order:  store.selectedCase.users_id*10,
+               subject: 'desbloqueo chat abogado',
+               amount: 350,
+               payment: 1
+           };
+
+           const orderedData = {};
+           Object.keys(data).sort().forEach(function(key) {
+             orderedData[key] = data[key];
+           });
+
+           const arrayConcat = new URLSearchParams(orderedData).toString(); //obj se tranforma en url string
+
+           const concat = basePath + "&" + arrayConcat;
+
+           let sign;
+
+           JSHmac(concat, "79c5481cffd3ecbd0c8ade5e5b5fc2c6", CONSTANTS.HmacAlgorithms.HmacSHA256)
+             .then(hash =>{return sign = hash})//adonde dejo esto?
+             .catch(e => console.log(e));
+
+           const options = {method: 'POST',
+                                headers: {
+                                  'Content-Type': 'application/json',
+                                  'Authorization': 'Bearer 87933aa65bc6af7ceae8fda096054dc3' //token publico
+                                },
+                                body: JSON.stringify(data) // se envia denuevo el obj, se envia por aca y denuevo en la firma, doble seguridad
+                              }
+            console.log(JSON.stringify(options))
+           fetch("https://des.payku.cl/api/transaction", options)
+           .then( (resp)=>{return resp.json()})
+           .then( (data)=>{
+            console.log(JSON.stringify(data))
+            Linking.openURL(data.url).catch(err => console.error("Couldn't load page", err));
+            })
+
+       }
+
     return (
     <View style={{flex: 1, flexDirection: 'column', backgroundColor: "white"}}>
         <Animated.View style={{flex: animateCaseContainer, flexDirection: 'row', backgroundColor: "#4170f9"}}>
@@ -328,8 +387,8 @@ export default function LawyerCaseChat({navigation}) {
         </View>
         <CountDown
                     until={420}
-                    onFinish={() => setModalVisibility(true)}
-                    style={("users_id" in store.selectedCase)?{marginRight: 320, backgroundColor: "#4170f9"}:{display: "none"}}
+                    onFinish={() => ("users_id" in store.selectedCase && unlocked===false)?setModalVisibility(true):setModalVisibility(false)}
+                    style={("users_id" in store.selectedCase && unlocked===false)?{marginRight: 320, backgroundColor: "#4170f9"}:{display: "none"}}
                     size={20}
                     timeToShow={['M','S']}
                     digitStyle={{marginRight: 0, padding: 0 , backgroundColor: '#4170f9', borderColor: '#4170f9'}}
@@ -341,11 +400,12 @@ export default function LawyerCaseChat({navigation}) {
 
 
                                                                                           />
-        <View style={{flex: 15, flexDirection: 'row', borderColor: "#4170f9", borderTopWidth: 3}}>
-            <View style={{flex:1, flexDirection:'column'}}><Text> </Text></View>
-            <View style={{flex:8}}><Text> </Text><TextInput ref={inputRef} onChangeText={x=> {setMessageInputContent(x); typing(x)}} style={{backgroundColor: "white", borderWidth:2, borderColor:"gray", borderRadius:10, height:60}}/></View>
-            <View style={{flex:3}}><Text> </Text><Icon onPress={sendMessage} size={50} name='send' color='#4170f9'/></View>
-        </View>
+        <View style={{flex: 13, flexDirection: 'row', borderColor: "#4170f9", borderTopWidth: 3}}>
+
+                    <View style={("users_id" in store.selectedCase)?{flex:1, flexDirection:'column'}:{display: "none"}}><Text>  </Text><Icon size={50} name='credit-card' color='gold'  onPress={() => { payment() }} /></View>
+                    <View style={("users_id" in store.selectedCase)?{flex:4}:{flex:4, marginLeft:60}}><Text> </Text><TextInput ref={inputRef} onChangeText={x=> {setMessageInputContent(x); typing(x)}} style={{backgroundColor: "white", borderWidth:2, borderColor:"gray", borderRadius:10, height:60}}/></View>
+                    <View style={{flex:1}}><Text> </Text><Icon onPress={sendMessage} size={50} name='send' color='#4170f9'/></View>
+                </View>
         <ModalPortal />
         <Modal
             visible={modalVisibility}
@@ -356,10 +416,10 @@ export default function LawyerCaseChat({navigation}) {
             <ModalContent>
               <Text style={styles.modalStyle}>Se ha acabado el tiempo!</Text>
               <Text> </Text>
-              <Text style={styles.modalStyle}>Si hay buenas posibilidades de que este pueda ser un cliente, desbloquea el chat por $1.000</Text>
+              <Text style={styles.modalStyle}>Si hay buenas posibilidades de que este pueda ser un cliente, desbloquea el chat por $350</Text>
               <Text> </Text>
                 <Text> </Text>
-              <Button title="DESBLOQUEAR" color="green" onPress={()=>{console.log("link pago")}}/>
+              <Button title="DESBLOQUEAR" color="green" onPress={()=>{payment()}}/>
             </ModalContent>
           </Modal>
      </View>

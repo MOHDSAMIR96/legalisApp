@@ -27,7 +27,6 @@ export default function Query({navigation}){//ESTA PARTE ES LA VISTA DE EL INICI
 
     useEffect(()=>{
     let hour = new Date().getHours()
-    console.log(hour)
     sethourOfTheDay(hour)
 
 
@@ -81,7 +80,8 @@ export default function Query({navigation}){//ESTA PARTE ES LA VISTA DE EL INICI
         "users_issue_subject": subjects[activeSubjectCounter],
         "users_issue_description": caseDescription,
         "lawyer_id": 1,
-        "taken": false
+        "taken": false,
+        "unlocked": false
     }
 
     let options = {
