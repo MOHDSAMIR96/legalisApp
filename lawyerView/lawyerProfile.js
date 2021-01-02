@@ -91,6 +91,7 @@ export default function LawyerProfile({navigation}) {
                 <View style={{flex:7, flexDirection:'column'}}>
                     <Text style={styles.welcome}>{store.userData.lawyers_name}</Text>
                     <Text style={styles.instructions}>{store.userData.lawyers_email}</Text>
+                    <Text style={styles.instructions}>GASTO MENSUAL: {store.userData.lawyers_spending}</Text>
                 </View>
               </View>
 

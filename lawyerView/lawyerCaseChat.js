@@ -264,7 +264,7 @@ export default function LawyerCaseChat({navigation}) {
            }
     }
 
-    const payment = () => { console.log("PAGANDOSE......")
+    const payment = () => {
 
        // hay dos paginas para probar la api, que entregan token diferentes. Una es para el sandbox y la otra para transacciones reales. Intenga ocupar los token para cada fin específico
        // una vez hecho el post confirma transacción con get, poniendo en authorization del header el token público ej: Bearer 87933aa65bc6af7ceae8fda096054dc3
@@ -272,12 +272,13 @@ export default function LawyerCaseChat({navigation}) {
            const basePath = encodeURIComponent('/api/transaction');//"https://des.payku.cl/api/transaction";
            const secretKey = "07c81310fe1dbc717a6f77218d0be7c4";// token privado
 
+            let spending = parseInt(store.userData.lawyers_spending) + 350;
 
            const data = {
                email: store.userData.lawyers_email,// el correo del pagador
-               urlreturn: 'http://patoexer.pythonanywhere.com/paymentOk/' + store.selectedCase.users_id , // colocar un identificador de pago, hacer tabla de pagos, endpoint flask de tabla pagos
+               urlreturn: 'http://patoexer.pythonanywhere.com/paymentOk/' + store.selectedCase.users_id + "/" + store.userData.lawyers_rut + "/" + spending, // colocar un identificador de pago, hacer tabla de pagos, endpoint flask de tabla pagos
                urlnotify: 'https://des.payku.cl/', // cuando el banco confirma el proceso del pago, se envía a una url los detalles de confirmacion de pago. HAy que hacer bkan con python para almacenar en base de datos
-               order:  store.selectedCase.users_id*10,
+               order:  "unicofdc" + store.selectedCase.users_id,
                subject: 'desbloqueo chat abogado',
                amount: 350,
                payment: 1
