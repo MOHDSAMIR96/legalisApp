@@ -20,11 +20,19 @@ export default function VideoComponent({navigation}){//ESTA PARTE ES LA VISTA DE
 
     useEffect(()=>{
 
-    setTimeout(()=>{ setSkip(true);
-    navigation.reset([NavigationActions.navigate({routeName: 'QueryChat'})]);
-    }, 48000)
-
+    setTimeout(()=>{ setSkip(true);}, 48000)
+    if(skip){navigation.reset([NavigationActions.navigate({routeName: 'QueryChat'})]);}
     },[])
+
+     useEffect(()=>{
+        setTimeout(()=>{
+        if(skip)
+            {
+                navigation.reset([NavigationActions.navigate({routeName: 'QueryChat'})]);
+            }
+        })
+
+     },[skip])
 
 
     return (
@@ -45,7 +53,7 @@ export default function VideoComponent({navigation}){//ESTA PARTE ES LA VISTA DE
          </>
 
     );
-  //}
+
 }
 
 const styles = StyleSheet.create({

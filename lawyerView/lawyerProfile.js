@@ -39,6 +39,12 @@ export default function LawyerProfile({navigation}) {
                      })
                      .catch(error => console.log(error))
 
+                 return ()=>{
+
+                 dispatch({type: "USERDATA", doneAction: ""})
+
+                 }
+
            },[])
 
 

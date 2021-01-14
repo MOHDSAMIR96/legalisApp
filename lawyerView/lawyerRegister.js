@@ -1,14 +1,21 @@
 import React, {Component, useState, useEffect, useRef }  from 'react';
-import { TouchableOpacity, Alert, Platform, StyleSheet, Text, View, Button, Image, List, TextInput, FormLabel, FormInput, FormValidationMessage, ScrollView, PanResponder } from 'react-native';
+import { KeyboardAvoidingView, TouchableOpacity, Alert, Platform, StyleSheet, Text, View, Button, Image, List, TextInput, FormLabel, FormInput, FormValidationMessage, ScrollView, PanResponder } from 'react-native';
 import { ThemeProvider, Avatar, Card, ListItem, Icon, FlatList} from 'react-native-elements';
 import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
+import RNPickerSelect from 'react-native-picker-select'; // DOCUMENTATION https://www.npmjs.com/package/react-native-picker-select
 
 import { useSelector, useDispatch } from 'react-redux';
 import {dispatchListOfCases, dispatchSelectCase} from '../redux/dispatcher.js'
-import {Animated} from 'react-native';
+import {Animated, Dimensions} from 'react-native';
 
 let arr = [1,2,3]
+    // DEVICE SIZE
+const windowWidth = Dimensions.get('window').width;
+const windowHeight = Dimensions.get('window').height;
+const windowHeightPercentUnit = parseInt(windowHeight/100);
+const windowWidthPercentUnit = parseInt(windowWidth/100);
+
 
 export default function LawyerRegister({navigation}) {
 
@@ -20,6 +27,7 @@ export default function LawyerRegister({navigation}) {
    const [flex, setFlex] = useState(0);// flex:{registerView:0 }
    const [animate, setAnimate] = useState(new Animated.Value(0));
    const [letEnterBoolean, setLetEnterBoolean] = useState(false);
+   const [account, setAccount] = useState("");
 
    const [registerName, setNewRegisterName] = useState("");
    const [registerMail, setNewRegisterMail] = useState("");
@@ -39,7 +47,7 @@ export default function LawyerRegister({navigation}) {
    useEffect(()=>{// ONLY IF THE USERDATA ARRIVES TO THE STORE THE NAVIGATOR IS UPDATED
 
 
-       if( letEnterBoolean ){//arreglar
+       if( letEnterBoolean ){
 
             let arrayOfCasesAndQueries = [];
 
@@ -187,23 +195,21 @@ export default function LawyerRegister({navigation}) {
             <Text style={styles.welcome}>Bienvendio a la red Legalis! Por favor ingresa tus datos</Text>
         </View>
 
-
-
-
             <View style={{flex: 1, flexDirection: 'row', backgroundColor: "#4170f9"}}>
                <View style={{flex:1, backgroundColor: "#4170f9"}}></View>
-                  <View style={{flex:4, flexDirection: 'row', backgroundColor: "#4170f9"}}>
-                      <TextInput onChangeText={x=> setNewRegisterName(x)} placeholder = " NOMBRE" style={{ backgroundColor: "white", height: 40, width: "100%", borderColor: 'gray', borderWidth: 1 , fontSize:20, borderRadius: 10}}/>
+                  <View style={{flex:windowWidthPercentUnit*1, flexDirection: 'row', backgroundColor: "#4170f9"}}>
+                      <TextInput onChangeText={x=> setNewRegisterName(x)} placeholder = "Nombre Completo" style={{ backgroundColor: "white", height: windowHeightPercentUnit*5, width: "100%", borderColor: 'gray', borderWidth: 1 , fontSize:windowHeightPercentUnit*3, textAlign:'center', borderRadius: 10}}/>
                   </View>
                <View style={{flex:1}}></View>
             </View>
 
 
 
+
             <View style={{flex: 1, flexDirection: 'row', backgroundColor: "#4170f9"}}>
               <View style={{flex:1, backgroundColor: "#4170f9"}}></View>
-                <View style={{flex:4, flexDirection: 'row', backgroundColor: "#4170f9"}}>
-                    <TextInput onChangeText={x=> setNewRegisterMail(x)} placeholder = " MAIL" style={{ backgroundColor: "white", height: 40, width: "100%", borderColor: 'gray', borderWidth: 1, fontSize:20, borderRadius: 10}}/>
+                <View style={{flex:windowWidthPercentUnit*1, flexDirection: 'row', backgroundColor: "#4170f9"}}>
+                    <TextInput onChangeText={x=> setNewRegisterMail(x)} placeholder = "Correo" style={{ backgroundColor: "white", height: windowHeightPercentUnit*5, width: "100%", borderColor: 'gray', borderWidth: 1, fontSize:windowHeightPercentUnit*3, borderRadius: 10, textAlign:'center'}}/>
                 </View>
               <View style={{flex:1}}></View>
             </View>
@@ -211,16 +217,16 @@ export default function LawyerRegister({navigation}) {
 
             <View style={{flex: 1, flexDirection: 'row', backgroundColor: "#4170f9"}}>
               <View style={{flex:1, backgroundColor: "#4170f9"}}></View>
-                <View style={{flex:4, flexDirection: 'row', backgroundColor: "#4170f9"}}>
-                   <TextInput onChangeText={x=> setNewRegisterPhone(x)} placeholder = " TÉLEFONO" style={{ backgroundColor: "white", height: 40, width: "100%", borderColor: 'gray', borderWidth: 1, fontSize:20, borderRadius: 10 }}/>
+                <View style={{flex:windowWidthPercentUnit*1, flexDirection: 'row', backgroundColor: "#4170f9"}}>
+                   <TextInput onChangeText={x=> setNewRegisterPhone(x)} placeholder = "Teléfono" style={{ backgroundColor: "white", height: windowHeightPercentUnit*5, width: "100%", borderColor: 'gray', borderWidth: 1, fontSize:windowHeightPercentUnit*3, borderRadius: 10, textAlign:'center' }}/>
                 </View>
               <View style={{flex:1}}></View>
             </View>
 
             <View style={{flex: 1, flexDirection: 'row', backgroundColor: "#4170f9"}}>
                           <View style={{flex:1, backgroundColor: "#4170f9"}}></View>
-                            <View style={{flex:4, flexDirection: 'row', backgroundColor: "#4170f9"}}>
-                               <TextInput value={registerRut} onChangeText={x=> RegisterRutificator(x)} placeholder = " RUT" style={{ backgroundColor: "white", height: 40, width: "100%", borderColor: 'gray', borderWidth: 1, fontSize:20, borderRadius: 10 }}/>
+                            <View style={{flex:windowWidthPercentUnit*1, flexDirection: 'row', backgroundColor: "#4170f9"}}>
+                               <TextInput value={registerRut} onChangeText={x=> RegisterRutificator(x)} placeholder = "Rut" style={{ backgroundColor: "white", height: windowHeightPercentUnit*5, width: "100%", borderColor: 'gray', borderWidth: 1, fontSize:windowHeightPercentUnit*3, borderRadius: 10, textAlign:'center' }}/>
                           </View>
               <View style={{flex:1}}></View>
             </View>
@@ -228,67 +234,72 @@ export default function LawyerRegister({navigation}) {
 
             <View style={{flex: 1, flexDirection: 'row', backgroundColor: "#4170f9"}}>
                 <View style={{flex:1, backgroundColor: "#4170f9"}}></View>
-                            <View style={{flex:4, flexDirection: 'row', backgroundColor: "#4170f9"}}>
-                               <TextInput onChangeText={x=> setNewRegisterField(x)} placeholder = " ESPECIALIDAD" style={{ backgroundColor: "white", height: 40, width: "100%", borderColor: 'gray', borderWidth: 1, fontSize:20, borderRadius: 10 }}/>
+                            <View style={{flex:windowWidthPercentUnit*1, flexDirection: 'row', backgroundColor: "#4170f9"}}>
+                               <TextInput onChangeText={x=> setNewRegisterField(x)} placeholder = " Especialidad Legal" style={{ backgroundColor: "white", height: windowHeightPercentUnit*5, width: "100%", borderColor: 'gray', borderWidth: 1, fontSize:windowHeightPercentUnit*3, borderRadius: 10, textAlign:'center' }}/>
                             </View>
                 <View style={{flex:1}}></View>
             </View>
 
+
+                        {/*<View style={{flex: 1, flexDirection: 'row', backgroundColor: "#4170f9"}}>
+            <RNPickerSelect
+                        onValueChange={(value) => setAccount(value)}
+                        items={[
+                            { label: 'Cuenta Corriente', value: 'cuenta corriente' },
+                            { label: 'Cuenta Vista', value: 'cuenta vista' },
+
+                        ]}
+                    /></View>*/}
+
             <View style={{flex: 1, flexDirection: 'row', backgroundColor: "#4170f9"}}>
                <View style={{flex:1, backgroundColor: "#4170f9"}}></View>
-                                        <View style={{flex:4, flexDirection: 'row', backgroundColor: "#4170f9"}}>
-                                           <TextInput onChangeText={x=> setNewRegisterBank(x)} placeholder = " BANCO" style={{ backgroundColor: "white", height: 40, width: "100%", borderColor: 'gray', borderWidth: 1, fontSize:20, borderRadius: 10 }}/>
+                                        <View style={{flex:windowWidthPercentUnit*1, flexDirection: 'row', backgroundColor: "#4170f9"}}>
+                                           <TextInput onChangeText={x=> setNewRegisterBank(x)} placeholder = "Banco" style={{ backgroundColor: "white", height: windowHeightPercentUnit*5, width: "100%", borderColor: 'gray', borderWidth: 1, fontSize:windowHeightPercentUnit*3, borderRadius: 10, textAlign:'center' }}/>
                                       </View>
                <View style={{flex:1}}></View>
             </View>
 
 
-            <View style={{flex: 1, flexDirection: 'row', backgroundColor: "#4170f9"}}>
-              <View style={{flex:1, backgroundColor: "#4170f9"}}></View>
-                                     <View style={{flex:4, flexDirection: 'row', backgroundColor: "#4170f9"}}>
-                                                       <TextInput onChangeText={x=> setNewRegisterAccountType(x)} placeholder = " TIPO DE CUENTA" style={{ backgroundColor: "white", height: 40, width: "100%", borderColor: 'gray', borderWidth: 1, fontSize:20, borderRadius: 10 }}/>
-                                     </View>
-              <View style={{flex:1}}></View>
-            </View>
 
             <View style={{flex: 1, flexDirection: 'row', backgroundColor: "#4170f9"}}>
               <View style={{flex:1, backgroundColor: "#4170f9"}}></View>
-                                        <View style={{flex:4, flexDirection: 'row', backgroundColor: "#4170f9"}}>
-                                           <TextInput onChangeText={x=> setNewRegisterAccount(x)} placeholder = " N° CUENTA" style={{ backgroundColor: "white", height: 40, width: "100%", borderColor: 'gray', borderWidth: 1, fontSize:20, borderRadius: 10 }}/>
+                                        <View style={{flex:windowWidthPercentUnit*1, flexDirection: 'row', backgroundColor: "#4170f9"}}>
+                                           <TextInput onChangeText={x=> setNewRegisterAccount(x)} placeholder = "Número de Cuenta" style={{ backgroundColor: "white", height: windowHeightPercentUnit*5, width: "100%", borderColor: 'gray', borderWidth: 1, fontSize:windowHeightPercentUnit*3, borderRadius: 10, textAlign:'center' }}/>
                                         </View>
               <View style={{flex:1}}></View>
             </View>
 
             <View style={{flex: 1, flexDirection: 'row', backgroundColor: "#4170f9"}}>
                <View style={{flex:1, backgroundColor: "#4170f9"}}></View>
-                 <View style={{flex:4, flexDirection: 'row', backgroundColor: "#4170f9"}}>
-                      <TextInput  secureTextEntry={true} onChangeText={x=> setNewRegisterPassword(x)} placeholder = " CLAVE" style={{ backgroundColor: "white", height: 40, width: "100%", borderColor: 'gray', borderWidth: 1, fontSize:20, borderRadius: 10 }}/>
+                 <View style={{flex:windowWidthPercentUnit*1, flexDirection: 'row', backgroundColor: "#4170f9"}}>
+                      <TextInput  secureTextEntry={true} onChangeText={x=> setNewRegisterPassword(x)} placeholder = "Clave" style={{ backgroundColor: "white", height: windowHeightPercentUnit*5, width: "100%", borderColor: 'gray', borderWidth: 1, fontSize:windowHeightPercentUnit*3, borderRadius: 10, textAlign:'center' }}/>
                  </View>
                <View style={{flex:1}}></View>
             </View>
 
             <View style={{flex: 1, flexDirection: 'row', backgroundColor: "#4170f9"}}>
                <View style={{flex:1, backgroundColor: "#4170f9"}}></View>
-                   <View style={{flex:4, flexDirection: 'column', backgroundColor: "#4170f9"}}>
+                   <View style={{flex:windowWidthPercentUnit*1, flexDirection: 'column', backgroundColor: "#4170f9"}}>
                         <Button title="REGISTRARSE" color="#747A87" type="clear" style={{width: 100}} onPress={register}/>
                    </View>
                <View style={{flex:1}}></View>
             </View>
 
+
         <Animated.View style={{flex: animate}}>
 
         <View style={{flex: 1, flexDirection: 'row', backgroundColor: "#4170f9"}}>
             <View style={{flex:1, backgroundColor: "#4170f9"}}></View>
-                     <View style={{flex:4, flexDirection: 'row', backgroundColor: "#4170f9"}}>
-                          <TextInput value={rut} onChangeText={x=> LoginRutificator(x)} placeholder = " RUT" style={{ backgroundColor: "white", height: 40, width: "100%", borderColor: 'gray', borderWidth: 1, fontSize:20, borderRadius: 10 }}/>
+                     <View style={{flex:windowWidthPercentUnit*1, flexDirection: 'row', backgroundColor: "#4170f9"}}>
+                          <TextInput value={rut} onChangeText={x=> LoginRutificator(x)} placeholder = "Rut" style={{ backgroundColor: "white", height: windowHeightPercentUnit*5, width: "100%", borderColor: 'gray', borderWidth: 1, fontSize:windowHeightPercentUnit*3, borderRadius: 10, textAlign:'center' }}/>
                      </View>
             <View style={{flex:1}}></View>
         </View>
 
         <View style={{flex: 1, flexDirection: 'row', backgroundColor: "#4170f9"}}>
             <View style={{flex:1, backgroundColor: "#4170f9"}}></View>
-                 <View style={{flex:4, flexDirection: 'row', backgroundColor: "#4170f9"}}>
-                       <TextInput  secureTextEntry={true} onChangeText={x=> enterPassword(x)} placeholder = " CLAVE" style={{ backgroundColor: "white", height: 40, width: "100%", borderColor: 'gray', borderWidth: 1, fontSize:20, borderRadius: 10 }}/>
+                 <View style={{flex:windowWidthPercentUnit*1, flexDirection: 'row', backgroundColor: "#4170f9"}}>
+                       <TextInput  secureTextEntry={true} onChangeText={x=> enterPassword(x)} placeholder = "Clave" style={{ backgroundColor: "white", height: windowHeightPercentUnit*5, width: "100%", borderColor: 'gray', borderWidth: 1, fontSize:windowHeightPercentUnit*3, borderRadius: 10, textAlign:'center' }}/>
                   </View>
             <View style={{flex:1}}></View>
         </View>
@@ -296,7 +307,7 @@ export default function LawyerRegister({navigation}) {
 
         <View style={{flex: 1, flexDirection: 'row', backgroundColor: "#4170f9"}}>
              <View style={{flex:1, backgroundColor: "#4170f9"}}></View>
-                <View style={{flex:4, flexDirection: 'column', backgroundColor: "#4170f9"}}>
+                <View style={{flex:windowWidthPercentUnit*1, flexDirection: 'column', backgroundColor: "#4170f9"}}>
                     <Button title="INGRESAR" color="#747A87" type="clear" style={{width: 100}} onPress={singInValidation}/>
                 </View>
              <View style={{flex:1}}></View>
@@ -307,7 +318,7 @@ export default function LawyerRegister({navigation}) {
 
         <View style={{flex: 2, flexDirection: 'row', backgroundColor: "#4170f9"}}>
            <View style={{flex:1, backgroundColor: "#4170f9"}}></View>
-                   <View style={{flex:4, flexDirection: 'column', backgroundColor: "#4170f9"}}><Text onPress={showRegisterView} style={styles.instructions}>*Si ya tienes cuenta <Text style={{fontSize: 30}}>INGRESA!</Text></Text></View>
+                   <View style={{flex:windowWidthPercentUnit*6, flexDirection: 'column', backgroundColor: "#4170f9"}}><Text onPress={showRegisterView} style={[styles.instructions, {textAlign: 'center'}]}>*Si ya tienes cuenta <Text style={{fontSize: windowHeightPercentUnit*4}}>INGRESA!</Text></Text></View>
            <View style={{flex:1}}></View>
         </View>
 
@@ -325,18 +336,18 @@ const styles = StyleSheet.create({
     backgroundColor: "#4170f9",
     marginBottom: 0,
     borderColor: '#fff',
-    fontSize:15,
+    fontSize:windowHeightPercentUnit*3,
     fontWeight: "bold"
   },
   welcome: {
       textAlign: 'center',
       margin: 0,
       color: "white",
-      fontSize: 30,
+      fontSize: windowHeightPercentUnit*4,
     },
     link: {
     fontWeight: "bold",
-    fontSize: 20,
+    fontSize: windowHeightPercentUnit*3,
     textDecorationLine: "underline"
     }
 });

@@ -4,12 +4,17 @@ import { ThemeProvider, Avatar, Card, ListItem, Icon, FlatList} from 'react-nati
 import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 import { useSelector, useDispatch } from 'react-redux';
-import {Animated, Linking} from 'react-native';
+import {Animated, Linking, Dimensions} from 'react-native';
 import CountDown from 'react-native-countdown-component'; // DOCUMENTATION ON https://github.com/talalmajali/react-native-countdown-component
 import { ModalPortal, Modal, ModalContent } from 'react-native-modals';
 
 import {dispatchListOfCases, dispatchSelectCase} from '../redux/dispatcher.js'
 import { JSHash, JSHmac, CONSTANTS } from "react-native-hash";
+
+const windowWidth = Dimensions.get('window').width;
+const windowHeight = Dimensions.get('window').height;
+const windowHeightPercentUnit = parseInt(windowHeight/100);
+
 
 
 export default function LawyerCaseChat({navigation}) {
@@ -327,7 +332,7 @@ export default function LawyerCaseChat({navigation}) {
                     <Text onPress={showCaseSummary} style={styles.welcomeSmall}>RESUMEN CASO</Text>
                     <ScrollView style={{flex: 5}}>
                     <TouchableOpacity  onPress={editCaseSummary} style={{opacity:0, zIndex: touchableOpacityZindex, backgroundColor: 'white', width: '100%', height: '100%', position: 'absolute'}}></TouchableOpacity >
-                    <TextInput onChangeText={(caseSummaryData) => enterCaseSummary(caseSummaryData)} onKeyPress={TextInputEnterKeyPressed} ref={CaseSummaryTextInput} defaultValue={caseSummary} multiline={true} style={{zIndex: 3, fontSize: 20, color: editableStatus.color, backgroundColor: editableStatus.backGround, textAlign: 'justify', paddingRight:30}}/>
+                    <TextInput onChangeText={(caseSummaryData) => enterCaseSummary(caseSummaryData)} onKeyPress={TextInputEnterKeyPressed} ref={CaseSummaryTextInput} defaultValue={caseSummary} multiline={true} style={{zIndex: 3, fontSize: 20, color: editableStatus.color, backgroundColor: editableStatus.backGround, textAlign: 'justify', paddingRight:30, paddingTop: '30%'}}/>
 
                     </ScrollView>
                 </Animated.View>
@@ -378,12 +383,19 @@ export default function LawyerCaseChat({navigation}) {
         <View style={{flex: 70}}>
             <ScrollView style={{flex: 5, flexDirection: 'column', height: 150, backgroundColor: "white"}}>
                 {
-                messages.map((item, index)=>{
-                if(item.messages_origin=="client" || item.messages_origin=="user"){return <Animated.Text key={index} style={styles.lawyerStyle}> {item.messages_content} </Animated.Text>}
-                else if(item.messages_origin=="lawyer"){return <Animated.Text key={index} style={styles.clientStyle}> {item.messages_content} </Animated.Text>}}
+                                  message.map(
+                                    function(item, index)
+                                    {
+                                        let style;
+                                        let initialValue = 0;
+                                        if(item.messages_origin=="lawyer"){
+                                            style = styles.lawyerStyle;
+                                        }else if(item.messages_origin=="user"){style = styles.clientStyle;}
+                        return <TouchableHighlight style={style}><Animated.Text key={index} style={{fontWeight: "bold", textAlign: align , fontSize: windowHeightPercentUnit*3, color:color}}> {item.messages_content} </Animated.Text></TouchableHighlight>
+                                    }
 
-                )
-                }
+                                                )
+                                }
             </ScrollView>
         </View>
         <CountDown
@@ -432,7 +444,7 @@ const styles = StyleSheet.create({
       textAlign: 'left',
       margin: 0,
       color: 'white',
-      fontSize: 22,
+      fontSize: windowHeightPercentUnit*4,
       fontWeight: 'bold'
     },
   lawyerStyle: {
@@ -440,38 +452,31 @@ const styles = StyleSheet.create({
     borderColor: 'white',
     borderRadius: 10,
     backgroundColor: "#4170f9",
-    color:"white",
-    fontWeight: "bold",
-    fontSize:18,
+    fontSize: windowHeightPercentUnit*2,
     marginRight:50,
     marginLeft: 10,
     marginTop: 20,
     padding:15,
     paddingRight: 5,
-    textAlign: 'left'
-
   },
   clientStyle: {
     backgroundColor: "#E5E7E9",
-    color:"black",
     borderWidth:1,
     borderColor: 'white',
     borderRadius: 10,
-    fontWeight: "bold",
-    fontSize:18,
     marginRight:10,
     marginLeft: 50,
     marginTop: 20,
     padding:15,
     paddingRight: 5,
-    textAlign: 'right'
     },
-    modalStyle:{
-       color:"black",
-       borderWidth:1,
-       borderColor: 'white',
-       borderRadius: 10,
-       fontSize:25,
-       textAlign: 'center',
+  modalStyle:{
+    color:"black",
+    borderWidth:1,
+    borderColor: 'white',
+    borderRadius: 10,
+    fontSize:windowHeightPercentUnit*3,
+    textAlign: 'center',
     },
 });
+

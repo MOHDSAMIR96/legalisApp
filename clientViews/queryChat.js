@@ -1,11 +1,11 @@
 import React, {Component, useState, useEffect, useRef }  from 'react';
-import { Platform, Alert, StyleSheet, Text, View, Button, Image, List, TextInput, FormLabel, FormInput, FormValidationMessage, ScrollView, PanResponder, Link } from 'react-native';
+import { TouchableHighlight, Platform, Alert, StyleSheet, Text, View, Button, Image, List, TextInput, FormLabel, FormInput, FormValidationMessage, ScrollView, PanResponder, Link } from 'react-native';
 import { ThemeProvider, Avatar, Card, ListItem, Icon, FlatList} from 'react-native-elements';
 import { createAppContainer, NavigationActions, StackActions } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 import { CommonActions } from '@react-navigation/native';
 import store from '../redux/store.js';
-import {Animated} from 'react-native';
+import {Animated, Dimensions} from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import CountDown from 'react-native-countdown-component'; // DOCUMENTATION ON https://github.com/talalmajali/react-native-countdown-component
 import { ModalPortal, Modal, ModalContent } from 'react-native-modals';
@@ -17,7 +17,10 @@ import ClientRegister from './register.js';
 import ClientProfile from './clientProfile.js';
 import CaseChat from './caseChat.js';
 
-
+    // DEVICE SIZE
+const windowWidth = Dimensions.get('window').width;
+const windowHeight = Dimensions.get('window').height;
+const windowHeightPercentUnit = parseInt(windowHeight/100);
 
 
 export function QueryChat({navigation}) {
@@ -28,7 +31,7 @@ export function QueryChat({navigation}) {
 
     //FUNCTIONAL COMPONENT STATE
     const [registerBtnDisplayed, setNewRegisterBtnDisplayed] = useState(0);
-    const [animate, setNewanimate] = useState(new Animated.Value(4));
+    const [animate, setNewanimate] = useState(new Animated.Value(windowHeightPercentUnit*0.8));
     const [messageAnimation, setMessageAnimation] = useState(new Animated.Value(0));
     const [textoEjemplo, setNewTextoEjemplo] = useState(store.users_issue_description);
     const [messageInputContent, setMessageInputContent] = useState("");
@@ -192,12 +195,12 @@ export function QueryChat({navigation}) {
     if(registerBtnDisplayed == 0){
        //this.setState({flex:{registerView:8}, registerBtnDisplayed: true})
        setNewRegisterBtnDisplayed(1)
-        Animated.timing(animate, {toValue: 100, duration: 300}).start()
+        Animated.timing(animate, {toValue: windowHeightPercentUnit*4, duration: 300}).start()
     }
     else if(registerBtnDisplayed == 1){
 
        setNewRegisterBtnDisplayed(0)
-       Animated.timing(animate, {toValue: 4, duration: 300}).start()
+       Animated.timing(animate, {toValue: windowHeightPercentUnit*1, duration: 300}).start()
     }
 
   }
@@ -215,14 +218,14 @@ export function QueryChat({navigation}) {
                     <Text onPress={showCase} style={styles.welcomeSmall}>RESUMEN CASO </Text>
                     <ScrollView>
 
-                    <Text style={{fontSize: 20, color: "white", textAlign: 'justify', paddingRight:30}}>{textoEjemplo}</Text>
+                    <Text style={{fontSize: windowHeightPercentUnit*3, color: "white", textAlign: 'justify', paddingRight:30, paddingTop: windowHeightPercentUnit*3}}>{textoEjemplo}</Text>
                     </ScrollView>
                 </View>
             </View>
-            <View style={{flex: 20}}>
-            </View>
+            <View style={{flex: 20}}></View>
+
         </Animated.View >
-        <View style={{flex: 70}}>
+        <View style={{flex: windowHeightPercentUnit*10}}>
         <Text ref={typingRef} style={{display: 'none'}}>El abogado esta escribiendo...</Text>
             <ScrollView style={{flex: 5, flexDirection: 'column', height: 150, backgroundColor: "white"}}>
                 {
@@ -230,11 +233,15 @@ export function QueryChat({navigation}) {
                     function(item, index)
                     {
                         let style;
+                        let color;
+                        let align;
                         let initialValue = 0;
                         if(item.messages_origin=="lawyer"){
                             style = styles.lawyerStyle;
-                        }else if(item.messages_origin=="user"){style = styles.clientStyle;}
-                        return <Animated.Text key={index} style={[style, {width: messageAnimation}]}> {item.messages_content} </Animated.Text>
+                            color = 'white';
+                            align = 'left';
+                        }else if(item.messages_origin=="user"){style = styles.clientStyle; color = 'black'; align = 'right';}
+                        return <TouchableHighlight style={style}><Animated.Text key={index} style={{fontWeight: "bold", textAlign: align , fontSize: windowHeightPercentUnit*3, color:color}}> {item.messages_content} </Animated.Text></TouchableHighlight>
                     }
 
                                 )
@@ -244,7 +251,7 @@ export function QueryChat({navigation}) {
         <CountDown
             until={420}
             onFinish={() => setModalVisibility(true)}
-            style={(startCountDown)?{marginRight: 320, backgroundColor: "#4170f9"}:{display: "none"}}//{{marginRight: 320, backgroundColor: "#4170f9"}}
+            style={(startCountDown)?{marginRight: 320, backgroundColor: "#4170f9"}:{display: "none"}}
             size={20}
             timeToShow={['M','S']}
             digitStyle={{marginRight: 0, padding: 0 , backgroundColor: '#4170f9', borderColor: '#4170f9'}}
@@ -256,9 +263,9 @@ export function QueryChat({navigation}) {
 
 
                                                                                   />
-        <View style={{flex: 13, flexDirection: 'row', borderColor: "#4170f9", borderTopWidth: 3}}>
+        <View style={{flex: windowHeightPercentUnit*2, marginBottom: windowHeightPercentUnit*5, flexDirection: 'row', borderColor: "#4170f9", borderTopWidth: 3}}>
 
-            <View style={{flex:1, flexDirection:'column'}}><Text>  </Text><Icon size={50} name='credit-card' color='gold'  onPress={() => { payment() }}/></View>
+            <View style={{flex:1, flexDirection:'column'}}><Text>  </Text>{/*<Icon size={50} name='credit-card' color='gold'  onPress={() => { payment() }}/>*/}</View>
             <View style={{flex:4}}><Text> </Text><TextInput ref={inputRef} onChangeText={x=> {setMessageInputContent(x); typing(x)}} style={{backgroundColor: "white", borderWidth:2, borderColor:"gray", borderRadius:10, height:60}}/></View>
             <View style={{flex:1}}><Text> </Text><Icon onPress={enterNewMessage} size={50} name='send' color='#4170f9'/></View>
         </View>
@@ -289,7 +296,7 @@ const styles = StyleSheet.create({
       textAlign: 'left',
       margin: 0,
       color: 'white',
-      fontSize: 22,
+      fontSize: windowHeightPercentUnit*4,
       fontWeight: 'bold'
     },
   lawyerStyle: {
@@ -297,39 +304,31 @@ const styles = StyleSheet.create({
     borderColor: 'white',
     borderRadius: 10,
     backgroundColor: "#4170f9",
-    color:"white",
-    fontWeight: "bold",
-    fontSize:18,
+    fontSize: windowHeightPercentUnit*2,
     marginRight:50,
     marginLeft: 10,
     marginTop: 20,
     padding:15,
     paddingRight: 5,
-    textAlign: 'left'
-
   },
   clientStyle: {
     backgroundColor: "#E5E7E9",
-    color:"black",
     borderWidth:1,
     borderColor: 'white',
     borderRadius: 10,
-    fontWeight: "bold",
-    fontSize:18,
     marginRight:10,
     marginLeft: 50,
     marginTop: 20,
     padding:15,
     paddingRight: 5,
-    textAlign: 'right',
     },
-    modalStyle:{
-           color:"black",
-           borderWidth:1,
-           borderColor: 'white',
-           borderRadius: 10,
-           fontSize:25,
-           textAlign: 'center',
-        },
+  modalStyle:{
+    color:"black",
+    borderWidth:1,
+    borderColor: 'white',
+    borderRadius: 10,
+    fontSize:windowHeightPercentUnit*3,
+    textAlign: 'center',
+    },
 });
 
