@@ -4,7 +4,7 @@ import { ThemeProvider, Avatar, Card, ListItem, Icon, FlatList} from 'react-nati
 import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 import { useSelector, useDispatch } from 'react-redux';
-import {Animated, Linking, Dimensions} from 'react-native';
+import {Animated, TouchableHighlight, KeyboardAvoidingView, Linking, Dimensions} from 'react-native';
 import CountDown from 'react-native-countdown-component'; // DOCUMENTATION ON https://github.com/talalmajali/react-native-countdown-component
 import { ModalPortal, Modal, ModalContent } from 'react-native-modals';
 
@@ -14,7 +14,7 @@ import { JSHash, JSHmac, CONSTANTS } from "react-native-hash";
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 const windowHeightPercentUnit = parseInt(windowHeight/100);
-
+const windowWidthPercentUnit = parseInt(windowWidth/100);
 
 
 export default function LawyerCaseChat({navigation}) {
@@ -25,12 +25,12 @@ export default function LawyerCaseChat({navigation}) {
 
     //REFERENCES
         const inputRef = useRef(null);
-
-    //REFERENCES
         const CaseSummaryTextInput = useRef(null);
+        const typingRef = useRef(null);
+        const timerRef = useRef(null);
 
     const [data, setData] = useState({time: 6, title: 'Event 1', description: 'Event 1 Description'});
-    const [animateCaseContainer, setAnimateCaseContainer] = useState(new Animated.Value(8));
+    const [animateCaseContainer, setAnimateCaseContainer] = useState(new Animated.Value(5));
     const [animateCaseUpdate, setAnimateCaseUpdate] = useState(new Animated.Value(5));
     const [animateCaseSummary, setAnimateCaseSummary] = useState(new Animated.Value(5));
     const [registerBtnDisplayed, setRegisterBtnDisplayed] = useState(false);
@@ -40,8 +40,7 @@ export default function LawyerCaseChat({navigation}) {
     const [returnedMessageId, setReturnedMessageId] = useState(0);
     const [modalVisibility, setModalVisibility] = useState(false);
     const [unlocked, setUnlocked] = useState(false);
-
-
+    const [startCountDown, InitCountDown] = useState(false);
 
     const [caseSummary, enterCaseSummary] = useState(store.selectedCase.cases_description);
     const [timeLine, entertimeLine] = useState([ {succeded: 3},{ id: 1, phase: "Presentación demanda"}, { id: 2, phase: "Ratificación firma"}, {id: 3, phase: "Contestación"}, { id: 4, phase: "Término Probatorio"}, {id: 5, phase: "Dictación de sentencia"}]);
@@ -57,7 +56,7 @@ export default function LawyerCaseChat({navigation}) {
      if("users_id" in store.selectedCase){ url = "http://patoexer.pythonanywhere.com/message/" + store.selectedCase.users_id + "/0/" + store.userData.lawyers_id}
      else{ url = "http://patoexer.pythonanywhere.com/message/0/" + store.selectedCase.client_id + "/" + store.userData.lawyers_id;}
 
-                 let fetchInterval = setInterval(()=>{
+                 let fetchInterval = setInterval(()=>{ console.log("funciona")
                                                        fetch(url)
                                                        .then((response)=> response.json())
                                                        .then((data)=>
@@ -183,37 +182,36 @@ export default function LawyerCaseChat({navigation}) {
   const showCaseSummary=()=>{
     if(!registerBtnDisplayed){
 
-        Animated.timing(animateCaseContainer, {toValue: 30, duration: 300}).start()
-        Animated.timing(animateCaseUpdate, {toValue: 1, duration: 0}).start()
+        Animated.timing(animateCaseContainer, {toValue: 40, duration: 500}).start()
+        //Animated.timing(animateCaseUpdate, {toValue: 1, duration: 0}).start()
         setRegisterBtnDisplayed(true)
     }
     else if(registerBtnDisplayed){
 
-    Animated.timing(animateCaseSummary, {toValue: 5, duration: 0}).start()
-      Animated.timing(animateCaseContainer, {toValue: 8, duration: 300}).start()
-      Animated.timing(animateCaseUpdate, {toValue: 5, duration: 300}).start()
+    //Animated.timing(animateCaseSummary, {toValue: 1, duration: 0}).start()
+      Animated.timing(animateCaseContainer, {toValue: 5, duration: 500}).start()
+      //Animated.timing(animateCaseUpdate, {toValue: 5, duration: 300}).start()
       setRegisterBtnDisplayed(false)
     }
 
   }
 
     const showCaseUpdate=()=>{
-        if(!registerBtnDisplayed){
+       /* if(!registerBtnDisplayed){
 
-
-           Animated.timing(animateCaseSummary, {toValue: 1, duration: 0}).start()
-            Animated.timing(animateCaseContainer, {toValue: 25, duration: 300}).start()
-            Animated.timing(animateCaseUpdate, {toValue: 5, duration: 300}).start()
+           //Animated.timing(animateCaseSummary, {toValue: 1, duration: 0}).start()
+            Animated.timing(animateCaseContainer, {toValue: 10, duration: 500}).start()
+           // Animated.timing(animateCaseUpdate, {toValue: 5, duration: 300}).start()
             setRegisterBtnDisplayed(true)
         }
         else if(registerBtnDisplayed){
 
 
-           Animated.timing(animateCaseSummary, {toValue: 5, duration: 0}).start()
-           Animated.timing(animateCaseContainer, {toValue: 8, duration: 300}).start()
-           Animated.timing(animateCaseUpdate, {toValue: 5, duration: 300}).start()
+           //Animated.timing(animateCaseSummary, {toValue: 5, duration: 0}).start()
+           Animated.timing(animateCaseContainer, {toValue: 1, duration: 500}).start()
+           //Animated.timing(animateCaseUpdate, {toValue: 5, duration: 300}).start()
            setRegisterBtnDisplayed(false)
-        }
+        }*/
 
       }
 
@@ -322,120 +320,101 @@ export default function LawyerCaseChat({navigation}) {
        }
 
     return (
-    <View style={{flex: 1, flexDirection: 'column', backgroundColor: "white"}}>
-        <Animated.View style={{flex: animateCaseContainer, flexDirection: 'row', backgroundColor: "#4170f9"}}>
-            <View style={{flex: 2, flexDirection:"column"}}>
-                <View style={{flex: 1}}></View>
-            </View>
-            <View style={{flex: 35}}>
-                <Animated.View style={{flex: animateCaseSummary}}>
-                    <Text onPress={showCaseSummary} style={styles.welcomeSmall}>RESUMEN CASO</Text>
-                    <ScrollView style={{flex: 5}}>
-                    <TouchableOpacity  onPress={editCaseSummary} style={{opacity:0, zIndex: touchableOpacityZindex, backgroundColor: 'white', width: '100%', height: '100%', position: 'absolute'}}></TouchableOpacity >
-                    <TextInput onChangeText={(caseSummaryData) => enterCaseSummary(caseSummaryData)} onKeyPress={TextInputEnterKeyPressed} ref={CaseSummaryTextInput} defaultValue={caseSummary} multiline={true} style={{zIndex: 3, fontSize: 20, color: editableStatus.color, backgroundColor: editableStatus.backGround, textAlign: 'justify', paddingRight:30, paddingTop: '30%'}}/>
+    <KeyboardAvoidingView style={{flex:1}} behavior="padding" keyboardVerticalOffset={windowHeightPercentUnit*5} >
+        <View style={{flex: 1, flexDirection: 'column', backgroundColor: "white"}}>
 
-                    </ScrollView>
-                </Animated.View>
-                <View
-                  style={{
-                    borderBottomColor: 'white',
-                    borderBottomWidth: 1
-                  }}
+            <Animated.View style={{ flex: animateCaseContainer, flexDirection: 'row', backgroundColor: "#4170f9"}}>
+                <View style={{flex: windowHeightPercentUnit, flexDirection:"column"}}>
+                    <View style={{flex: windowHeightPercentUnit}}></View>
+                </View>
+                <View  style={{flex: windowHeightPercentUnit*10}}>
+                    <View style={{flex: windowHeightPercentUnit}}>
+                        <Text onPress={showCaseSummary}  style={styles.welcomeSmall}>
+                        RESUMEN CASO
+                        </Text>
+                         <ScrollView style={{flex: windowHeightPercentUnit}}>
+                            <TouchableOpacity  onPress={editCaseSummary} style={{opacity:0, zIndex: touchableOpacityZindex, backgroundColor: 'white', width: '100%', height: '100%', position: 'absolute'}}></TouchableOpacity >
+                            <TextInput onChangeText={(caseSummaryData) => enterCaseSummary(caseSummaryData)} onKeyPress={TextInputEnterKeyPressed} ref={CaseSummaryTextInput} defaultValue={caseSummary} multiline={true} style={{zIndex: 3, fontSize: 20, color: editableStatus.color, backgroundColor: editableStatus.backGround, textAlign: 'justify', paddingRight:30, paddingTop: windowHeightPercentUnit*3}}/>
+                         </ScrollView>
+                    </View>
+                </View>
+                <View style={{flex: windowHeightPercentUnit}}>
+                </View>
+            </Animated.View >
+
+            <View style={{flex: windowHeightPercentUnit*10}}>
+                <ScrollView style={{flex: windowHeightPercentUnit*5, flexDirection: 'column', height: 150, backgroundColor: "white"}}>
+                    {
+                      messages.map(
+                        function(item, index)
+                        {
+                            let style;
+                            let color;
+                            let align;
+                            let initialValue = 0;
+                            if(item.messages_origin=="lawyer"){
+                                style = styles.lawyerStyle;
+                                color = 'white';
+                                align = 'left';
+                            }else if(item.messages_origin=="user"){style = styles.clientStyle; color = 'black'; align = 'right';}
+                            return <TouchableHighlight style={style}><Text key={index} style={{fontWeight: "bold", textAlign: align , fontSize: windowHeightPercentUnit*3, color:color}}>{item.messages_content}</Text></TouchableHighlight>
+                        }
+
+                                    )
+                    }
+                </ScrollView>
+            </View>
+
+            <CountDown
+                until={420}
+                onFinish={() => ("users_id" in store.selectedCase && unlocked===false)?setModalVisibility(true):setModalVisibility(false)}
+                style={("users_id" in store.selectedCase && unlocked===false)?{marginRight: '60%', borderTopLeftRadius: 10, borderTopRightRadius: 10,  backgroundColor: "#4170f9"}:{display: "none"}}
+                size={20}
+                timeToShow={['M','S']}
+                digitStyle={{marginRight: 0, height: windowHeightPercentUnit*5, padding: 0 , backgroundColor: '#4170f9', borderColor: '#4170f9'}}
+                digitTxtStyle={{color: 'white'}}
+                timeLabelStyle={{color: '#4170f9', fontWeight: 'bold'}}
+                separatorStyle={{color: 'white'}}
+                timeLabels={{m: null, s: null}}
+                showSeparator={true}
                 />
 
 
-                <Animated.View style={{flex: animateCaseUpdate}}>
-                    <Text onPress={showCaseUpdate} style={styles.welcomeSmall}>AVANCE CASO</Text>
-                                        <View style={{flexDirection: "row", felx: 2}}>
-                                        {timeLine.map((item)=>{
-
-                                        let color= "";
-                                        let roundedBorder="";
-                                        let itemSucceded = timeLine[0].succeded;
-
-                                        (item.id == 1)?roundedBorder=20:roundedBorder=0;
-                                        (item.id <= itemSucceded)?color="#39E938":color="white";
-                                           if(item.hasOwnProperty("id")){
-                                            return (
-                                                <View key={item.id} style={{ marginTop:10 , flex: 3,flexDirection:'row', height: 30, width: 20}}>
-                                                    <View style={{flex: 1, backgroundColor: color, height: 10, width: 10, marginTop:8, borderTopLeftRadius: roundedBorder, borderBottomLeftRadius: roundedBorder }}>
-                                                    </View>
-                                                    <View style={{flex: 1, backgroundColor: color, height: 30, borderRadius:30, width: 20}}>
-                                                        <Text className={item.phase} style={{color: color, height: 30, borderRadius:30, width: 20}} onPress={()=> showPhase(item)} >o</Text>
-                                                    </View>
-                                                </View>
-                                                    )
-                                                }
-                                            })
-                                        }
-
-                                        </View>
-                                        <View style={{flex:1}}>
-                                            <Animated.Text style={{ opacity: animatephaseShowedOnTimeline, textAlign: 'center', color: 'white', fontSize:30, fontWeight: 'bold'}}>- {phaseShowedOnTimeline} -</Animated.Text>
-                                        </View>
-                </Animated.View>
-
-            </View>
-            <View style={{flex: 1}}>
-            </View>
-        </Animated.View >
-
-        <View style={{flex: 70}}>
-            <ScrollView style={{flex: 5, flexDirection: 'column', height: 150, backgroundColor: "white"}}>
-                {
-                                  message.map(
-                                    function(item, index)
-                                    {
-                                        let style;
-                                        let initialValue = 0;
-                                        if(item.messages_origin=="lawyer"){
-                                            style = styles.lawyerStyle;
-                                        }else if(item.messages_origin=="user"){style = styles.clientStyle;}
-                        return <TouchableHighlight style={style}><Animated.Text key={index} style={{fontWeight: "bold", textAlign: align , fontSize: windowHeightPercentUnit*3, color:color}}> {item.messages_content} </Animated.Text></TouchableHighlight>
-                                    }
-
-                                                )
-                                }
-            </ScrollView>
-        </View>
-        <CountDown
-                    until={420}
-                    onFinish={() => ("users_id" in store.selectedCase && unlocked===false)?setModalVisibility(true):setModalVisibility(false)}
-                    style={("users_id" in store.selectedCase && unlocked===false)?{marginRight: 320, backgroundColor: "#4170f9"}:{display: "none"}}
-                    size={20}
-                    timeToShow={['M','S']}
-                    digitStyle={{marginRight: 0, padding: 0 , backgroundColor: '#4170f9', borderColor: '#4170f9'}}
-                    digitTxtStyle={{color: 'white'}}
-                    timeLabelStyle={{color: '#4170f9', fontWeight: 'bold'}}
-                    separatorStyle={{color: 'white'}}
-                    timeLabels={{m: null, s: null}}
-                    showSeparator={true}
-
-
-                                                                                          />
-        <View style={{flex: 13, flexDirection: 'row', borderColor: "#4170f9", borderTopWidth: 3}}>
-
-                    <View style={("users_id" in store.selectedCase)?{flex:1, flexDirection:'column'}:{display: "none"}}><Text>  </Text><Icon size={50} name='credit-card' color='gold'  onPress={() => { payment() }} /></View>
-                    <View style={("users_id" in store.selectedCase)?{flex:4}:{flex:4, marginLeft:60}}><Text> </Text><TextInput ref={inputRef} onChangeText={x=> {setMessageInputContent(x); typing(x)}} style={{backgroundColor: "white", borderWidth:2, borderColor:"gray", borderRadius:10, height:60}}/></View>
-                    <View style={{flex:1}}><Text> </Text><Icon onPress={sendMessage} size={50} name='send' color='#4170f9'/></View>
+            <View style={{ marginBottom: windowHeightPercentUnit*5, flexDirection: 'row', borderColor: "#4170f9", borderTopWidth: 3}}>
+                <View style={{flex:1, flexDirection:'column'}}>
+                    <Text>
+                    </Text>{/*<Icon size={50} name='credit-card' color='gold'  onPress={() => { payment() }}/>*/}
                 </View>
-        <ModalPortal />
-        <Modal
-            visible={modalVisibility}
-            onTouchOutside={() => {
+                <View style={{flex:4}}>
+                    <Text>
+                    </Text>
+                    <TextInput ref={inputRef} onChangeText={x=> {setMessageInputContent(x); typing(x)}} style={{backgroundColor: "white", borderWidth:2, borderColor:"gray", borderRadius:10, height:60}}/>
+                </View>
+                <View style={{flex:1}}>
+                    <Text>
+                    </Text>
+                    <Icon onPress={sendMessage} size={50} name='send' color='#4170f9'/>
+                 </View>
+            </View>
 
-            }}
-          >
-            <ModalContent>
-              <Text style={styles.modalStyle}>Se ha acabado el tiempo!</Text>
-              <Text> </Text>
-              <Text style={styles.modalStyle}>Si hay buenas posibilidades de que este pueda ser un cliente, desbloquea el chat por $350</Text>
-              <Text> </Text>
-                <Text> </Text>
-              <Button title="DESBLOQUEAR" color="green" onPress={()=>{payment()}}/>
-            </ModalContent>
-          </Modal>
-     </View>
+            <ModalPortal />
+                <Modal
+                  visible={modalVisibility}
+                  onTouchOutside={() => {
+                        }}
+                    >
+                    <ModalContent>
+                        <Text style={styles.modalStyle}>Se ha acabado el tiempo!</Text>
+                        <Text> </Text>
+                        <Text style={styles.modalStyle}>Si su caso le interesó a su abogado, éste debloqueará el chat ilimitado</Text>
+                        <Text> </Text>
+                        <Text style={styles.modalStyle}>Por favor espere unos minutos, no salga de la aplicación</Text>
+                    </ModalContent>
+                </Modal>
+         </View>
+    </KeyboardAvoidingView>
+
+
     );
 }
 
@@ -479,4 +458,3 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     },
 });
-
