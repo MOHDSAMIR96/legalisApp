@@ -1,6 +1,6 @@
 import React, {Component, useState, useEffect, useRef }  from 'react';
-import { KeyboardAvoidingView, TouchableOpacity, Alert, Platform, StyleSheet, Text, View, Button, Image, List, TextInput, FormLabel, FormInput, FormValidationMessage, ScrollView, PanResponder } from 'react-native';
-import { ThemeProvider, Avatar, Card, ListItem, Icon, FlatList} from 'react-native-elements';
+import { KeyboardAvoidingView, TouchableOpacity, Alert, Platform, StyleSheet, Text, View, Button, Image, List, TextInput, FormLabel, FormInput, FormValidationMessage, ScrollView, PanResponder, Switch } from 'react-native';
+import { CheckBox as iosCheckbox, ThemeProvider, Avatar, Card, ListItem, Icon, FlatList} from 'react-native-elements';
 import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 import RNPickerSelect from 'react-native-picker-select'; // DOCUMENTATION https://www.npmjs.com/package/react-native-picker-select
@@ -36,6 +36,7 @@ export default function LawyerRegister({navigation}) {
    const [registerPhone, setNewRegisterPhone] = useState("");
    const [registerPassword, setNewRegisterPassword] = useState("");
    const [toggleCheckBox, setToggleCheckBox] = useState(false)
+   const [isEnabled, setIsEnabled] = useState(false);
    const [registerRut, setNewRegisterRut] = useState("");
 
    const [registerField, setNewRegisterField] = useState("");
@@ -45,6 +46,21 @@ export default function LawyerRegister({navigation}) {
 
    const [rut, enterRut] = useState("");
    const [password, enterPassword] = useState("");
+
+   const checkbox =  (Platform.OS !== 'ios')?<CheckBox
+                                          tintColors={{true:"#27F900", false: "white" }}
+                                          disabled={false}
+                                          value={toggleCheckBox}
+                                          onValueChange={(newValue) => setToggleCheckBox(newValue)}
+                                          />:<Switch
+                                                     trackColor={{ false: "white", true: "#27F900" }}
+                                                     thumbColor={isEnabled ? "#f5dd4b" : "#f4f3f4"}
+                                                     ios_backgroundColor="#3e3e3e"
+                                                     onValueChange={(value)=> setToggleCheckBox(value)}
+                                                     value={toggleCheckBox}
+                                                     style={{marginLeft: windowWidthPercentUnit}}
+                                                   />
+
 
 
    useEffect(()=>{// ONLY IF THE USERDATA ARRIVES TO THE STORE THE NAVIGATOR IS UPDATED
@@ -280,13 +296,9 @@ export default function LawyerRegister({navigation}) {
                       <TextInput  secureTextEntry={(!toggleCheckBox)?true:false} onChangeText={x=> setNewRegisterPassword(x)} placeholder = "Clave" style={{ backgroundColor: "white", height: windowHeightPercentUnit*5, width: "100%", borderColor: 'gray', borderWidth: 1, fontSize:windowHeightPercentUnit*3, borderRadius: 10, textAlign:'center' }}/>
                  </View>
                <View style={{flex:1}}>
-                {(Platform.OS !== 'ios')?<CheckBox
-
-                                                             tintColors={{true:"#27F900", false: "white" }}
-                                                             disabled={false}
-                                                             value={toggleCheckBox}
-                                                             onValueChange={(newValue) => setToggleCheckBox(newValue)}
-                                                           />: console.log("checbox not suported on this device")}
+                {
+                   checkbox
+                }
                </View>
             </View>
 
