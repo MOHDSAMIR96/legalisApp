@@ -53,11 +53,16 @@ export default function LawyerRegister({navigation}) {
    const [registerAccount, setNewRegisterAccount] = useState("");
    const [registerAccountAnimation, setNewRegisterAccountAnimation] = useState(new Animated.Value(0));
 
+   const [sendingRegistration, setSendingRegistration] = useState("none");
+   const [verifyingLogIn, setverifyingLogIn] = useState("none");
+
    const [inputColorValidation, setInputColorValidation] = useState({registerName: "white", registerMail: "white", registerPhone: "white",
      registerPassword: "white", registerRut: "white", registerField: "white", registerBank: "white" , registerAccount: "white"  });
 
    const [rut, enterRut] = useState("");
+   const [rutAnimation, setrutAnimation] = useState(new Animated.Value(0));
    const [password, enterPassword] = useState("");
+   const [passwordAnimation, setPasswordAnimation] = useState(new Animated.Value(0));
 
    const checkbox =  (Platform.OS !== 'ios')?<CheckBox
                                           tintColors={{true:"#27F900", false: "white" }}
@@ -93,6 +98,7 @@ export default function LawyerRegister({navigation}) {
                                                                      arrayOfCasesAndQueries.push(...data.resp)
 
                                                                      dispatchListOfCases(arrayOfCasesAndQueries)
+                                                                     setverifyingLogIn("none")
                                                                      navigation.navigate('LawyerProfile')
                                                                      })
                                                                      .catch(error => console.log(error))
@@ -255,8 +261,8 @@ export default function LawyerRegister({navigation}) {
                	})
                ]).start()
            break;
-case registerPassword.length:
-       setInputColorValidation({...inputColorValidation, registerPassword: "#FBC1C1" })
+        case registerPassword.length:
+               setInputColorValidation({...inputColorValidation, registerPassword: "#FBC1C1" })
                Animated.sequence([
                	Animated.timing(registerPasswordAnimation, {
                		toValue: 10,
@@ -277,7 +283,9 @@ case registerPassword.length:
                ]).start()
            break;
            default:
-           setLetEnterBoolean(false)
+                 setSendingRegistration("flex")
+                 setLetEnterBoolean(false)
+
 
                  let today = new Date();
                  let currentDate = today.getFullYear() + "-" + (today.getMonth() + 1) + "-" + today.getDate()
@@ -313,6 +321,7 @@ case registerPassword.length:
                                        .then((response)=>{ return response.json()})
                                        .then((data)=> {
                                            console.log("JSON.stringify(data)")
+                                           setSendingRegistration("none")
                                            navigation.navigate('ThanksMsg')
                                        })
                                        .catch(error => {console.log(error)})
@@ -382,18 +391,64 @@ case registerPassword.length:
 
     const singInValidation = () => {
 
-        fetch("http://patoexer.pythonanywhere.com/lawyer/" + rut)
-                                .then((response)=> {return response.json()})
-                                .then((data)=> {
+    switch(0){
+           case rut.length: console.log("funcion")
+            Animated.sequence([
+            	Animated.timing(rutAnimation, {
+            		toValue: 10,
+            		duration: 50
+            	}),
+            	Animated.timing(rutAnimation, {
+            		toValue: -10,
+            		duration: 50
+            	}),
+                Animated.timing(rutAnimation, {
+            		toValue: 10,
+            		duration: 50
+            	}),
+            	Animated.timing(rutAnimation, {
+            		toValue: 0,
+            		duration: 50
+            	})
+            ]).start()
+            break;
+            case password.length:
+            Animated.sequence([
+            	Animated.timing(passwordAnimation, {
+            		toValue: 10,
+            		duration: 50
+            	}),
+            	Animated.timing(passwordAnimation, {
+            		toValue: -10,
+            		duration: 50
+            	}),
+                Animated.timing(passwordAnimation, {
+            		toValue: 10,
+            		duration: 50
+            	}),
+            	Animated.timing(passwordAnimation, {
+            		toValue: 0,
+            		duration: 50
+            	})
+            ]).start()
+            break;
 
-                                    let dataToDispatch = {...data}
-                                    dispatch({type: "USERDATA", doneAction: dataToDispatch});
+            default:
+             setverifyingLogIn("flex")
+             fetch("http://patoexer.pythonanywhere.com/lawyer/" + rut)
+                                            .then((response)=> {return response.json()})
+                                            .then((data)=> {
 
-                                    if(dataToDispatch.lawyers_password==password){
-                                    setLetEnterBoolean(true)
-                                    } else{console.log("not verified")}
-                                })
-                                .catch(error => { console.log(error)})
+                                                let dataToDispatch = {...data}
+                                                dispatch({type: "USERDATA", doneAction: dataToDispatch});
+
+                                                if(dataToDispatch.lawyers_password==password){
+                                                setLetEnterBoolean(true)
+                                                } else{console.log("not verified")}
+                                            })
+                                            .catch(error => { console.log(error)})
+
+            }
       }
 
 
@@ -496,7 +551,7 @@ case registerPassword.length:
                    <View style={{flex:windowWidthPercentUnit*1, flexDirection: 'column', backgroundColor: "#4170f9"}}>
                         <Button title="REGISTRARSE" color={Platform.OS === 'ios'?"white":"#747A87"} type="clear" style={{width: 100}} onPress={register}/>
                    </View>
-               <View style={{flex:1}}></View>
+               <View style={{flex:1}}><Text style={{display: sendingRegistration}}>!!!!!</Text></View>
             </View>
 
 
@@ -504,17 +559,17 @@ case registerPassword.length:
 
         <View style={{flex: 1, flexDirection: 'row', backgroundColor: "#4170f9"}}>
             <View style={{flex:1, backgroundColor: "#4170f9"}}></View>
-                     <View style={{flex:windowWidthPercentUnit*1, flexDirection: 'row', backgroundColor: "#4170f9"}}>
+                     <Animated.View style={{flex:windowWidthPercentUnit*1,left: rutAnimation, flexDirection: 'row', backgroundColor: "#4170f9"}}>
                           <TextInput value={rut} onChangeText={x=> LoginRutificator(x)} placeholder = "Rut" style={{ backgroundColor: "white", height: windowHeightPercentUnit*5, width: "100%", borderColor: 'gray', borderWidth: 1, fontSize:windowHeightPercentUnit*3, borderRadius: 10, textAlign:'center', marginTop: windowHeightPercentUnit }}/>
-                     </View>
+                     </Animated.View>
             <View style={{flex:1}}></View>
         </View>
 
         <View style={{flex: 1, flexDirection: 'row', backgroundColor: "#4170f9"}}>
             <View style={{flex:1, backgroundColor: "#4170f9"}}></View>
-                 <View style={{flex:windowWidthPercentUnit*1, flexDirection: 'row', backgroundColor: "#4170f9"}}>
+                 <Animated.View style={{flex:windowWidthPercentUnit*1, left: passwordAnimation,  flexDirection: 'row', backgroundColor: "#4170f9"}}>
                        <TextInput  secureTextEntry={true} onChangeText={x=> enterPassword(x)} placeholder = "Clave" style={{ backgroundColor: "white", height: windowHeightPercentUnit*5, width: "100%", borderColor: 'gray', borderWidth: 1, fontSize:windowHeightPercentUnit*3, borderRadius: 10, textAlign:'center', marginTop: windowHeightPercentUnit }}/>
-                  </View>
+                  </Animated.View>
             <View style={{flex:1}}></View>
         </View>
 
@@ -524,7 +579,7 @@ case registerPassword.length:
                 <View style={{flex:windowWidthPercentUnit, flexDirection: 'column', backgroundColor: "#4170f9"}}>
                     <Button title="INGRESAR" color={Platform.OS === 'ios'?"white":"#747A87"} type="clear" style={{width: '100%'}} onPress={singInValidation}/>
                 </View>
-             <View style={{flex:1}}></View>
+             <View style={{flex:1}}><Text style={{display: verifyingLogIn}}>!!!?!!</Text></View>
         </View>
 
         </Animated.View>
