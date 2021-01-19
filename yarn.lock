@@ -1442,6 +1442,11 @@
   resolved "https://registry.yarnpkg.com/@protobufjs/utf8/-/utf8-1.1.0.tgz#a777360b5b39a1a2e5106f8e858f2fd2d060c570"
   integrity sha1-p3c2C1s5oaLlEG+OhY8v0tBgxXA=
 
+"@react-native-community/checkbox@^0.5.7":
+  version "0.5.7"
+  resolved "https://registry.yarnpkg.com/@react-native-community/checkbox/-/checkbox-0.5.7.tgz#ac818de88736acc1a4539188f2d435cf5e845ae1"
+  integrity sha512-CiHBAMWy5fsFIHLd1pf8frlWrLT8DnCXUSxdlGKazHm7srQSReKH4R5absShjmYOHRo9raWEnKZO/cm7MUDHZg==
+
 "@react-native-community/cli-debugger-ui@^4.9.0":
   version "4.9.0"
   resolved "https://registry.yarnpkg.com/@react-native-community/cli-debugger-ui/-/cli-debugger-ui-4.9.0.tgz#4177764ba69243c97aa26829d59d9501acb2bd71"
@@ -5627,6 +5632,11 @@ react-native-screens@~2.10.1:
   version "2.10.1"
   resolved "https://registry.yarnpkg.com/react-native-screens/-/react-native-screens-2.10.1.tgz#06d22fae87ef0ce51c616c34a199726db1403b95"
   integrity sha512-Z2kKSk4AwWRQNCBmTjViuBQK0/Lx0jc25TZptn/2gKYUCOuVRvCekoA26u0Tsb3BIQ8tWDsZW14OwDlFUXW1aw==
+
+react-native-set-soft-input-mode@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/react-native-set-soft-input-mode/-/react-native-set-soft-input-mode-1.1.0.tgz#0bc0c5265dab5105c631bfc00c0fef186b1935c7"
+  integrity sha512-xB/U7EQPUwFsUtJ78x3DRjmrezMf4oZVpfr6NOLawSWDvh8HxiDfBx8LsvRQmpC/g8k8veVfqVmVTQ8wYPdqqA==
 
 react-native-status-bar-height@^2.5.0:
   version "2.5.0"

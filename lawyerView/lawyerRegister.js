@@ -9,6 +9,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import {dispatchListOfCases, dispatchSelectCase} from '../redux/dispatcher.js'
 import {Animated, Dimensions} from 'react-native';
 
+import CheckBox from '@react-native-community/checkbox'; //DOCS:  https://github.com/react-native-checkbox/react-native-checkbox
+
 let arr = [1,2,3]
     // DEVICE SIZE
 const windowWidth = Dimensions.get('window').width;
@@ -33,6 +35,7 @@ export default function LawyerRegister({navigation}) {
    const [registerMail, setNewRegisterMail] = useState("");
    const [registerPhone, setNewRegisterPhone] = useState("");
    const [registerPassword, setNewRegisterPassword] = useState("");
+   const [toggleCheckBox, setToggleCheckBox] = useState(false)
    const [registerRut, setNewRegisterRut] = useState("");
 
    const [registerField, setNewRegisterField] = useState("");
@@ -190,7 +193,9 @@ export default function LawyerRegister({navigation}) {
 
 
     return (
+    <KeyboardAvoidingView behavior="height" keyboardVerticalOffset={-100} style={{flex: 1}}>
       <View style={{flex: 1, flexDirection: 'column', backgroundColor: "#4170f9"}}>
+
         <View style={{flex:2, backgroundColor: "#4170f9"}}>
             <Text style={styles.welcome}>Bienvendio a la red Legalis! Por favor ingresa tus datos</Text>
         </View>
@@ -272,15 +277,23 @@ export default function LawyerRegister({navigation}) {
             <View style={{flex: 1, flexDirection: 'row', backgroundColor: "#4170f9"}}>
                <View style={{flex:1, backgroundColor: "#4170f9"}}></View>
                  <View style={{flex:windowWidthPercentUnit*1, flexDirection: 'row', backgroundColor: "#4170f9"}}>
-                      <TextInput  secureTextEntry={true} onChangeText={x=> setNewRegisterPassword(x)} placeholder = "Clave" style={{ backgroundColor: "white", height: windowHeightPercentUnit*5, width: "100%", borderColor: 'gray', borderWidth: 1, fontSize:windowHeightPercentUnit*3, borderRadius: 10, textAlign:'center' }}/>
+                      <TextInput  secureTextEntry={(!toggleCheckBox)?true:false} onChangeText={x=> setNewRegisterPassword(x)} placeholder = "Clave" style={{ backgroundColor: "white", height: windowHeightPercentUnit*5, width: "100%", borderColor: 'gray', borderWidth: 1, fontSize:windowHeightPercentUnit*3, borderRadius: 10, textAlign:'center' }}/>
                  </View>
-               <View style={{flex:1}}></View>
+               <View style={{flex:1}}>
+                {(Platform.OS !== 'ios')?<CheckBox
+
+                                                             tintColors={{true:"#27F900", false: "white" }}
+                                                             disabled={false}
+                                                             value={toggleCheckBox}
+                                                             onValueChange={(newValue) => setToggleCheckBox(newValue)}
+                                                           />: console.log("checbox not suported on this device")}
+               </View>
             </View>
 
             <View style={{flex: 1, flexDirection: 'row', backgroundColor: "#4170f9"}}>
                <View style={{flex:1, backgroundColor: "#4170f9"}}></View>
                    <View style={{flex:windowWidthPercentUnit*1, flexDirection: 'column', backgroundColor: "#4170f9"}}>
-                        <Button title="REGISTRARSE" color="#747A87" type="clear" style={{width: 100}} onPress={register}/>
+                        <Button title="REGISTRARSE" color={Platform.OS === 'ios'?"white":"#747A87"} type="clear" style={{width: 100}} onPress={register}/>
                    </View>
                <View style={{flex:1}}></View>
             </View>
@@ -291,7 +304,7 @@ export default function LawyerRegister({navigation}) {
         <View style={{flex: 1, flexDirection: 'row', backgroundColor: "#4170f9"}}>
             <View style={{flex:1, backgroundColor: "#4170f9"}}></View>
                      <View style={{flex:windowWidthPercentUnit*1, flexDirection: 'row', backgroundColor: "#4170f9"}}>
-                          <TextInput value={rut} onChangeText={x=> LoginRutificator(x)} placeholder = "Rut" style={{ backgroundColor: "white", height: windowHeightPercentUnit*5, width: "100%", borderColor: 'gray', borderWidth: 1, fontSize:windowHeightPercentUnit*3, borderRadius: 10, textAlign:'center' }}/>
+                          <TextInput value={rut} onChangeText={x=> LoginRutificator(x)} placeholder = "Rut" style={{ backgroundColor: "white", height: windowHeightPercentUnit*5, width: "100%", borderColor: 'gray', borderWidth: 1, fontSize:windowHeightPercentUnit*3, borderRadius: 10, textAlign:'center', marginTop: windowHeightPercentUnit }}/>
                      </View>
             <View style={{flex:1}}></View>
         </View>
@@ -299,16 +312,16 @@ export default function LawyerRegister({navigation}) {
         <View style={{flex: 1, flexDirection: 'row', backgroundColor: "#4170f9"}}>
             <View style={{flex:1, backgroundColor: "#4170f9"}}></View>
                  <View style={{flex:windowWidthPercentUnit*1, flexDirection: 'row', backgroundColor: "#4170f9"}}>
-                       <TextInput  secureTextEntry={true} onChangeText={x=> enterPassword(x)} placeholder = "Clave" style={{ backgroundColor: "white", height: windowHeightPercentUnit*5, width: "100%", borderColor: 'gray', borderWidth: 1, fontSize:windowHeightPercentUnit*3, borderRadius: 10, textAlign:'center' }}/>
+                       <TextInput  secureTextEntry={true} onChangeText={x=> enterPassword(x)} placeholder = "Clave" style={{ backgroundColor: "white", height: windowHeightPercentUnit*5, width: "100%", borderColor: 'gray', borderWidth: 1, fontSize:windowHeightPercentUnit*3, borderRadius: 10, textAlign:'center', marginTop: windowHeightPercentUnit }}/>
                   </View>
             <View style={{flex:1}}></View>
         </View>
 
 
-        <View style={{flex: 1, flexDirection: 'row', backgroundColor: "#4170f9"}}>
+        <View style={{flex: 1, flexDirection: 'row',marginTop: windowHeightPercentUnit, backgroundColor: "#4170f9"}}>
              <View style={{flex:1, backgroundColor: "#4170f9"}}></View>
-                <View style={{flex:windowWidthPercentUnit*1, flexDirection: 'column', backgroundColor: "#4170f9"}}>
-                    <Button title="INGRESAR" color="#747A87" type="clear" style={{width: 100}} onPress={singInValidation}/>
+                <View style={{flex:windowWidthPercentUnit, flexDirection: 'column', backgroundColor: "#4170f9"}}>
+                    <Button title="INGRESAR" color={Platform.OS === 'ios'?"white":"#747A87"} type="clear" style={{width: '100%'}} onPress={singInValidation}/>
                 </View>
              <View style={{flex:1}}></View>
         </View>
@@ -316,15 +329,13 @@ export default function LawyerRegister({navigation}) {
         </Animated.View>
 
 
-        <View style={{flex: 2, flexDirection: 'row', backgroundColor: "#4170f9"}}>
-           <View style={{flex:1, backgroundColor: "#4170f9"}}></View>
-                   <View style={{flex:windowWidthPercentUnit*6, flexDirection: 'column', backgroundColor: "#4170f9"}}><Text onPress={showRegisterView} style={[styles.instructions, {textAlign: 'center'}]}>*Si ya tienes cuenta <Text style={{fontSize: windowHeightPercentUnit*4}}>INGRESA!</Text></Text></View>
-           <View style={{flex:1}}></View>
+        <View style={{flex: 1, flexDirection: 'row', backgroundColor: "#4170f9"}}>
+                   <View style={{ marginTop: windowWidthPercentUnit, flex:windowWidthPercentUnit*6, flexDirection: 'column', backgroundColor: "#4170f9"}}><Text onPress={showRegisterView} style={[styles.instructions, {textAlign: 'center'}]}>*Si ya tienes cuenta <Text style={{fontSize: windowHeightPercentUnit*4}}>INGRESA!</Text></Text></View>
         </View>
 
       </View>
 
-
+</KeyboardAvoidingView>
 
     );
 

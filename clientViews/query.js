@@ -1,10 +1,9 @@
 import React, {Component, useState, useEffect}  from 'react';
-import { TouchableOpacity, Alert, Platform, StyleSheet, Text, View, Button, Image, TextInput, FormLabel, FormInput, FormValidationMessage, ScrollView } from 'react-native';
+import { KeyboardAvoidingView, TouchableOpacity, Alert, Platform, StyleSheet, Text, View, Button, Image, TextInput, FormLabel, FormInput, FormValidationMessage, ScrollView } from 'react-native';
 import { ThemeProvider, Avatar, Card, ListItem, Icon} from 'react-native-elements';
 import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
-
-import {PanResponder, Animated, Dimensions } from 'react-native';
+import {PanResponder, Animated, Dimensions, Picker } from 'react-native';
 import { Video } from 'expo-av';
 
 import { useSelector, useDispatch } from 'react-redux';
@@ -33,6 +32,8 @@ export default function Query({navigation}){//ESTA PARTE ES LA VISTA DE EL INICI
     const [userName, setNewUserName] = useState("");
     const [fetchResponse, setNewFetchResponse] = useState("");
     const [hourOfTheDay, sethourOfTheDay] = useState(0);
+
+    const [selectedValue, setSelectedValue] = useState("");
 
     //REDUX STATE
     const store = useSelector(state => state.userData);
@@ -153,7 +154,7 @@ export default function Query({navigation}){//ESTA PARTE ES LA VISTA DE EL INICI
 
     let clientData = {
         "users_name": userName,
-        "users_issue_subject": subjects[activeSubjectCounter],
+        "users_issue_subject": (Platform.OS==='ios')?selectedValue:subjects[activeSubjectCounter],
         "users_issue_description": caseDescription,
         "lawyer_id": 1,
         "taken": false,
@@ -181,82 +182,94 @@ export default function Query({navigation}){//ESTA PARTE ES LA VISTA DE EL INICI
   }
 
     return (
-    <View style={{flex: windowHeightPercentUnit*1, backgroundColor: "#4170f9"}}>
 
-        <View style={(hourOfTheDay<24)?{flex: windowHeightPercentUnit*2, backgroundColor: "#4170f9"}:{ display:'none'}}><Text style={styles.welcome}>Cuéntanos tu problema...</Text></View>
+    <KeyboardAvoidingView behavior='height' style={{flex: windowHeightPercentUnit, backgroundColor: "#4170f9"}}>
 
-        <View style={(hourOfTheDay>=24)?{flex: windowHeightPercentUnit*2, backgroundColor: "#4170f9"}:{ display:'none'}}><Text style={styles.welcome}>Estamos descanzando</Text></View>
-        <View style={(hourOfTheDay>=24)?{flex: windowHeightPercentUnit*5, backgroundColor: "#4170f9"}:{ display:'none'}}><Text style={styles.instructions}>Los sentimos, nuestros abgados estan descanzando. Nuestra hora de atención es de 8:00 a 20:00 hrs. Por favor, vuelva más tarde. </Text></View>
+        <View  style={(hourOfTheDay<24)?{flex: windowHeightPercentUnit, backgroundColor: "#4170f9"}:{ display:'none'}}>
+            <Text style={[styles.welcome, {fontSize: windowHeightPercentUnit*4, padding: windowHeightPercentUnit }]}>Cuéntanos tu problema...</Text>
+        </View>
 
-        <View style={(hourOfTheDay<24)?{ flex: windowHeightPercentUnit*1, flexDirection: 'row'}:{ display:'none'}} >
-           <View style={{flex: 1}}></View>
-           <View   {..._panResponder.panHandlers} style={{flex: 8, width: '80%', borderRadius: 10, flexDirection: 'row', backgroundColor:"white"}}>
-               <Animated.Text style={(subjects[activeSubjectCounter]==subjects[0])?{marginLeft: '10%',position: 'relative', left: animatePosition , textAlign: 'center', fontSize: animateFontSize1 , backgroundColor: 'white', color: "#4170f9", fontWeight: "bold"}:{ marginLeft: '10%', position:'relative',left: animatePosition  , textAlign: 'center',  fontSize: animateFontSize1 , color: "#4170f9", fontWeight: "bold"}}>{subjects[0]}</Animated.Text>
-               <Animated.Text style={(subjects[activeSubjectCounter]==subjects[1])?{marginLeft: '10%', position: 'relative', left: animatePosition ,textAlign: 'center', fontSize: animateFontSize2 ,backgroundColor: 'white', color: "#4170f9", fontWeight: "bold"}:{ marginLeft: '10%', position:'relative',left: animatePosition , textAlign: 'center' , fontSize: animateFontSize2 , color: "#4170f9", fontWeight: "bold"}}>{subjects[1]}</Animated.Text>
-               <Animated.Text style={(subjects[activeSubjectCounter]==subjects[2])?{ marginLeft: '10%', position: 'relative', left: animatePosition , textAlign: 'center',  fontSize: animateFontSize3 ,backgroundColor: 'white', color: "#4170f9", fontWeight: "bold"}:{ marginLeft: '10%', position:'relative',left: animatePosition , textAlign: 'center',  fontSize: animateFontSize3 , color: "#4170f9", fontWeight: "bold"}}>{subjects[2]}</Animated.Text>
-               <Animated.Text style={(subjects[activeSubjectCounter]==subjects[3])?{ marginLeft: '10%', position: 'relative',left: animatePosition , textAlign: 'center', fontSize: animateFontSize4 ,backgroundColor: 'white', color: "#4170f9", fontWeight: "bold"}:{ marginLeft: '10%',  position:'relative', left: animatePosition ,textAlign: 'center', fontSize: animateFontSize4 , color: "#4170f9", fontWeight: "bold"}}>{subjects[3]}</Animated.Text>
-               <Animated.Text style={(subjects[activeSubjectCounter]==subjects[4])?{marginLeft: '10%', position: 'relative',left: animatePosition, textAlign: 'center', fontSize: animateFontSize5 ,backgroundColor: 'white', color: "#4170f9", fontWeight: "bold"}:{ marginLeft: '10%',  position:'relative', left: animatePosition ,textAlign: 'center', fontSize: animateFontSize5 , color: "#4170f9", fontWeight: "bold"}}>{subjects[4]}</Animated.Text>
-               <Animated.Text style={(subjects[activeSubjectCounter]==subjects[5])?{marginLeft: '10%', position: 'relative',left: animatePosition , textAlign: 'center', fontSize: animateFontSize6 ,backgroundColor: 'white', color: "#4170f9", fontWeight: "bold"}:{ marginLeft: '10%',  position:'relative',left: animatePosition , textAlign: 'center', fontSize: animateFontSize6 , color: "#4170f9", fontWeight: "bold"}}>{subjects[5]}</Animated.Text>
+        <View style={(hourOfTheDay>=24)?{flex: windowHeightPercentUnit*2, backgroundColor: "#4170f9"}:{ display:'none'}}>
+            <Text style={styles.welcome}>Estamos descanzando</Text>
+        </View>
 
-           </View>
-            <View style={{flex: 1}}></View>
+        <View style={(hourOfTheDay>=24)?{flex: windowHeightPercentUnit*5, backgroundColor: "#4170f9"}:{ display:'none'}}>
+            <Text style={styles.instructions}>Los sentimos, nuestros abgados estan descanzando. Nuestra hora de atención es de 8:00 a 20:00 hrs. Por favor, vuelva más tarde. </Text>
         </View>
 
 
-            <View style={(hourOfTheDay<24)?{flex: windowHeightPercentUnit*2, flexDirection: 'row', backgroundColor: "#4170f9"}:{ display:'none'}}>
-                   <View style={{flex: 2}}></View>
-                   <View style={[{ width: "100%", flex:1, flexDirection: 'column',margin: '5%', backgroundColor: "#4170f9"}]}>
-                             <View style={{backgroundColor: "#747A87", borderRadius: 100, marginBottom: '40%', paddingTop:'10%'}}><Icon name='mic' color='white' /></View>
-                             <View style={{flex:1, flexDirection: 'row', backgroundColor: "#4170f9"}}>
+        <View style={(hourOfTheDay<24)?{ flex: windowHeightPercentUnit*3, padding: windowHeightPercentUnit, backgroundColor: '#4170f9', flexDirection: 'row'}:{ display:'none'}} >
 
-                               <Text>{ "ani: " +  JSON.stringify(animatePosition) + "%" } </Text>
+            <View style={Platform.OS!=='ios'?{display: 'none'}:{flex:1}} >
+            <Picker
+                    selectedValue={selectedValue}
+                    style={Platform.OS==='android'?{display: 'none'}:{ height: windowHeightPercentUnit/2, width: '100%'}}
+                    onValueChange={(itemValue, itemIndex) => setSelectedValue(itemValue)}
+                  >
+                    <Picker.Item color='white' label="PROPIEDADES" value="propiedades" />
+                    <Picker.Item color='white' label="HERENCIAS" value="herencias" />
+                    <Picker.Item color='white' label="DIVORCIOS" value="divorcio" />
+                    <Picker.Item color='white' label="DESPIDOS" value="despidos" />
+                    <Picker.Item color='white' label="DEUDAS" value="deudas" />
+                    <Picker.Item color='white' label="OTRAS CONSULTAS" value="otras consultas" />
+                  </Picker>
 
-                             </View>
-                   </View>
-                   <View style={{flex: 2}}></View>
+             </View  >
+            <View   {..._panResponder.panHandlers} style={Platform.OS==='android'?{width: '100%', borderRadius: 10, flexDirection: 'row', height: windowHeightPercentUnit*10, backgroundColor:"white"}:{display: 'none'}}>
+                <Animated.Text style={(subjects[activeSubjectCounter]==subjects[0])?{marginLeft: '10%',position: 'relative', left: animatePosition , textAlign: 'center', fontSize: animateFontSize1 , backgroundColor: 'white', color: "#4170f9", fontWeight: "bold"}:{ marginLeft: '10%', position:'relative',left: animatePosition  , textAlign: 'center',  fontSize: animateFontSize1 , color: "#4170f9", fontWeight: "bold"}}>{subjects[0]}</Animated.Text>
+                <Animated.Text style={(subjects[activeSubjectCounter]==subjects[1])?{marginLeft: '10%', position: 'relative', left: animatePosition ,textAlign: 'center', fontSize: animateFontSize2 ,backgroundColor: 'white', color: "#4170f9", fontWeight: "bold"}:{ marginLeft: '10%', position:'relative',left: animatePosition , textAlign: 'center' , fontSize: animateFontSize2 , color: "#4170f9", fontWeight: "bold"}}>{subjects[1]}</Animated.Text>
+                <Animated.Text style={(subjects[activeSubjectCounter]==subjects[2])?{ marginLeft: '10%', position: 'relative', left: animatePosition , textAlign: 'center',  fontSize: animateFontSize3 ,backgroundColor: 'white', color: "#4170f9", fontWeight: "bold"}:{ marginLeft: '10%', position:'relative',left: animatePosition , textAlign: 'center',  fontSize: animateFontSize3 , color: "#4170f9", fontWeight: "bold"}}>{subjects[2]}</Animated.Text>
+                <Animated.Text style={(subjects[activeSubjectCounter]==subjects[3])?{ marginLeft: '10%', position: 'relative',left: animatePosition , textAlign: 'center', fontSize: animateFontSize4 ,backgroundColor: 'white', color: "#4170f9", fontWeight: "bold"}:{ marginLeft: '10%',  position:'relative', left: animatePosition ,textAlign: 'center', fontSize: animateFontSize4 , color: "#4170f9", fontWeight: "bold"}}>{subjects[3]}</Animated.Text>
+                <Animated.Text style={(subjects[activeSubjectCounter]==subjects[4])?{marginLeft: '10%', position: 'relative',left: animatePosition, textAlign: 'center', fontSize: animateFontSize5 ,backgroundColor: 'white', color: "#4170f9", fontWeight: "bold"}:{ marginLeft: '10%',  position:'relative', left: animatePosition ,textAlign: 'center', fontSize: animateFontSize5 , color: "#4170f9", fontWeight: "bold"}}>{subjects[4]}</Animated.Text>
+                <Animated.Text style={(subjects[activeSubjectCounter]==subjects[5])?{marginLeft: '10%', position: 'relative',left: animatePosition , textAlign: 'center', fontSize: animateFontSize6 ,backgroundColor: 'white', color: "#4170f9", fontWeight: "bold"}:{ marginLeft: '10%',  position:'relative',left: animatePosition , textAlign: 'center', fontSize: animateFontSize6 , color: "#4170f9", fontWeight: "bold"}}>{subjects[5]}</Animated.Text>
             </View>
 
-                 <View style={(hourOfTheDay<24)?{flex: windowHeightPercentUnit*3, flexDirection: 'row', backgroundColor: "#4170f9"}:{ display:'none'}} >
-                     <View style={{flex: 1}}></View>
-                       <View style={[{ flex:10, flexDirection: 'column', backgroundColor: "#4170f9"}]}>
-                          <TextInput placeholder="¿CUAL ES TU PROBLEMA LEGAL?" onChangeText={x=> setNewCaseDescription(x)} multiline={false} style={{textAlign: 'center',backgroundColor: 'white', fontSize: windowHeightPercentUnit*2, height: '100%', borderRadius:10}} />
+        </View>
 
-                          <View style={{flex:1, flexDirection: 'row', backgroundColor: "#4170f9"}}>
-                            <Text></Text>
-                          </View>
-                       </View>
+        <View style={(hourOfTheDay<24)?{flex: windowHeightPercentUnit, padding: windowHeightPercentUnit , flexDirection: 'row', backgroundColor: "#4170f9"}:{ display:'none'}}>
+            <View style={{flex: 2}}></View>
+            <View style={[{ width: "100%", flex:1, flexDirection: 'column',backgroundColor: '#4170f9'}]}>
+                <Icon size={windowHeightPercentUnit*6} name='mic' color='white' />
+            </View>
+            <View style={{flex: 2}}></View>
+        </View>
 
-                     <View style={{flex: 1}}>
+        <View style={{flex:windowHeightPercentUnit*5}} >
+            <View style={(hourOfTheDay<24)?{flex: windowHeightPercentUnit*3, flexDirection: 'row', backgroundColor: "#4170f9"}:{ display:'none'}} >
+                <View style={{flex: 1}}>
+                </View>
+                <View style={[{ width: '80%', flexDirection: 'column', backgroundColor: "#4170f9"}]}>
+                    <TextInput placeholder="¿CUAL ES TU PROBLEMA LEGAL?" onChangeText={x=> setNewCaseDescription(x)} multiline={false} style={{textAlign: 'center',backgroundColor: 'white', fontSize: windowHeightPercentUnit*2.5, height: '100%', borderRadius:10}} />
+                </View>
+                <View style={{flex: 1}}>
+                </View>
+            </View>
 
-                     </View>
-                 </View>
+            <View style={(hourOfTheDay<24)?{flex: windowHeightPercentUnit*2, padding: windowHeightPercentUnit*2, flexDirection: 'row', backgroundColor: "#4170f9"}:{ display:'none'}}>
+                <View style={{flex: 1}}></View>
+                <View style={[{ flex:windowHeightPercentUnit*2, flexDirection: 'column', backgroundColor: "#4170f9"}]}>
+                    <TextInput placeholder="NOMBRE" onChangeText={x=> setNewUserName(x)} style={{fontSize: windowHeightPercentUnit*2.5, textAlign: 'center',backgroundColor: 'white', borderRadius:10}} />
+                    <View style={{flex:1, flexDirection: 'row', backgroundColor: "#4170f9"}}>
+                        <Text></Text>
+                    </View>
+                </View>
+                <View style={{flex: 1}}></View>
+            </View>
+        </View>
 
-                <View style={(hourOfTheDay<24)?{flex: windowHeightPercentUnit*3, flexDirection: 'row', backgroundColor: "#4170f9"}:{ display:'none'}}>
-                                     <View style={{flex: 1}}></View>
-                                       <View style={[{ flex:10, flexDirection: 'column', backgroundColor: "#4170f9"}]}>
-                                         <TextInput placeholder="NOMBRE" onChangeText={x=> setNewUserName(x)} style={{fontSize: windowHeightPercentUnit*2, textAlign: 'center', padding: '5%',backgroundColor: 'white', borderRadius:10, marginTop: '10%', marginBottom: '10%'}} />
+        <View style={{flex:windowHeightPercentUnit}}>
+            <TouchableOpacity
+               style={(hourOfTheDay<=24)?{padding: windowHeightPercentUnit*3, paddingTop: windowHeightPercentUnit ,backgroundColor: "#747A87", color: 'white', alignItems: "center"}:{ display:'none'}}
+               color="white"
+               onPress={()=> {  sendDescription()
+               }}
+            >
+                <Text style={{fontSize:windowHeightPercentUnit*4, color: "white"}}>SIGUIENTE</Text>
+            </TouchableOpacity>
+        </View>
 
-                                          <View style={{flex:1, flexDirection: 'row', backgroundColor: "#4170f9"}}>
-                                            <Text></Text>
-                                          </View>
-                                       </View>
+    </KeyboardAvoidingView>
 
-                                     <View style={{flex: 1}}>
-
-                                      </View>
-                                 </View>
-
-                <TouchableOpacity
-                        style={(hourOfTheDay<=24)?{backgroundColor: "#747A87", height: '10%', color: 'white', alignItems: "center"}:{ display:'none'}}
-                        color="white"
-                        onPress={()=> {  sendDescription()
-                        }}
-                      >
-                      <Text></Text>
-                        <Text style={{fontSize:windowHeightPercentUnit*4, color: "white"}}>SIGUIENTE</Text>
-                      </TouchableOpacity>
-
-     </View>
     );
   //}
 }
@@ -279,5 +292,25 @@ const styles = StyleSheet.create({
       padding: windowHeightPercentUnit*2
 
     },
+    inputIOS: {
+        fontSize: 16,
+        paddingVertical: 12,
+        paddingHorizontal: 10,
+        borderWidth: 1,
+        borderColor: 'gray',
+        borderRadius: 4,
+        color: 'black',
+        paddingRight: 30, // to ensure the text is never behind the icon
+      },
+      inputAndroid: {
+        fontSize: 16,
+        paddingHorizontal: 10,
+        paddingVertical: 8,
+        borderWidth: 0.5,
+        borderColor: 'purple',
+        borderRadius: 8,
+        color: 'black',
+        paddingRight: 30, // to ensure the text is never behind the icon
+      },
 });
 

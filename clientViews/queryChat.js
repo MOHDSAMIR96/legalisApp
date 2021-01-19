@@ -5,7 +5,7 @@ import { createAppContainer, NavigationActions, StackActions } from 'react-navig
 import { createStackNavigator } from 'react-navigation-stack';
 import { CommonActions } from '@react-navigation/native';
 import store from '../redux/store.js';
-import {Animated, Dimensions} from 'react-native';
+import {KeyboardAvoidingView, Animated, Dimensions} from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import CountDown from 'react-native-countdown-component'; // DOCUMENTATION ON https://github.com/talalmajali/react-native-countdown-component
 import { ModalPortal, Modal, ModalContent } from 'react-native-modals';
@@ -21,6 +21,7 @@ import CaseChat from './caseChat.js';
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 const windowHeightPercentUnit = parseInt(windowHeight/100);
+const windowWidthPercentUnit = parseInt(windowWidth/100);
 
 
 export function QueryChat({navigation}) {
@@ -30,10 +31,10 @@ export function QueryChat({navigation}) {
     const dispatch = useDispatch();
 
     //FUNCTIONAL COMPONENT STATE
-    const [registerBtnDisplayed, setNewRegisterBtnDisplayed] = useState(0);
-    const [animate, setNewanimate] = useState(new Animated.Value(windowHeightPercentUnit*0.8));
+    const [registerBtnDisplayed, setNewRegisterBtnDisplayed] = useState(1);
+    const [animate, setNewanimate] = useState(new Animated.Value(windowHeightPercentUnit*4));
     const [messageAnimation, setMessageAnimation] = useState(new Animated.Value(0));
-    const [textoEjemplo, setNewTextoEjemplo] = useState(store.users_issue_description);
+    const [description, setNewDescription] = useState(store.users_issue_description);
     const [messageInputContent, setMessageInputContent] = useState("");
     const [message, enterMessage] = useState([]);
     const [returnedMessageId, setReturnedMessageId] = useState(0);
@@ -207,22 +208,22 @@ export function QueryChat({navigation}) {
 
 
     return (
-
+    <KeyboardAvoidingView style={{flex:1}} behavior="padding" keyboardVerticalOffset={windowHeightPercentUnit*5} >
     <View style={{flex: 1, flexDirection: 'column', backgroundColor: "white"}}>
         <Animated.View style={{ flex: animate, flexDirection: 'row', backgroundColor: "#4170f9"}}>
-            <View style={{flex: 2, flexDirection:"column"}}>
-                <View style={{flex: 1}}></View>
+            <View style={{flex: windowHeightPercentUnit*2, flexDirection:"column"}}>
+                <View style={{flex: windowHeightPercentUnit*1}}></View>
             </View>
-            <View style={{flex: 35}}>
-                <View style={{flex: 5}}>
+            <View  style={{flex: windowHeightPercentUnit*35}}>
+                <View style={{flex: windowHeightPercentUnit*5}}>
                     <Text onPress={showCase} style={styles.welcomeSmall}>RESUMEN CASO </Text>
                     <ScrollView>
 
-                    <Text style={{fontSize: windowHeightPercentUnit*3, color: "white", textAlign: 'justify', paddingRight:30, paddingTop: windowHeightPercentUnit*3}}>{textoEjemplo}</Text>
+                    <Text style={{fontSize: windowHeightPercentUnit*3, color: "white", textAlign: 'justify', paddingRight:30, paddingTop: windowHeightPercentUnit*3}}>{description}</Text>
                     </ScrollView>
                 </View>
             </View>
-            <View style={{flex: 20}}></View>
+            <View style={{flex: windowHeightPercentUnit*20}}></View>
 
         </Animated.View >
         <View style={{flex: windowHeightPercentUnit*10}}>
@@ -248,10 +249,12 @@ export function QueryChat({navigation}) {
                 }
             </ScrollView>
         </View>
+
+
         <CountDown
             until={420}
             onFinish={() => setModalVisibility(true)}
-            style={(startCountDown)?{marginRight: 320, backgroundColor: "#4170f9"}:{display: "none"}}
+            style={(startCountDown)?{marginRight: windowWidthPercentUnit*80, borderTopLeftRadius: 10, borderTopRightRadius: 10, backgroundColor: "#4170f9"}:{display: "none"}}
             size={20}
             timeToShow={['M','S']}
             digitStyle={{marginRight: 0, padding: 0 , backgroundColor: '#4170f9', borderColor: '#4170f9'}}
@@ -260,15 +263,17 @@ export function QueryChat({navigation}) {
             separatorStyle={{color: 'white'}}
             timeLabels={{m: null, s: null}}
             showSeparator={true}
+            />
 
 
-                                                                                  />
-        <View style={{flex: windowHeightPercentUnit*2, marginBottom: windowHeightPercentUnit*5, flexDirection: 'row', borderColor: "#4170f9", borderTopWidth: 3}}>
+        <View style={{ marginBottom: windowHeightPercentUnit*5, flexDirection: 'row', borderColor: "#4170f9", borderTopWidth: 3}}>
 
             <View style={{flex:1, flexDirection:'column'}}><Text>  </Text>{/*<Icon size={50} name='credit-card' color='gold'  onPress={() => { payment() }}/>*/}</View>
             <View style={{flex:4}}><Text> </Text><TextInput ref={inputRef} onChangeText={x=> {setMessageInputContent(x); typing(x)}} style={{backgroundColor: "white", borderWidth:2, borderColor:"gray", borderRadius:10, height:60}}/></View>
             <View style={{flex:1}}><Text> </Text><Icon onPress={enterNewMessage} size={50} name='send' color='#4170f9'/></View>
+
         </View>
+
 
         <ModalPortal />
                 <Modal
@@ -286,6 +291,7 @@ export function QueryChat({navigation}) {
                     </ModalContent>
                   </Modal>
      </View>
+     </KeyboardAvoidingView>
 
     );
 
