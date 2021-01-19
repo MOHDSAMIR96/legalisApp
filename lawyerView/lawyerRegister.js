@@ -32,17 +32,29 @@ export default function LawyerRegister({navigation}) {
    const [account, setAccount] = useState("");
 
    const [registerName, setNewRegisterName] = useState("");
+   const [registerNameAnimation, setNewRegisterNameAnimation] = useState(new Animated.Value(0));
    const [registerMail, setNewRegisterMail] = useState("");
+   const [registerMailAnimation, setNewRegisterMailAnimation] = useState(new Animated.Value(0));
    const [registerPhone, setNewRegisterPhone] = useState("");
+   const [registerPhoneAnimation, setNewRegisterPhoneAnimation] = useState(new Animated.Value(0));
+
    const [registerPassword, setNewRegisterPassword] = useState("");
+   const [registerPasswordAnimation, setNewRegisterPasswordAnimation] = useState(new Animated.Value(0));
    const [toggleCheckBox, setToggleCheckBox] = useState(false)
    const [isEnabled, setIsEnabled] = useState(false);
    const [registerRut, setNewRegisterRut] = useState("");
+   const [registerRutAnimation, setNewRegisterRutAnimation] = useState(new Animated.Value(0));
 
    const [registerField, setNewRegisterField] = useState("");
+   const [registerFieldAnimation, setNewRegisterFieldAnimation] = useState(new Animated.Value(0));
    const [registerBank, setNewRegisterBank] = useState("");
+   const [registerBankAnimation, setNewRegisterBankAnimation] = useState(new Animated.Value(0));
    const [registerAccountType, setNewRegisterAccountType] = useState("");
    const [registerAccount, setNewRegisterAccount] = useState("");
+   const [registerAccountAnimation, setNewRegisterAccountAnimation] = useState(new Animated.Value(0));
+
+   const [inputColorValidation, setInputColorValidation] = useState({registerName: "white", registerMail: "white", registerPhone: "white",
+     registerPassword: "white", registerRut: "white", registerField: "white", registerBank: "white" , registerAccount: "white"  });
 
    const [rut, enterRut] = useState("");
    const [password, enterPassword] = useState("");
@@ -93,52 +105,229 @@ export default function LawyerRegister({navigation}) {
 
   const register =()=>{
 
-      setLetEnterBoolean(false)
+       switch(0){
+       case registerName.length:
+        setInputColorValidation({...inputColorValidation, registerName: "#FBC1C1" })
+        Animated.sequence([
+        	Animated.timing(registerNameAnimation, {
+        		toValue: 10,
+        		duration: 50
+        	}),
+        	Animated.timing(registerNameAnimation, {
+        		toValue: -10,
+        		duration: 50
+        	}),
+            Animated.timing(registerNameAnimation, {
+        		toValue: 10,
+        		duration: 50
+        	}),
+        	Animated.timing(registerNameAnimation, {
+        		toValue: 0,
+        		duration: 50
+        	})
+        ]).start()
+        break;
+       case registerMail.length:
+        setInputColorValidation({...inputColorValidation, registerMail: "#FBC1C1" })
+                Animated.sequence([
+                	Animated.timing(registerMailAnimation, {
+                		toValue: 10,
+                		duration: 50
+                	}),
+                	Animated.timing(registerMailAnimation, {
+                		toValue: -10,
+                		duration: 50
+                	}),
+                    Animated.timing(registerMailAnimation, {
+                		toValue: 10,
+                		duration: 50
+                	}),
+                	Animated.timing(registerMailAnimation, {
+                		toValue: 0,
+                		duration: 50
+                	})
+                ]).start()
+           break;
 
-      let today = new Date();
-      let currentDate = today.getFullYear() + "-" + (today.getMonth() + 1) + "-" + today.getDate()
+       case registerPhone.length:
+       setInputColorValidation({...inputColorValidation, registerPhone: "#FBC1C1" })
+               Animated.sequence([
+               	Animated.timing(registerPhoneAnimation, {
+               		toValue: 10,
+               		duration: 50
+               	}),
+               	Animated.timing(registerPhoneAnimation, {
+               		toValue: -10,
+               		duration: 50
+               	}),
+                   Animated.timing(registerPhoneAnimation, {
+               		toValue: 10,
+               		duration: 50
+               	}),
+               	Animated.timing(registerPhoneAnimation, {
+               		toValue: 0,
+               		duration: 50
+               	})
+               ]).start()
+           break;
 
-      //POST TO CLIENTS/
+       case registerRut.length:
+       setInputColorValidation({...inputColorValidation, registerRut: "#FBC1C1" })
+               Animated.sequence([
+               	Animated.timing(registerRutAnimation, {
+               		toValue: 10,
+               		duration: 50
+               	}),
+               	Animated.timing(registerRutAnimation, {
+               		toValue: -10,
+               		duration: 50
+               	}),
+                   Animated.timing(registerRutAnimation, {
+               		toValue: 10,
+               		duration: 50
+               	}),
+               	Animated.timing(registerRutAnimation, {
+               		toValue: 0,
+               		duration: 50
+               	})
+               ]).start()
+           break;
+       case registerField.length:
+       setInputColorValidation({...inputColorValidation, registerField: "#FBC1C1" })
+               Animated.sequence([
+               	Animated.timing(registerFieldAnimation, {
+               		toValue: 10,
+               		duration: 50
+               	}),
+               	Animated.timing(registerFieldAnimation, {
+               		toValue: -10,
+               		duration: 50
+               	}),
+                   Animated.timing(registerFieldAnimation, {
+               		toValue: 10,
+               		duration: 50
+               	}),
+               	Animated.timing(registerFieldAnimation, {
+               		toValue: 0,
+               		duration: 50
+               	})
+               ]).start()
+           break;
+       case registerBank.length:
+       setInputColorValidation({...inputColorValidation, registerBank: "#FBC1C1" })
+               Animated.sequence([
+               	Animated.timing(registerBankAnimation, {
+               		toValue: 10,
+               		duration: 50
+               	}),
+               	Animated.timing(registerBankAnimation, {
+               		toValue: -10,
+               		duration: 50
+               	}),
+                   Animated.timing(registerBankAnimation, {
+               		toValue: 10,
+               		duration: 50
+               	}),
+               	Animated.timing(registerBankAnimation, {
+               		toValue: 0,
+               		duration: 50
+               	})
+               ]).start()
+           break;
+       case registerAccount.length:
+       setInputColorValidation({...inputColorValidation, registerAccount: "#FBC1C1" })
+               Animated.sequence([
+               	Animated.timing(registerAccountAnimation, {
+               		toValue: 10,
+               		duration: 50
+               	}),
+               	Animated.timing(registerAccountAnimation, {
+               		toValue: -10,
+               		duration: 50
+               	}),
+                   Animated.timing(registerAccountAnimation, {
+               		toValue: 10,
+               		duration: 50
+               	}),
+               	Animated.timing(registerAccountAnimation, {
+               		toValue: 0,
+               		duration: 50
+               	})
+               ]).start()
+           break;
+case registerPassword.length:
+       setInputColorValidation({...inputColorValidation, registerPassword: "#FBC1C1" })
+               Animated.sequence([
+               	Animated.timing(registerPasswordAnimation, {
+               		toValue: 10,
+               		duration: 50
+               	}),
+               	Animated.timing(registerPasswordAnimation, {
+               		toValue: -10,
+               		duration: 50
+               	}),
+                   Animated.timing(registerPasswordAnimation, {
+               		toValue: 10,
+               		duration: 50
+               	}),
+               	Animated.timing(registerPasswordAnimation, {
+               		toValue: 0,
+               		duration: 50
+               	})
+               ]).start()
+           break;
+           default:
+           setLetEnterBoolean(false)
 
-      fetch("http://patoexer.pythonanywhere.com/lawyer/" + registerRut)
-      .then(response =>{return response.json()})
-      .then((data)=>{
+                 let today = new Date();
+                 let currentDate = today.getFullYear() + "-" + (today.getMonth() + 1) + "-" + today.getDate()
 
-        if(data.lawyers_rut!=registerRut){
+                 //POST TO CLIENTS/
 
-                let lawyerData = {
-                        "lawyers_name": registerName,
-                         "lawyers_password": registerPassword,
-                         "lawyers_email": registerMail,
-                         "lawyers_rut": registerRut,
-                         "lawyers_phone": registerPhone,
-                         "lawyers_field": registerField,
-                         "lawyers_title": " ",
-                         "lawyers_file_speciality": " " ,
-                         "lawyers_bank": registerBank,
-                         "lawyers_account": registerAccountType,
-                         "lawyers_bank_number": registerAccount
-                    }
+                 fetch("http://patoexer.pythonanywhere.com/lawyer/" + registerRut)
+                 .then(response =>{return response.json()})
+                 .then((data)=>{
 
-                    let options = {
-                                method: 'POST',
-                                body: JSON.stringify(lawyerData),
-                                headers: {'Content-Type': 'application/json'}};
+                   if(data.lawyers_rut!=registerRut){
 
-                fetch("http://patoexer.pythonanywhere.com/lawyer/1", options)
-                            .then((response)=>{ return response.json()})
-                            .then((data)=> {
-                                console.log("JSON.stringify(data)")
-                                navigation.navigate('ThanksMsg')
-                            })
-                            .catch(error => {console.log(error)})
+                           let lawyerData = {
+                                   "lawyers_name": registerName,
+                                    "lawyers_password": registerPassword,
+                                    "lawyers_email": registerMail,
+                                    "lawyers_rut": registerRut,
+                                    "lawyers_phone": registerPhone,
+                                    "lawyers_field": registerField,
+                                    "lawyers_title": " ",
+                                    "lawyers_file_speciality": " " ,
+                                    "lawyers_bank": registerBank,
+                                    "lawyers_account": registerAccountType,
+                                    "lawyers_bank_number": registerAccount
+                               }
 
-        } else{
-                   console.log("YA ESTAS REGISTRADO!!")
-        }
+                               let options = {
+                                           method: 'POST',
+                                           body: JSON.stringify(lawyerData),
+                                           headers: {'Content-Type': 'application/json'}};
 
-      })
-      .catch((error) => console.log(error))
+                           fetch("http://patoexer.pythonanywhere.com/lawyer/1", options)
+                                       .then((response)=>{ return response.json()})
+                                       .then((data)=> {
+                                           console.log("JSON.stringify(data)")
+                                           navigation.navigate('ThanksMsg')
+                                       })
+                                       .catch(error => {console.log(error)})
+
+                   } else{
+                              console.log("YA ESTAS REGISTRADO!!")
+                   }
+
+                 })
+                 .catch((error) => console.log(error))
+
+
+
+       }
+
 
   }
 
@@ -218,9 +407,9 @@ export default function LawyerRegister({navigation}) {
 
             <View style={{flex: 1, flexDirection: 'row', backgroundColor: "#4170f9"}}>
                <View style={{flex:1, backgroundColor: "#4170f9"}}></View>
-                  <View style={{flex:windowWidthPercentUnit*1, flexDirection: 'row', backgroundColor: "#4170f9"}}>
-                      <TextInput onChangeText={x=> setNewRegisterName(x)} placeholder = "Nombre Completo" style={{ backgroundColor: "white", height: windowHeightPercentUnit*5, width: "100%", borderColor: 'gray', borderWidth: 1 , fontSize:windowHeightPercentUnit*3, textAlign:'center', borderRadius: 10}}/>
-                  </View>
+                  <Animated.View style={{flex:windowWidthPercentUnit*1, left: registerNameAnimation, flexDirection: 'row', backgroundColor: "#4170f9"}}>
+                      <TextInput onChangeText={x=> setNewRegisterName(x)} placeholder = "Nombre Completo" style={{ backgroundColor: inputColorValidation.registerName, height: windowHeightPercentUnit*5, width: "100%", borderColor: 'gray', borderWidth: 1 , fontSize:windowHeightPercentUnit*3, textAlign:'center', borderRadius: 10}}/>
+                  </Animated.View>
                <View style={{flex:1}}></View>
             </View>
 
@@ -229,35 +418,35 @@ export default function LawyerRegister({navigation}) {
 
             <View style={{flex: 1, flexDirection: 'row', backgroundColor: "#4170f9"}}>
               <View style={{flex:1, backgroundColor: "#4170f9"}}></View>
-                <View style={{flex:windowWidthPercentUnit*1, flexDirection: 'row', backgroundColor: "#4170f9"}}>
-                    <TextInput onChangeText={x=> setNewRegisterMail(x)} placeholder = "Correo" style={{ backgroundColor: "white", height: windowHeightPercentUnit*5, width: "100%", borderColor: 'gray', borderWidth: 1, fontSize:windowHeightPercentUnit*3, borderRadius: 10, textAlign:'center'}}/>
-                </View>
+                <Animated.View style={{flex:windowWidthPercentUnit*1, left: registerMailAnimation, flexDirection: 'row', backgroundColor: "#4170f9"}}>
+                    <TextInput onChangeText={x=> setNewRegisterMail(x)} placeholder = "Correo" style={{ backgroundColor: inputColorValidation.registerMail, height: windowHeightPercentUnit*5, width: "100%", borderColor: 'gray', borderWidth: 1, fontSize:windowHeightPercentUnit*3, borderRadius: 10, textAlign:'center'}}/>
+                </Animated.View>
               <View style={{flex:1}}></View>
             </View>
 
 
             <View style={{flex: 1, flexDirection: 'row', backgroundColor: "#4170f9"}}>
               <View style={{flex:1, backgroundColor: "#4170f9"}}></View>
-                <View style={{flex:windowWidthPercentUnit*1, flexDirection: 'row', backgroundColor: "#4170f9"}}>
-                   <TextInput onChangeText={x=> setNewRegisterPhone(x)} placeholder = "Teléfono" style={{ backgroundColor: "white", height: windowHeightPercentUnit*5, width: "100%", borderColor: 'gray', borderWidth: 1, fontSize:windowHeightPercentUnit*3, borderRadius: 10, textAlign:'center' }}/>
-                </View>
+                <Animated.View style={{flex:windowWidthPercentUnit*1, left: registerPhoneAnimation, flexDirection: 'row', backgroundColor: "#4170f9"}}>
+                   <TextInput onChangeText={x=> setNewRegisterPhone(x)} placeholder = "Teléfono" style={{ backgroundColor: inputColorValidation.registerPhone, height: windowHeightPercentUnit*5, width: "100%", borderColor: 'gray', borderWidth: 1, fontSize:windowHeightPercentUnit*3, borderRadius: 10, textAlign:'center' }}/>
+                </Animated.View>
               <View style={{flex:1}}></View>
             </View>
 
             <View style={{flex: 1, flexDirection: 'row', backgroundColor: "#4170f9"}}>
                           <View style={{flex:1, backgroundColor: "#4170f9"}}></View>
-                            <View style={{flex:windowWidthPercentUnit*1, flexDirection: 'row', backgroundColor: "#4170f9"}}>
-                               <TextInput value={registerRut} onChangeText={x=> RegisterRutificator(x)} placeholder = "Rut" style={{ backgroundColor: "white", height: windowHeightPercentUnit*5, width: "100%", borderColor: 'gray', borderWidth: 1, fontSize:windowHeightPercentUnit*3, borderRadius: 10, textAlign:'center' }}/>
-                          </View>
+                            <Animated.View style={{flex:windowWidthPercentUnit*1, left: registerRutAnimation, flexDirection: 'row', backgroundColor: "#4170f9"}}>
+                               <TextInput value={registerRut} onChangeText={x=> RegisterRutificator(x)} placeholder = "Rut" style={{ backgroundColor: inputColorValidation.registerRut, height: windowHeightPercentUnit*5, width: "100%", borderColor: 'gray', borderWidth: 1, fontSize:windowHeightPercentUnit*3, borderRadius: 10, textAlign:'center' }}/>
+                          </Animated.View>
               <View style={{flex:1}}></View>
             </View>
 
 
             <View style={{flex: 1, flexDirection: 'row', backgroundColor: "#4170f9"}}>
                 <View style={{flex:1, backgroundColor: "#4170f9"}}></View>
-                            <View style={{flex:windowWidthPercentUnit*1, flexDirection: 'row', backgroundColor: "#4170f9"}}>
-                               <TextInput onChangeText={x=> setNewRegisterField(x)} placeholder = " Especialidad Legal" style={{ backgroundColor: "white", height: windowHeightPercentUnit*5, width: "100%", borderColor: 'gray', borderWidth: 1, fontSize:windowHeightPercentUnit*3, borderRadius: 10, textAlign:'center' }}/>
-                            </View>
+                            <Animated.View style={{flex:windowWidthPercentUnit*1, left: registerFieldAnimation, flexDirection: 'row', backgroundColor: "#4170f9"}}>
+                               <TextInput onChangeText={x=> setNewRegisterField(x)} placeholder = " Especialidad Legal" style={{ backgroundColor: inputColorValidation.registerField, height: windowHeightPercentUnit*5, width: "100%", borderColor: 'gray', borderWidth: 1, fontSize:windowHeightPercentUnit*3, borderRadius: 10, textAlign:'center' }}/>
+                            </Animated.View>
                 <View style={{flex:1}}></View>
             </View>
 
@@ -274,9 +463,9 @@ export default function LawyerRegister({navigation}) {
 
             <View style={{flex: 1, flexDirection: 'row', backgroundColor: "#4170f9"}}>
                <View style={{flex:1, backgroundColor: "#4170f9"}}></View>
-                                        <View style={{flex:windowWidthPercentUnit*1, flexDirection: 'row', backgroundColor: "#4170f9"}}>
-                                           <TextInput onChangeText={x=> setNewRegisterBank(x)} placeholder = "Banco" style={{ backgroundColor: "white", height: windowHeightPercentUnit*5, width: "100%", borderColor: 'gray', borderWidth: 1, fontSize:windowHeightPercentUnit*3, borderRadius: 10, textAlign:'center' }}/>
-                                      </View>
+                                        <Animated.View style={{flex:windowWidthPercentUnit*1, left: registerBankAnimation, flexDirection: 'row', backgroundColor: "#4170f9"}}>
+                                           <TextInput onChangeText={x=> setNewRegisterBank(x)} placeholder = "Banco" style={{ backgroundColor: inputColorValidation.registerBank, height: windowHeightPercentUnit*5, width: "100%", borderColor: 'gray', borderWidth: 1, fontSize:windowHeightPercentUnit*3, borderRadius: 10, textAlign:'center' }}/>
+                                      </Animated.View>
                <View style={{flex:1}}></View>
             </View>
 
@@ -284,17 +473,17 @@ export default function LawyerRegister({navigation}) {
 
             <View style={{flex: 1, flexDirection: 'row', backgroundColor: "#4170f9"}}>
               <View style={{flex:1, backgroundColor: "#4170f9"}}></View>
-                                        <View style={{flex:windowWidthPercentUnit*1, flexDirection: 'row', backgroundColor: "#4170f9"}}>
-                                           <TextInput onChangeText={x=> setNewRegisterAccount(x)} placeholder = "Número de Cuenta" style={{ backgroundColor: "white", height: windowHeightPercentUnit*5, width: "100%", borderColor: 'gray', borderWidth: 1, fontSize:windowHeightPercentUnit*3, borderRadius: 10, textAlign:'center' }}/>
-                                        </View>
+                                        <Animated.View style={{flex:windowWidthPercentUnit*1, left: registerAccountAnimation,flexDirection: 'row', backgroundColor: "#4170f9"}}>
+                                           <TextInput onChangeText={x=> setNewRegisterAccount(x)} placeholder = "Número de Cuenta" style={{ backgroundColor: inputColorValidation.registerAccount, height: windowHeightPercentUnit*5, width: "100%", borderColor: 'gray', borderWidth: 1, fontSize:windowHeightPercentUnit*3, borderRadius: 10, textAlign:'center' }}/>
+                                        </Animated.View>
               <View style={{flex:1}}></View>
             </View>
 
             <View style={{flex: 1, flexDirection: 'row', backgroundColor: "#4170f9"}}>
                <View style={{flex:1, backgroundColor: "#4170f9"}}></View>
-                 <View style={{flex:windowWidthPercentUnit*1, flexDirection: 'row', backgroundColor: "#4170f9"}}>
-                      <TextInput  secureTextEntry={(!toggleCheckBox)?true:false} onChangeText={x=> setNewRegisterPassword(x)} placeholder = "Clave" style={{ backgroundColor: "white", height: windowHeightPercentUnit*5, width: "100%", borderColor: 'gray', borderWidth: 1, fontSize:windowHeightPercentUnit*3, borderRadius: 10, textAlign:'center' }}/>
-                 </View>
+                 <Animated.View style={{flex:windowWidthPercentUnit*1, left: registerPasswordAnimation, flexDirection: 'row', backgroundColor: "#4170f9"}}>
+                      <TextInput  secureTextEntry={(!toggleCheckBox)?true:false} onChangeText={x=> setNewRegisterPassword(x)} placeholder = "Clave" style={{ backgroundColor: inputColorValidation.registerPassword, height: windowHeightPercentUnit*5, width: "100%", borderColor: 'gray', borderWidth: 1, fontSize:windowHeightPercentUnit*3, borderRadius: 10, textAlign:'center' }}/>
+                 </Animated.View>
                <View style={{flex:1}}>
                 {
                    checkbox
