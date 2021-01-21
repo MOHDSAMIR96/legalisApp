@@ -3,7 +3,8 @@ import { TouchableOpacity, Alert, Platform, StyleSheet, Text, View, Button, Imag
 import { ThemeProvider, Avatar, Card, ListItem, Icon, FlatList} from 'react-native-elements';
 import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
-import {Dimensions} from 'react-native';
+import {Dimensions } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage'
 
 import { useSelector, useDispatch } from 'react-redux';
 import {dispatchListOfCases, dispatchSelectCase} from '../redux/dispatcher.js'
@@ -35,20 +36,22 @@ const windowHeightPercentUnit = parseInt(windowHeight/100);
 const windowWidthPercentUnit = parseInt(windowWidth/100);
 
 
-
-
 export default function LawyerProfile({navigation}) {
 
     //REDUX STATE
        const store = useSelector(state => state);
        const dispatch = useDispatch();
-
+       const [asyncStore, setAsyncStore] = useState([]); //THIS REPLACE THE USESELECTOR
        const [cases, setCases] = useState([]);
        const [notificationToken, setNotificationToken] = useState([]);
 
         useEffect(()=>{
 
+               showAsyncStorageData()
+
+               //EXPO PUSH NOTIFICATION, WE GET THE DEVICE TOKEN AND STORE ON FIREBASE SERVER
                getNotificactionToken();
+
                let arrayOfCasesAndQueries = [];
 
                fetch("http://patoexer.pythonanywhere.com/lawyerCases/" + store.userData.lawyers_id)//WE GET ALL LAWYER'S CASES
@@ -77,6 +80,33 @@ export default function LawyerProfile({navigation}) {
 
            },[])
 
+    const showAsyncStorageData = async () =>{
+        try{
+            let name = AsyncStorage.getItem("lawyerSession")
+            .then((value) =>{
+            value = JSON.parse(value)
+            //THE RETRIVED DATA IS STORED ON COMPONENT HOOK
+            setAsyncStore(value)
+            })
+
+        }
+        catch(err){
+            console.log(err)
+            }
+        }
+
+    const  removeItemValue = async (key)=> {
+              try {
+                  await AsyncStorage.removeItem(key);
+                  console.log('Data removed')
+                  navigation.navigate('Home')
+
+              }
+              catch(exception) {
+                  return false;
+              }
+          }
+
     const getNotificactionToken = async () =>{// THIS ASYNC FUNCTION INSERT INTO FIREBASE DATABASE THE TOKEN OF NOTIFICATION
             const {status: existingStatus} = await Permissions.getAsync(Permissions.NOTIFICATIONS)
             console.log(existingStatus);
@@ -102,19 +132,15 @@ export default function LawyerProfile({navigation}) {
             .doc('Q6vBYWYcUrAnlxNYBkji')
             .set({token}, {merge: true});
              }
-
-             setInterval(()=>notify(token), 1000);
-
         }
 
     const notify = async(token) => { // THIS ASYNC FUNCTION EXECUTE THE NOTIFICATION ITSELF ON THE DEVICE, REMEMBER DEVICE SIMULATORS DO NOT SHOW NOTIFICATION, THEY ARE NOT SUPPORTED
-                  console.log("vuelve")
+                console.log("notify function runin7g")
                 const message = {
                   to: token,
                   sound: 'default',
                   title: 'NOTIFICACION DE PRUEBA',
                   body: 'And here is the body!',
-                  data: { data: 'goes here' },
                 };
 
                 await fetch('https://exp.host/--/api/v2/push/send', {
@@ -165,7 +191,7 @@ export default function LawyerProfile({navigation}) {
 
 
     return (
-          <View style={{flex:1, flexDirection: 'column', backgroundColor: "#4170f9"}}>
+          <View style={{flex:1, flexDirection: 'column', backgroundColor: "#4170f9"}}><Text onPress={()=>{removeItemValue('lawyerSession')}}>Cerrar Sesión</Text>
             <View style={{flex:windowHeightPercentUnit}}>
             </View>
             <View style={{flex:windowHeightPercentUnit*2, flexDirection:'row'}}>
@@ -173,18 +199,18 @@ export default function LawyerProfile({navigation}) {
                     <Text> </Text>
                 </View>
                 <View style={{flex:2, flexDirection:'column'}}>
-                    <Avatar rounded size="large" icon={{name: 'user', type: 'font-awesome'}} />
+                    <Avatar onPress={()=> console.log(JSON.stringify(store))} rounded size="large" icon={{name: 'user', type: 'font-awesome'}} />
                 </View>
                 <View style={{flex:7, flexDirection:'column'}}>
-                    <Text style={styles.welcome}>{store.userData.lawyers_name}</Text>
-                    <Text style={styles.instructions}>{store.userData.lawyers_email}</Text>
-                    <Text style={styles.instructions}>GASTO MENSUAL: {store.userData.lawyers_spending}</Text>
+                    <Text style={styles.welcome}>{asyncStore.lawyers_name }</Text>
+                    <Text style={styles.instructions}>{asyncStore.lawyers_email}</Text>
+                    <Text style={styles.instructions}>GASTO MENSUAL: {asyncStore.lawyers_spending}</Text>
                 </View>
             </View>
 
             <View style={{flex:windowHeightPercentUnit, flexDirection:'row'}}>
                 <View style={{flex:2}}>
-                    <Text style={styles.title}>MIS CAUSAS</Text>
+                    <Text onPress={()=> showAsyncStorageData()} style={styles.title}>MIS CAUSAS</Text>
                 </View>
             </View>
 

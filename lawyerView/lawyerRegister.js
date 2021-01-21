@@ -8,6 +8,8 @@ import RNPickerSelect from 'react-native-picker-select'; // DOCUMENTATION https:
 import { useSelector, useDispatch } from 'react-redux';
 import {dispatchListOfCases, dispatchSelectCase} from '../redux/dispatcher.js'
 import {Animated, Dimensions} from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage'
+
 
 import CheckBox from '@react-native-community/checkbox'; //DOCS:  https://github.com/react-native-checkbox/react-native-checkbox
 
@@ -24,6 +26,32 @@ export default function LawyerRegister({navigation}) {
     //REDUX STATE
    const store = useSelector(state => state.userData);
    const dispatch = useDispatch();
+
+   //ASYNC STORAGE
+   const save = async (data) =>{
+    try{
+        await AsyncStorage.setItem("lawyerSession", JSON.stringify(data))
+    } catch(err){console.log(err)}
+   }
+
+   const showAsyncStorageData = async (navigation) =>{
+                        try{
+                            let name = AsyncStorage.getItem("lawyerSession")
+                            .then((value) =>{
+                            if(value!==null){
+                                   console.log("funcionaaaa")
+                                  navigation.navigate('LawyerProfile')
+                              }
+                              else
+                              {
+                              }
+                            })
+                        }
+                        catch(err){
+                            console.log(err)
+                            }
+                        }
+
 
    const [registerBtnDisplayed, setRegisterBtnDisplayed] = useState(false);
    const [flex, setFlex] = useState(0);// flex:{registerView:0 }
@@ -63,8 +91,10 @@ export default function LawyerRegister({navigation}) {
    const [rutAnimation, setrutAnimation] = useState(new Animated.Value(0));
    const [password, enterPassword] = useState("");
    const [passwordAnimation, setPasswordAnimation] = useState(new Animated.Value(0));
+   const [toggleCheckBoxLogin, setToggleCheckBoxLogin] = useState(false)
+   const [isEnabledLogin, setIsEnabledLogin] = useState(false);
 
-   const checkbox =  (Platform.OS !== 'ios')?<CheckBox
+   const registerCheckbox =  (Platform.OS !== 'ios')?<CheckBox
                                           tintColors={{true:"#27F900", false: "white" }}
                                           disabled={false}
                                           value={toggleCheckBox}
@@ -78,10 +108,24 @@ export default function LawyerRegister({navigation}) {
                                                      style={{marginLeft: windowWidthPercentUnit}}
                                                    />
 
+    const loginCheckbox =(Platform.OS !== 'ios')?<CheckBox
+                                                tintColors={{true:"#27F900", false: "white" }}
+                                                disabled={false}
+                                                value={toggleCheckBoxLogin}
+                                                onValueChange={(newValue) => setToggleCheckBoxLogin(newValue)}
+                                                 />:<Switch
+                                                       trackColor={{ false: "white", true: "#27F900" }}
+                                                       thumbColor={isEnabledLogin ? "#f5dd4b" : "#f4f3f4"}
+                                                       ios_backgroundColor="#3e3e3e"
+                                                       onValueChange={(value)=> setToggleCheckBoxLogin(value)}
+                                                       value={toggleCheckBoxLogin}
+                                                       style={{marginLeft: windowWidthPercentUnit}}
+                                                       />
 
 
    useEffect(()=>{// ONLY IF THE USERDATA ARRIVES TO THE STORE THE NAVIGATOR IS UPDATED
 
+       showAsyncStorageData(navigation)
 
        if( letEnterBoolean ){
 
@@ -308,7 +352,7 @@ export default function LawyerRegister({navigation}) {
                                     "lawyers_title": " ",
                                     "lawyers_file_speciality": " " ,
                                     "lawyers_bank": registerBank,
-                                    "lawyers_account": registerAccountType,
+                                    "lawyers_account": " ",
                                     "lawyers_bank_number": registerAccount
                                }
 
@@ -320,7 +364,6 @@ export default function LawyerRegister({navigation}) {
                            fetch("http://patoexer.pythonanywhere.com/lawyer/1", options)
                                        .then((response)=>{ return response.json()})
                                        .then((data)=> {
-                                           console.log("JSON.stringify(data)")
                                            setSendingRegistration("none")
                                            navigation.navigate('ThanksMsg')
                                        })
@@ -368,7 +411,6 @@ export default function LawyerRegister({navigation}) {
                 split.length >5 ? split[split.length-4] = "." + split[split.length-4]: falseCase= null;
                 split.length >7 ? split[split.length-7] = "." + split[split.length-7]: falseCase= null;
 
-                console.log(split.join(""))
                 setNewRegisterRut(split.join(""));
       }
 
@@ -392,7 +434,7 @@ export default function LawyerRegister({navigation}) {
     const singInValidation = () => {
 
     switch(0){
-           case rut.length: console.log("funcion")
+           case rut.length:
             Animated.sequence([
             	Animated.timing(rutAnimation, {
             		toValue: 10,
@@ -443,6 +485,7 @@ export default function LawyerRegister({navigation}) {
                                                 dispatch({type: "USERDATA", doneAction: dataToDispatch});
 
                                                 if(dataToDispatch.lawyers_password==password){
+                                                save(dataToDispatch)
                                                 setLetEnterBoolean(true)
                                                 } else{console.log("not verified")}
                                             })
@@ -450,7 +493,6 @@ export default function LawyerRegister({navigation}) {
 
             }
       }
-
 
     return (
     <KeyboardAvoidingView behavior="height" keyboardVerticalOffset={-100} style={{flex: 1}}>
@@ -541,7 +583,7 @@ export default function LawyerRegister({navigation}) {
                  </Animated.View>
                <View style={{flex:1}}>
                 {
-                   checkbox
+                   registerCheckbox
                 }
                </View>
             </View>
@@ -568,15 +610,20 @@ export default function LawyerRegister({navigation}) {
         <View style={{flex: 1, flexDirection: 'row', backgroundColor: "#4170f9"}}>
             <View style={{flex:1, backgroundColor: "#4170f9"}}></View>
                  <Animated.View style={{flex:windowWidthPercentUnit*1, left: passwordAnimation,  flexDirection: 'row', backgroundColor: "#4170f9"}}>
-                       <TextInput  secureTextEntry={true} onChangeText={x=> enterPassword(x)} placeholder = "Clave" style={{ backgroundColor: "white", height: windowHeightPercentUnit*5, width: "100%", borderColor: 'gray', borderWidth: 1, fontSize:windowHeightPercentUnit*3, borderRadius: 10, textAlign:'center', marginTop: windowHeightPercentUnit }}/>
+                       <TextInput  secureTextEntry={(!toggleCheckBoxLogin)?true:false} onChangeText={x=> enterPassword(x)} placeholder = "Clave" style={{ backgroundColor: "white", height: windowHeightPercentUnit*5, width: "100%", borderColor: 'gray', borderWidth: 1, fontSize:windowHeightPercentUnit*3, borderRadius: 10, textAlign:'center', marginTop: windowHeightPercentUnit }}/>
                   </Animated.View>
-            <View style={{flex:1}}></View>
+            <View style={{flex:1, paddingTop: windowHeightPercentUnit*2}}>
+            {
+                loginCheckbox
+            }
+
+            </View>
         </View>
 
 
         <View style={{flex: 1, flexDirection: 'row',marginTop: windowHeightPercentUnit, backgroundColor: "#4170f9"}}>
              <View style={{flex:1, backgroundColor: "#4170f9"}}></View>
-                <View style={{flex:windowWidthPercentUnit, flexDirection: 'column', backgroundColor: "#4170f9"}}>
+                <View style={{flex:windowWidthPercentUnit, flexDirection: 'column', height: windowHeightPercentUnit*100 , backgroundColor: "#4170f9"}}>
                     <Button title="INGRESAR" color={Platform.OS === 'ios'?"white":"#747A87"} type="clear" style={{width: '100%'}} onPress={singInValidation}/>
                 </View>
              <View style={{flex:1}}><Text style={{display: verifyingLogIn}}>!!!?!!</Text></View>

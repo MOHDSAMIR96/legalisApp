@@ -33,6 +33,9 @@ export default function Query({navigation}){//ESTA PARTE ES LA VISTA DE EL INICI
     const [fetchResponse, setNewFetchResponse] = useState("");
     const [hourOfTheDay, sethourOfTheDay] = useState(0);
 
+    const [descriptionAnimation, setDescriptionAnimation] = useState(new Animated.Value(0));
+    const [nameAnimation, setNameAnimation] = useState(new Animated.Value(0));
+
     const [selectedValue, setSelectedValue] = useState("");
 
     //REDUX STATE
@@ -49,7 +52,7 @@ export default function Query({navigation}){//ESTA PARTE ES LA VISTA DE EL INICI
             //HERE WE ANIMATE THE FONT ON THE SUBJECT SELECTOR
                                 switch(subjects[activeSubjectCounter]){
                                     case subjects[0]:
-                                        Animated.timing(animateFontSize1, {toValue: windowHeightPercentUnit*3, duration: 500}).start()
+                                        Animated.timing(animateFontSize1, {toValue: windowHeightPercentUnit*5, duration: 500}).start()
                                         Animated.timing(animateFontSize2, {toValue: windowHeightPercentUnit, duration: 500}).start()
                                         Animated.timing(animateFontSize3, {toValue: windowHeightPercentUnit, duration: 500}).start()
                                         Animated.timing(animateFontSize4, {toValue: windowHeightPercentUnit, duration: 500}).start()
@@ -58,7 +61,7 @@ export default function Query({navigation}){//ESTA PARTE ES LA VISTA DE EL INICI
                                         break;
                                     case subjects[1]:
                                         Animated.timing(animateFontSize1, {toValue: windowHeightPercentUnit, duration: 500}).start()
-                                        Animated.timing(animateFontSize2, {toValue: windowHeightPercentUnit*3, duration: 500}).start()
+                                        Animated.timing(animateFontSize2, {toValue: windowHeightPercentUnit*5, duration: 500}).start()
                                         Animated.timing(animateFontSize3, {toValue: windowHeightPercentUnit, duration: 500}).start()
                                         Animated.timing(animateFontSize4, {toValue: windowHeightPercentUnit, duration: 500}).start();
                                         Animated.timing(animateFontSize5, {toValue: windowHeightPercentUnit, duration: 500}).start()
@@ -68,7 +71,7 @@ export default function Query({navigation}){//ESTA PARTE ES LA VISTA DE EL INICI
                                     case subjects[2]:
                                          Animated.timing(animateFontSize1, {toValue: windowHeightPercentUnit, duration: 500}).start()
                                          Animated.timing(animateFontSize2, {toValue: windowHeightPercentUnit, duration: 500}).start()
-                                         Animated.timing(animateFontSize3, {toValue: windowHeightPercentUnit*3, duration: 500}).start()
+                                         Animated.timing(animateFontSize3, {toValue: windowHeightPercentUnit*5, duration: 500}).start()
                                          Animated.timing(animateFontSize4, {toValue: windowHeightPercentUnit, duration: 500}).start();
                                          Animated.timing(animateFontSize5, {toValue: windowHeightPercentUnit, duration: 500}).start()
                                          Animated.timing(animateFontSize6, {toValue: windowHeightPercentUnit, duration: 500}).start()
@@ -78,7 +81,7 @@ export default function Query({navigation}){//ESTA PARTE ES LA VISTA DE EL INICI
                                         Animated.timing(animateFontSize1, {toValue: windowHeightPercentUnit, duration: 500}).start()
                                         Animated.timing(animateFontSize2, {toValue: windowHeightPercentUnit, duration: 500}).start()
                                         Animated.timing(animateFontSize3, {toValue: windowHeightPercentUnit, duration: 500}).start()
-                                        Animated.timing(animateFontSize4, {toValue: windowHeightPercentUnit*3, duration: 500}).start();
+                                        Animated.timing(animateFontSize4, {toValue: windowHeightPercentUnit*5, duration: 500}).start();
                                         Animated.timing(animateFontSize5, {toValue: windowHeightPercentUnit, duration: 500}).start()
                                         Animated.timing(animateFontSize6, {toValue: windowHeightPercentUnit, duration: 500}).start()
 
@@ -88,7 +91,7 @@ export default function Query({navigation}){//ESTA PARTE ES LA VISTA DE EL INICI
                                         Animated.timing(animateFontSize2, {toValue: windowHeightPercentUnit, duration: 500}).start()
                                         Animated.timing(animateFontSize3, {toValue: windowHeightPercentUnit, duration: 500}).start()
                                         Animated.timing(animateFontSize4, {toValue: windowHeightPercentUnit, duration: 500}).start();
-                                        Animated.timing(animateFontSize5, {toValue: windowHeightPercentUnit*3, duration: 500}).start()
+                                        Animated.timing(animateFontSize5, {toValue: windowHeightPercentUnit*5, duration: 500}).start()
                                         Animated.timing(animateFontSize6, {toValue: windowHeightPercentUnit, duration: 500}).start()
 
                                         break;
@@ -98,7 +101,7 @@ export default function Query({navigation}){//ESTA PARTE ES LA VISTA DE EL INICI
                                         Animated.timing(animateFontSize3, {toValue: windowHeightPercentUnit, duration: 500}).start()
                                         Animated.timing(animateFontSize4, {toValue: windowHeightPercentUnit, duration: 500}).start();
                                         Animated.timing(animateFontSize5, {toValue: windowHeightPercentUnit, duration: 500}).start()
-                                        Animated.timing(animateFontSize6, {toValue: windowHeightPercentUnit*3, duration: 500}).start()
+                                        Animated.timing(animateFontSize6, {toValue: windowHeightPercentUnit*5, duration: 500}).start()
                                         break;
                                 }
 
@@ -152,34 +155,79 @@ export default function Query({navigation}){//ESTA PARTE ES LA VISTA DE EL INICI
 
   const sendDescription=()=>{
 
+  switch(0){
+  case caseDescription.length:
+    Animated.sequence([
+              	Animated.timing(descriptionAnimation, {
+              		toValue: 10,
+              		duration: 50
+              	}),
+              	Animated.timing(descriptionAnimation, {
+              		toValue: -10,
+              		duration: 50
+              	}),
+                  Animated.timing(descriptionAnimation, {
+              		toValue: 10,
+              		duration: 50
+              	}),
+              	Animated.timing(descriptionAnimation, {
+              		toValue: 0,
+              		duration: 50
+              	})
+              ]).start()
+      break;
+  case userName.length:
+  Animated.sequence([
+          	Animated.timing(nameAnimation, {
+          		toValue: 10,
+          		duration: 50
+          	}),
+          	Animated.timing(nameAnimation, {
+          		toValue: -10,
+          		duration: 50
+          	}),
+              Animated.timing(nameAnimation, {
+          		toValue: 10,
+          		duration: 50
+          	}),
+          	Animated.timing(nameAnimation, {
+          		toValue: 0,
+          		duration: 50
+          	})
+          ]).start()
+    break;
+  default:
     let clientData = {
-        "users_name": userName,
-        "users_issue_subject": (Platform.OS==='ios')?selectedValue:subjects[activeSubjectCounter],
-        "users_issue_description": caseDescription,
-        "lawyer_id": 1,
-        "taken": false,
-        "unlocked": false
-    }
+            "users_name": userName,
+            "users_issue_subject": (Platform.OS==='ios')?selectedValue:subjects[activeSubjectCounter],
+            "users_issue_description": caseDescription,
+            "lawyer_id": 1,
+            "taken": false,
+            "unlocked": false
+        }
 
-    let options = {
-                method: 'POST',
-                body: JSON.stringify(clientData),
-                headers: {'Content-Type': 'application/json'}};
+        let options = {
+                    method: 'POST',
+                    body: JSON.stringify(clientData),
+                    headers: {'Content-Type': 'application/json'}};
 
-    if(caseDescription.length>0 || userName.length>0){
-        fetch("http://patoexer.pythonanywhere.com/user/1", options)
-                .then((response)=> response.json())
-                .then((data)=> {
-                    console.log(JSON.stringify(data))
-                    dispatch({type: "USERDATA", doneAction: data});
-                    navigation.navigate('videoComponent')
-                })
-                .catch(error => {console.log(JSON.stringify(error))})
-
-    }else{console.log("llenar el formulario " + caseDescription.length + " " + userName.length)}
-
-
+        if(caseDescription.length>0 || userName.length>0){
+            fetch("http://patoexer.pythonanywhere.com/user/1", options)
+                    .then((response)=> response.json())
+                    .then((data)=> {
+                        console.log(JSON.stringify(data))
+                        dispatch({type: "USERDATA", doneAction: data});
+                        navigation.navigate('videoComponent')
+                    })
+                    .catch(error => {console.log(JSON.stringify(error))})
+        }
   }
+
+}
+
+
+
+
 
     return (
 
@@ -238,21 +286,21 @@ export default function Query({navigation}){//ESTA PARTE ES LA VISTA DE EL INICI
             <View style={(hourOfTheDay<24)?{flex: windowHeightPercentUnit*3, flexDirection: 'row', backgroundColor: "#4170f9"}:{ display:'none'}} >
                 <View style={{flex: 1}}>
                 </View>
-                <View style={[{ width: '80%', flexDirection: 'column', backgroundColor: "#4170f9"}]}>
+                <Animated.View style={[{ width: '80%', left: descriptionAnimation, flexDirection: 'column', backgroundColor: "#4170f9"}]}>
                     <TextInput placeholder="¿CUAL ES TU PROBLEMA LEGAL?" onChangeText={x=> setNewCaseDescription(x)} multiline={false} style={{textAlign: 'center',backgroundColor: 'white', fontSize: windowHeightPercentUnit*2.5, height: '100%', borderRadius:10}} />
-                </View>
+                </Animated.View>
                 <View style={{flex: 1}}>
                 </View>
             </View>
 
             <View style={(hourOfTheDay<24)?{flex: windowHeightPercentUnit*2, padding: windowHeightPercentUnit*2, flexDirection: 'row', backgroundColor: "#4170f9"}:{ display:'none'}}>
                 <View style={{flex: 1}}></View>
-                <View style={[{ flex:windowHeightPercentUnit*2, flexDirection: 'column', backgroundColor: "#4170f9"}]}>
+                <Animated.View style={[{ flex:windowHeightPercentUnit*2, left: nameAnimation, flexDirection: 'column', backgroundColor: "#4170f9"}]}>
                     <TextInput placeholder="NOMBRE" onChangeText={x=> setNewUserName(x)} style={{fontSize: windowHeightPercentUnit*2.5, textAlign: 'center',backgroundColor: 'white', borderRadius:10}} />
                     <View style={{flex:1, flexDirection: 'row', backgroundColor: "#4170f9"}}>
                         <Text></Text>
                     </View>
-                </View>
+                </Animated.View>
                 <View style={{flex: 1}}></View>
             </View>
         </View>

@@ -42,7 +42,7 @@ export default function LawyerCaseChat({navigation}) {
     const [unlocked, setUnlocked] = useState(false);
     const [startCountDown, InitCountDown] = useState(false);
 
-    const [caseSummary, enterCaseSummary] = useState(store.selectedCase.cases_description);
+    const [caseSummary, enterCaseSummary] = ("users_id" in store.selectedCase)?useState(store.selectedCase.users_issue_description):useState(store.selectedCase.cases_description);
     const [timeLine, entertimeLine] = useState([ {succeded: 3},{ id: 1, phase: "Presentación demanda"}, { id: 2, phase: "Ratificación firma"}, {id: 3, phase: "Contestación"}, { id: 4, phase: "Término Probatorio"}, {id: 5, phase: "Dictación de sentencia"}]);
     const [phaseShowedOnTimeline, enterPhaseShowedOnTimeline] = useState("");
     const [animatephaseShowedOnTimeline, enteranimatephaseShowedOnTimeline] = useState(new Animated.Value(0));
@@ -56,7 +56,7 @@ export default function LawyerCaseChat({navigation}) {
      if("users_id" in store.selectedCase){ url = "http://patoexer.pythonanywhere.com/message/" + store.selectedCase.users_id + "/0/" + store.userData.lawyers_id}
      else{ url = "http://patoexer.pythonanywhere.com/message/0/" + store.selectedCase.client_id + "/" + store.userData.lawyers_id;}
 
-                 let fetchInterval = setInterval(()=>{ console.log("funciona")
+                 let fetchInterval = setInterval(()=>{ console.log(JSON.stringify(store.selectedCase.users_issue_description))
                                                        fetch(url)
                                                        .then((response)=> response.json())
                                                        .then((data)=>
@@ -259,7 +259,7 @@ export default function LawyerCaseChat({navigation}) {
                 fetch("http://patoexer.pythonanywhere.com/case/" + store.selectedCase.client_id, options)
                 .then((response)=>{ return response.json();})
                 .then( data => {
-                    console.log("data modified " + JSON.stringify(data))
+                    console.log("data modified ************************************: " + JSON.stringify(data))
                     enterCaseSummary(data.modifiedFields[0].cases_description)
                     console.log("case sumary " + caseSummary)
                 })

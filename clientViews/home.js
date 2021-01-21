@@ -4,6 +4,7 @@ import { ThemeProvider, Avatar, Card, ListItem, Icon, FlatList} from 'react-nati
 import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 import {Dimensions } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage'
 
 import { JSHash, JSHmac, CONSTANTS } from "react-native-hash";
 
@@ -22,8 +23,34 @@ constructor(props) {
       language: 'java',
       notificationToken: ''
     };
+    this.showAsyncStorageData = this.showAsyncStorageData.bind(this);
 
   }
+
+   componentDidMount(){
+
+    this.showAsyncStorageData(this.props.navigation)
+
+   }
+
+   showAsyncStorageData = async (navigation) =>{
+                 try{
+                     let name = AsyncStorage.getItem("lawyerSession")
+                     .then((value) =>{
+                     if(value!==null){
+
+                           this.props.navigation.navigate('LawyerProfile')
+                       }
+                       else
+                       {
+                       }
+                     })
+                 }
+                 catch(err){
+                     console.log(err)
+                     }
+                 }
+
 
   render() {
     return (

@@ -41,6 +41,8 @@ export function QueryChat({navigation}) {
     const [stillTypingAdvisor, booleanStillTypingAdvisor] = useState(false);
     const [startCountDown, InitCountDown] = useState(false);
     const [modalVisibility, setModalVisibility] = useState(false);
+    const [unlocked, setUnlocked] = useState(false);
+
 
 
     //REFERENCES
@@ -65,6 +67,9 @@ export function QueryChat({navigation}) {
                                              if(data.taken){
                                              InitCountDown(true)
                                              }
+                                             if(data.unlocked){
+                                               setUnlocked(true)
+                                               }
 
                                          })
                                          .catch((error)=>{})
@@ -253,8 +258,8 @@ export function QueryChat({navigation}) {
 
         <CountDown
             until={420}
-            onFinish={() => setModalVisibility(true)}
-            style={(startCountDown)?{marginRight: windowWidthPercentUnit*80, borderTopLeftRadius: 10, borderTopRightRadius: 10, backgroundColor: "#4170f9"}:{display: "none"}}
+            onFinish={() => ("users_id" in store.selectedCase && unlocked===false)?setModalVisibility(true):setModalVisibility(false)}
+            style={(startCountDown && unlocked===false)?{marginRight: windowWidthPercentUnit*80, borderTopLeftRadius: 10, borderTopRightRadius: 10, backgroundColor: "#4170f9"}:{display: "none"}}
             size={20}
             timeToShow={['M','S']}
             digitStyle={{marginRight: 0, padding: 0 , backgroundColor: '#4170f9', borderColor: '#4170f9'}}

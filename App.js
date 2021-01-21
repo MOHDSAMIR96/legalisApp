@@ -1,9 +1,11 @@
-import React, { Component } from 'react';
+import React, {Component, useState, useEffect}  from 'react';
 import { createAppContainer, TabNavigator  } from 'react-navigation';
+import { NavigationActions, StackActions } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 
 import { Provider } from 'react-redux';
 import store from './redux/store.js'
+import AsyncStorage from '@react-native-community/async-storage'
 
 
 //IMPORTATION OF VIEW COMPONENTS
@@ -27,7 +29,7 @@ const instructions = Platform.select({
 });
 
 
-const AppNavigator = createStackNavigator(//STACKNAVIGATOR TIENE PROBLEMAS CON EL PROVIDER DE REDUX, PUES NO LO TOMA COMO UN COMPONENTE
+const AppNavigator = createStackNavigator(
   {
     Home: Home,
     QueryChat: QueryChat,
@@ -48,19 +50,15 @@ const AppNavigator = createStackNavigator(//STACKNAVIGATOR TIENE PROBLEMAS CON E
   }
 );
 
-
-
-
-
 const AppContainer = createAppContainer(AppNavigator);
 
-export default class App extends React.Component {
-  render() {
+export default function App() {
+
     return(
         <Provider store={store}>
             <AppContainer />
         </Provider>
 
     )
-  }
+
 }
