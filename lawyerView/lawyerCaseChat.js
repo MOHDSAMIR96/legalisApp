@@ -319,6 +319,27 @@ export default function LawyerCaseChat({navigation}) {
 
        }
 
+    const sendRejectionReason=(title)=>{
+
+            let rejectionReasonData = {
+                                         "rejectionReazon": title
+
+                                       }
+
+                      let options2 = {
+                                         method: 'PUT',
+                                         body: JSON.stringify(rejectionReasonData),
+                                         headers: {'Content-Type': 'application/json'}};
+
+                       fetch("http://patoexer.pythonanywhere.com/user/" + store.selectedCase.users_id, options2)
+                          .then((response)=> { return response.json()})
+                          .then((data)=> {
+                          console.log(JSON.stringify(data))
+                          navigation.navigate('Home');
+                          })
+                          .catch(error => console.log("errorrr"))
+    }
+
     return (
     <KeyboardAvoidingView style={{flex:1}} behavior="padding" keyboardVerticalOffset={windowHeightPercentUnit*5} >
         <View style={{flex: 1, flexDirection: 'column', backgroundColor: "white"}}>
@@ -366,7 +387,7 @@ export default function LawyerCaseChat({navigation}) {
             </View>
 
             <CountDown
-                until={420}
+                until={20}
                 onFinish={() => ("users_id" in store.selectedCase && unlocked===false)?setModalVisibility(true):setModalVisibility(false)}
                 style={("users_id" in store.selectedCase && unlocked===false)?{marginRight: '60%', borderTopLeftRadius: 10, borderTopRightRadius: 10,  backgroundColor: "#4170f9"}:{display: "none"}}
                 size={20}
@@ -404,11 +425,21 @@ export default function LawyerCaseChat({navigation}) {
                         }}
                     >
                     <ModalContent>
-                        <Text style={styles.modalStyle}>Se ha acabado el tiempo!</Text>
+                        <Text style={styles.modalStyle}>Se acabó el tiempo! ¿Te interesa tomar este caso?</Text>
+
+                        <Text style={styles.modalStyle}></Text>
+                        <Button color={Platform.OS === 'ios'?"#4170f9":"#4170f9"} title="No es un caso real" onPress={()=>sendRejectionReason("No es un caso real")} />
                         <Text> </Text>
-                        <Text style={styles.modalStyle}>Si su caso le interesó a su abogado, éste debloqueará el chat ilimitado</Text>
+                        <Button color={Platform.OS === 'ios'?"#4170f9":"#4170f9"} title="No requiere gestión alguna" onPress={()=>sendRejectionReason("No requiere gestión alguna")} />
                         <Text> </Text>
-                        <Text style={styles.modalStyle}>Por favor espere unos minutos, no salga de la aplicación</Text>
+                        <Button color={Platform.OS === 'ios'?"#4170f9":"#4170f9"} title="No piensa contratar abogado en lo pronto" onPress={()=>sendRejectionReason("No piensa contratar abogado en lo pronto")} />
+                        <Text> </Text>
+                        <Button color={Platform.OS === 'ios'?"#4170f9":"#4170f9"} title="No tiene capacidad de pago" onPress={()=>sendRejectionReason("No tiene capacidad de pago")} />
+                        <Text> </Text>
+                        <Button color={Platform.OS === 'ios'?"#4170f9":"#4170f9"} title="Quien consulta no toma la desición de contratar" onPress={()=>sendRejectionReason("Quien consulta no toma la desición de contratar")} />
+                        <Text> </Text>
+                        <Text style={styles.modalStyle}>Quiero desbloquear el chat para tener este cliente</Text>
+                        <Icon size={50} name='credit-card' color='gold'  onPress={() => { payment() }}/>
                     </ModalContent>
                 </Modal>
          </View>

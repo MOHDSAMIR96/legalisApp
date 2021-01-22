@@ -58,7 +58,7 @@ export function QueryChat({navigation}) {
 
 
 
-                      let fetchInterval = setInterval(()=>{
+                      let fetchInterval = setInterval(()=>{ console.log(JSON.stringify(store))
 
                                          fetch("http://patoexer.pythonanywhere.com/user/" + store.users_id)
                                          .then((response)=> { return response.json()})
@@ -208,7 +208,14 @@ export function QueryChat({navigation}) {
        setNewRegisterBtnDisplayed(0)
        Animated.timing(animate, {toValue: windowHeightPercentUnit*1, duration: 300}).start()
     }
+  }
 
+  const waitingForLawyersResponse =()=> {
+    let fetchLawyerResponseInterval = fetch("http://patoexer.pythonanywhere.com/user/" + store.users_id)
+                         .then(response =>{return response.json()})
+                         .then((data)=>{
+                          console.log("ACA: " + JSON.stringify(data))
+                          })
   }
 
 
@@ -257,8 +264,8 @@ export function QueryChat({navigation}) {
 
 
         <CountDown
-            until={420}
-            onFinish={() => ("users_id" in store.selectedCase && unlocked===false)?setModalVisibility(true):setModalVisibility(false)}
+            until={20}
+            onFinish={() => ("users_id" in store && unlocked===false)?setModalVisibility(true):setModalVisibility(false)}
             style={(startCountDown && unlocked===false)?{marginRight: windowWidthPercentUnit*80, borderTopLeftRadius: 10, borderTopRightRadius: 10, backgroundColor: "#4170f9"}:{display: "none"}}
             size={20}
             timeToShow={['M','S']}
@@ -292,7 +299,8 @@ export function QueryChat({navigation}) {
                       <Text> </Text>
                       <Text style={styles.modalStyle}>Si su caso le interesó a su abogado, éste debloqueará el chat ilimitado</Text>
                       <Text> </Text>
-                        <Text style={styles.modalStyle}>Por favor espere unos minutos, no salga de la aplicación</Text>
+                      <Text style={styles.modalStyle}>Por favor espere unos minutos, no salga de la aplicación</Text>
+                      <Text style={styles.modalStyle}>LOADING ...</Text>
                     </ModalContent>
                   </Modal>
      </View>
