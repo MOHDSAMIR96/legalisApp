@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Platform } from 'react-native'
 import { createAppContainer, TabNavigator  } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 

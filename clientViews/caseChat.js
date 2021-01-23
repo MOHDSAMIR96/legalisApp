@@ -44,15 +44,15 @@ export default function CaseChat() {
   const showCaseSummary = () => {
     if(!registerBtnDisplayed){
 
-        Animated.timing(animateCaseContainer, {toValue: 30, duration: 300}).start()
-        Animated.timing(animateCaseUpdate, {toValue: 1, duration: 0}).start()
+        Animated.timing(animateCaseContainer, {toValue: 30, duration: 300, useNativeDriver: true, }).start()
+        Animated.timing(animateCaseUpdate, {toValue: 1, duration: 0, useNativeDriver: true, }).start()
         setRegisterBtnDisplayed(true);
 
     }
     else if(registerBtnDisplayed){
-      Animated.timing(animateCaseSummary, {toValue: 5, duration: 0}).start()
-      Animated.timing(animateCaseContainer, {toValue: 8, duration: 300}).start()
-      Animated.timing(animateCaseUpdate, {toValue: 5, duration: 300}).start()
+      Animated.timing(animateCaseSummary, {toValue: 5, duration: 0, useNativeDriver: true, }).start()
+      Animated.timing(animateCaseContainer, {toValue: 8, duration: 300, useNativeDriver: true, }).start()
+      Animated.timing(animateCaseUpdate, {toValue: 5, duration: 300, useNativeDriver: true, }).start()
       setRegisterBtnDisplayed(false);
     }
 
@@ -62,17 +62,17 @@ export default function CaseChat() {
         if(!registerBtnDisplayed){//--------->
 
 
-           Animated.timing(animateCaseSummary, {toValue: 1, duration: 0}).start()
-            Animated.timing(animateCaseContainer, {toValue: 25, duration: 300}).start()
-            Animated.timing(animateCaseUpdate, {toValue: 5, duration: 300}).start()
+           Animated.timing(animateCaseSummary, {toValue: 1, duration: 0, useNativeDriver: true, }).start()
+            Animated.timing(animateCaseContainer, {toValue: 25, duration: 300, useNativeDriver: true, }).start()
+            Animated.timing(animateCaseUpdate, {toValue: 5, duration: 300, useNativeDriver: true, }).start()
             setRegisterBtnDisplayed(true);
         }
         else if(registerBtnDisplayed){
 
 
-           Animated.timing(animateCaseSummary, {toValue: 5, duration: 0}).start()
-           Animated.timing(animateCaseContainer, {toValue: 8, duration: 300}).start()
-           Animated.timing(animateCaseUpdate, {toValue: 5, duration: 300}).start()
+           Animated.timing(animateCaseSummary, {toValue: 5, duration: 0, useNativeDriver: true, }).start()
+           Animated.timing(animateCaseContainer, {toValue: 8, duration: 300, useNativeDriver: true, }).start()
+           Animated.timing(animateCaseUpdate, {toValue: 5, duration: 300, useNativeDriver: true, }).start()
            setRegisterBtnDisplayed(false);
         }
 
@@ -82,7 +82,7 @@ export default function CaseChat() {
 
         setPhaseShowedOnTimeline(phase)
         Animated.timing(animatephaseShowedOnTimeline, {toValue: 0, duration: 0}).start(()=>{
-        Animated.timing(animatephaseShowedOnTimeline, {toValue: 1, duration: 800}).start()})
+        Animated.timing(animatephaseShowedOnTimeline, {toValue: 1, duration: 800, useNativeDriver: true, }).start()})
     }
 
 

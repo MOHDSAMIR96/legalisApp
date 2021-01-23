@@ -68,15 +68,15 @@ export default class LawyerCaseChat extends React.Component {
   showCaseSummary(){
     if(!this.state.registerBtnDisplayed){
 
-        Animated.timing(this.state.animateCaseContainer, {toValue: 30, duration: 300}).start()
-        Animated.timing(this.state.animateCaseUpdate, {toValue: 1, duration: 0}).start()
+        Animated.timing(this.state.animateCaseContainer, {toValue: 30, duration: 300, useNativeDriver: true, }).start()
+        Animated.timing(this.state.animateCaseUpdate, {toValue: 1, duration: 0, useNativeDriver: true, }).start()
         this.setState({registerBtnDisplayed: true})
     }
     else if(this.state.registerBtnDisplayed){
 
-    Animated.timing(this.state.animateCaseSummary, {toValue: 5, duration: 0}).start()
-      Animated.timing(this.state.animateCaseContainer, {toValue: 8, duration: 300}).start()
-      Animated.timing(this.state.animateCaseUpdate, {toValue: 5, duration: 300}).start()
+    Animated.timing(this.state.animateCaseSummary, {toValue: 5, duration: 0, useNativeDriver: true, }).start()
+      Animated.timing(this.state.animateCaseContainer, {toValue: 8, duration: 300, useNativeDriver: true, }).start()
+      Animated.timing(this.state.animateCaseUpdate, {toValue: 5, duration: 300, useNativeDriver: true, }).start()
        this.setState({registerBtnDisplayed: false})
     }
 
@@ -86,17 +86,17 @@ export default class LawyerCaseChat extends React.Component {
         if(!this.state.registerBtnDisplayed){//--------->
 
 
-           Animated.timing(this.state.animateCaseSummary, {toValue: 1, duration: 0}).start()
-            Animated.timing(this.state.animateCaseContainer, {toValue: 25, duration: 300}).start()
-            Animated.timing(this.state.animateCaseUpdate, {toValue: 5, duration: 300}).start()
+           Animated.timing(this.state.animateCaseSummary, {toValue: 1, duration: 0, useNativeDriver: true, }).start()
+            Animated.timing(this.state.animateCaseContainer, {toValue: 25, duration: 300, useNativeDriver: true, }).start()
+            Animated.timing(this.state.animateCaseUpdate, {toValue: 5, duration: 300, useNativeDriver: true, }).start()
             this.setState({registerBtnDisplayed: true})
         }
         else if(this.state.registerBtnDisplayed){
 
 
-           Animated.timing(this.state.animateCaseSummary, {toValue: 5, duration: 0}).start()
-           Animated.timing(this.state.animateCaseContainer, {toValue: 8, duration: 300}).start()
-           Animated.timing(this.state.animateCaseUpdate, {toValue: 5, duration: 300}).start()
+           Animated.timing(this.state.animateCaseSummary, {toValue: 5, duration: 0, useNativeDriver: true, }).start()
+           Animated.timing(this.state.animateCaseContainer, {toValue: 8, duration: 300, useNativeDriver: true, }).start()
+           Animated.timing(this.state.animateCaseUpdate, {toValue: 5, duration: 300, useNativeDriver: true, }).start()
             this.setState({registerBtnDisplayed: false})
         }
 
@@ -106,7 +106,7 @@ export default class LawyerCaseChat extends React.Component {
          console.log("hola" + phase.id)
         this.setState({phaseShowedOnTimeline: phase.phase})
         Animated.timing(this.state.animatephaseShowedOnTimeline, {toValue: 0, duration: 0}).start(()=>{
-        Animated.timing(this.state.animatephaseShowedOnTimeline, {toValue: 1, duration: 800}).start()})
+        Animated.timing(this.state.animatephaseShowedOnTimeline, {toValue: 1, duration: 800, useNativeDriver: true, }).start()})
 
         let newTimeLine = [...this.state.timeLine];
         newTimeLine.shift();
@@ -120,7 +120,7 @@ export default class LawyerCaseChat extends React.Component {
         this.setState({touchableOpacityZindex: 1})
         this.setState({editableStatus: {color: "#4170f9", backGround: "white"}})
         this.CaseSummaryTextInput.current.focus()
-        Animated.timing(this.state.animateCaseContainer, {toValue: 100, duration: 300}).start()
+        Animated.timing(this.state.animateCaseContainer, {toValue: 100, duration: 300, useNativeDriver: true, }).start()
     }
 
     TextInputEnterKeyPressed(e){
@@ -128,7 +128,7 @@ export default class LawyerCaseChat extends React.Component {
 
                 this.setState({editableStatus: {color: "white", backGround: "#4170f9"}})
                 this.setState({touchableOpacityZindex: 5})
-                Animated.timing(this.state.animateCaseContainer, {toValue: 30, duration: 300}).start()
+                Animated.timing(this.state.animateCaseContainer, {toValue: 30, duration: 300, useNativeDriver: true, }).start()
                 Keyboard.dismiss()
                 //fetch() POST TO DE DB
 

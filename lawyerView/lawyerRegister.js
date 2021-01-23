@@ -50,57 +50,58 @@ export default function LawyerRegister({navigation}) {
       let currentDate = today.getFullYear() + "-" + (today.getMonth() + 1) + "-" + today.getDate()
 
       //POST TO CLIENTS/
+      navigation.navigate('ThanksMsg')
 
-      fetch("http://patoexer.pythonanywhere.com/lawyer/" + registerRut)
-      .then(response =>{return response.json()})
-      .then((data)=>{
+      // fetch("http://patoexer.pythonanywhere.com/lawyer/" + registerRut)
+      // .then(response =>{return response.json()})
+      // .then((data)=>{
 
-        if(data.lawyers_rut!=registerRut){
+      //   if(data.lawyers_rut!=registerRut){
 
-                let lawyerData = {
-                        "lawyers_name": registerName,
-                         "lawyers_password": registerPassword,
-                         "lawyers_email": registerMail,
-                         "lawyers_rut": registerRut,
-                         "lawyers_phone": registerPhone,
-                         "lawyers_field": registerField,
-                         "lawyers_title": " ",
-                         "lawyers_file_speciality": " " ,
-                         "lawyers_bank": registerBank,
-                         "lawyers_account": registerAccountType,
-                         "lawyers_bank_number": registerAccount
-                    }
+      //           let lawyerData = {
+      //                   "lawyers_name": registerName,
+      //                    "lawyers_password": registerPassword,
+      //                    "lawyers_email": registerMail,
+      //                    "lawyers_rut": registerRut,
+      //                    "lawyers_phone": registerPhone,
+      //                    "lawyers_field": registerField,
+      //                    "lawyers_title": " ",
+      //                    "lawyers_file_speciality": " " ,
+      //                    "lawyers_bank": registerBank,
+      //                    "lawyers_account": registerAccountType,
+      //                    "lawyers_bank_number": registerAccount
+      //               }
 
-                    let options = {
-                                method: 'POST',
-                                body: JSON.stringify(lawyerData),
-                                headers: {'Content-Type': 'application/json'}};
+      //               let options = {
+      //                           method: 'POST',
+      //                           body: JSON.stringify(lawyerData),
+      //                           headers: {'Content-Type': 'application/json'}};
 
-                fetch("http://patoexer.pythonanywhere.com/lawyer/1", options)
-                            .then((response)=>{ return response.json()})
-                            .then((data)=> {
-                                console.log(JSON.stringify(data))
-                                navigation.navigate('ThanksMsg')
-                            })
-                            .catch(error => {console.log(error)})
+      //           fetch("http://patoexer.pythonanywhere.com/lawyer/1", options)
+      //                       .then((response)=>{ return response.json()})
+      //                       .then((data)=> {
+      //                           console.log(JSON.stringify(data))
+      //                           navigation.navigate('ThanksMsg')
+      //                       })
+      //                       .catch(error => {console.log(error)})
 
-        } else{
-                   console.log("YA ESTAS REGISTRADO!!")
-        }
+      //   } else{
+      //              console.log("YA ESTAS REGISTRADO!!")
+      //   }
 
-      })
-      .catch((error) => console.log(error))
+      // })
+      // .catch((error) => console.log(error))
 
   }
 
   const showRegisterView = () => {
     if(!registerBtnDisplayed){
        setRegisterBtnDisplayed(true)//this.setState({registerBtnDisplayed: true})
-        Animated.timing(animate, {toValue: 3, duration: 500}).start()
+        Animated.timing(animate, {toValue: 3, duration: 500, useNativeDriver: true, }).start()
     }
     else if(registerBtnDisplayed){
        setRegisterBtnDisplayed(false)//this.setState({ registerBtnDisplayed: false})
-       Animated.timing(animate, {toValue: 0, duration: 500}).start()
+       Animated.timing(animate, {toValue: 0, duration: 500, useNativeDriver: true, }).start()
     }
 
   }

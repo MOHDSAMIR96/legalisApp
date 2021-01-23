@@ -156,12 +156,12 @@ export function QueryChat({navigation}) {
     if(registerBtnDisplayed == 0){
        //this.setState({flex:{registerView:8}, registerBtnDisplayed: true})
        setNewRegisterBtnDisplayed(1)
-        Animated.timing(animate, {toValue: 100, duration: 300}).start()
+        Animated.timing(animate, {toValue: 100, duration: 300, useNativeDriver: true, }).start()
     }
     else if(registerBtnDisplayed == 1){
        //this.setState({flex:{registerView:0}, registerBtnDisplayed: false})
        setNewRegisterBtnDisplayed(0)
-       Animated.timing(animate, {toValue: 4, duration: 300}).start()
+       Animated.timing(animate, {toValue: 4, duration: 300, useNativeDriver: true, }).start()
     }
 
   }

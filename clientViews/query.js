@@ -34,7 +34,7 @@ export default function Query({navigation}){//ESTA PARTE ES LA VISTA DE EL INICI
             // The gesture has started. Show visual feedback so the user knows
             // what is happening!
             // gestureState.d{x,y} will be set to zero now
-            //Animated.timing(this.state.animatePosition, {toValue: 40, duration: 500}).start()
+            //Animated.timing(this.state.animatePosition, {toValue: 40, duration: 500, useNativeDriver: true, }).start()
           },
           onPanResponderMove: (evt, gestureState) => {
                //console.log(gestureState)
@@ -48,11 +48,11 @@ export default function Query({navigation}){//ESTA PARTE ES LA VISTA DE EL INICI
           // responder. This typically means a gesture has succeeded
 
             if(gestureState.dx<0){
-                  Animated.timing(animatePosition, {toValue: animatePosition.__getValue() + 80, duration: 500}).start()
+                  Animated.timing(animatePosition, {toValue: animatePosition.__getValue() + 80, duration: 500, useNativeDriver: true, }).start()
                   setNewActiveSubjectCounter(activeSubjectCounter + 1)
                 }
                 else{
-                Animated.timing(animatePosition, {toValue: animatePosition.__getValue() - 80, duration: 500}).start()
+                Animated.timing(animatePosition, {toValue: animatePosition.__getValue() - 80, duration: 500, useNativeDriver: true, }).start()
                 setNewActiveSubjectCounter(activeSubjectCounter - 1)
                 }
           },
@@ -96,7 +96,7 @@ export default function Query({navigation}){//ESTA PARTE ES LA VISTA DE EL INICI
   }
 
     return (
-    <View style={{flex: 1, backgroundColor: "#4170f9"}}>
+    <ScrollView style={{flex: 1, backgroundColor: "#4170f9"}}>
 
         <View style={{flex: 2}}><Text style={styles.welcome}>¿De qué trata tu problema? </Text></View>
         <View style={{ flex: 2, flexDirection: 'row'}}>
@@ -119,7 +119,11 @@ export default function Query({navigation}){//ESTA PARTE ES LA VISTA DE EL INICI
             <View style={{flex: 2, flexDirection: 'row', backgroundColor: "#4170f9"}}>
                    <View style={{flex: 2}}></View>
                    <View style={[{ width: "100%", flex:1, flexDirection: 'column', backgroundColor: "#4170f9"}]}>
-                             <View style={{backgroundColor: "#747A87", borderRadius: 100, width: 90, height:90, paddingTop:10}}><Icon size={60} name='mic' color='white' /></View>
+                             <TouchableOpacity
+                              style={{backgroundColor: "#747A87", borderRadius: 100, width: 90, height:90, paddingTop:10}}><Icon size={60} name='mic' color='white' 
+                              onPress={()=>{navigation.navigate('VoiceRecognition')}}
+                              />
+                             </TouchableOpacity>
                              <View style={{flex:1, flexDirection: 'row', backgroundColor: "#4170f9"}}>
                                <Text> </Text>
                              </View>
@@ -163,7 +167,7 @@ export default function Query({navigation}){//ESTA PARTE ES LA VISTA DE EL INICI
                         <Text style={{fontSize:20, color: "white"}}>SIGUIENTE</Text>
                       </TouchableOpacity>
 
-     </View>
+     </ScrollView>
     );
   //}
 }
