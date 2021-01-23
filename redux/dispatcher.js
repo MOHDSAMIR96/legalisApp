@@ -2,6 +2,7 @@ import store from './store.js';
 import {storeUSerId} from './actions';
 import {storeNewMessage} from './actions';
 import {storeSelectedCase} from './actions';
+import {storeListOfCases} from './actions';
 
 
 export function changerUserIdDispatcher(x){
@@ -14,4 +15,8 @@ export function pushAnotherMessage(x){
 
 export function dispatchSelectCase(x){
     store.dispatch(storeSelectedCase(x));
+}
+
+export function dispatchListOfCases(x){
+    store.dispatch(storeListOfCases(x))
 }

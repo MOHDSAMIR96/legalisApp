@@ -1,9 +1,15 @@
 import React, {Component, useState, useEffect, useRef }  from 'react';
-import { Platform, Alert, StyleSheet, Text, View, Button, Image, List, TextInput, FormLabel, FormInput, FormValidationMessage, ScrollView, PanResponder, Link } from 'react-native';
+import { TouchableHighlight, Platform, Alert, StyleSheet, Text, View, Button, Image, List, TextInput, FormLabel, FormInput, FormValidationMessage, ScrollView, PanResponder, Link } from 'react-native';
 import { ThemeProvider, Avatar, Card, ListItem, Icon, FlatList} from 'react-native-elements';
 import { createAppContainer, NavigationActions, StackActions } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 import { CommonActions } from '@react-navigation/native';
+import store from '../redux/store.js';
+import {KeyboardAvoidingView, Animated, Dimensions} from 'react-native';
+import { useSelector, useDispatch } from 'react-redux';
+import CountDown from 'react-native-countdown-component'; // DOCUMENTATION ON https://github.com/talalmajali/react-native-countdown-component
+import { ModalPortal, Modal, ModalContent } from 'react-native-modals';
+
 //IMPORTATION OF VIEW COMPONENTS
 import Query from './query.js';
 import {Home} from './home.js';
@@ -11,13 +17,11 @@ import ClientRegister from './register.js';
 import ClientProfile from './clientProfile.js';
 import CaseChat from './caseChat.js';
 
-import store from '../redux/store.js';
-
-
-
-import {Animated} from 'react-native';
-
-import { useSelector, useDispatch } from 'react-redux';
+    // DEVICE SIZE
+const windowWidth = Dimensions.get('window').width;
+const windowHeight = Dimensions.get('window').height;
+const windowHeightPercentUnit = parseInt(windowHeight/100);
+const windowWidthPercentUnit = parseInt(windowWidth/100);
 
 
 export function QueryChat({navigation}) {
@@ -27,37 +31,68 @@ export function QueryChat({navigation}) {
     const dispatch = useDispatch();
 
     //FUNCTIONAL COMPONENT STATE
-    const [registerBtnDisplayed, setNewRegisterBtnDisplayed] = useState(0);
-    const [animate, setNewanimate] = useState(new Animated.Value(4));
-    const [textoEjemplo, setNewTextoEjemplo] = useState(store.users_issue_description);
+    const [registerBtnDisplayed, setNewRegisterBtnDisplayed] = useState(1);
+    const [animate, setNewanimate] = useState(new Animated.Value(windowHeightPercentUnit*4));
+    const [messageAnimation, setMessageAnimation] = useState(new Animated.Value(0));
+    const [description, setNewDescription] = useState(store.users_issue_description);
     const [messageInputContent, setMessageInputContent] = useState("");
     const [message, enterMessage] = useState([]);
     const [returnedMessageId, setReturnedMessageId] = useState(0);
     const [stillTypingAdvisor, booleanStillTypingAdvisor] = useState(false);
+    const [startCountDown, InitCountDown] = useState(false);
+    const [modalVisibility, setModalVisibility] = useState(false);
+    const [unlocked, setUnlocked] = useState(false);
+    const [lawyerRespone, setLawyerRespone] = useState("LOADING...");
+
+
 
     //REFERENCES
     const inputRef = useRef(null);
     const typingRef = useRef(null);
+    const timerRef = useRef(null);
+
+    useEffect(()=>{
+    Animated.timing(messageAnimation,{toValue: 350,duration: 1000}).start();
+    },[message])
 
      useEffect(()=>{
 
+
+
                       let fetchInterval = setInterval(()=>{
-                                         fetch("http://patoexer.pythonanywhere.com/message/" + store.users_id)
+
+                                         fetch("http://patoexer.pythonanywhere.com/user/" + store.users_id)
+                                         .then((response)=> { return response.json()})
+                                         .then((data)=>{
+
+                                             if(data.taken){
+                                             InitCountDown(true)
+                                             }
+                                             if(data.unlocked){
+                                               setUnlocked(true)
+                                               }
+
+                                         })
+                                         .catch((error)=>{})
+
+                                         fetch("http://patoexer.pythonanywhere.com/message/" + store.users_id  + "/0/" + store.lawyer_id)
                                          .then((response)=> response.json())
                                          .then((data)=>
-                                                       { console.log("+++++: " + data[data.length - 1].messages_origin + "// " + data[data.length - 1].messages_content  )
+                                                       {
                                                        if(message[message.length - 1 ]!= data[data.length - 1].messages_content){
                                                              if(data[data.length - 1].messages_content == "typing..." && data[data.length - 1].messages_origin=="lawyer" ){
                                                              this.typingRef.current.style = "inline";
-                                                             console.log("FUNCIONA")
+                                                             Animated.timing(messageAnimation,{toValue: 350,duration: 500}).start();
+
                                                              }
                                                              else{
                                                                 enterMessage([...data])
+                                                                Animated.timing(messageAnimation,{toValue: 350,duration: 500}).start();
                                                              }
                                                              }
                                                        })
                                        }, 1000);
-
+      // return en useffect es como componentWillUnmunt
       return ()=>{
           clearInterval(fetchInterval);
           let options = {
@@ -67,10 +102,20 @@ export function QueryChat({navigation}) {
           fetch("http://patoexer.pythonanywhere.com/user/" + store.users_id, options)
               .then((response)=> response.json())
               .then((data)=> {
+
+                let options = {
+                                      method: 'DELETE',
+                                      headers: {'Content-Type': 'application/json'}};
+
+                          fetch("http://patoexer.pythonanywhere.com/message/" + store.users_id, options)
+                              .then((response)=> response.json())
+                              .then((data)=> {
+                              })
+                              .catch(error => {})
               })
               .catch(error => {})
 
-            }// return en useffect es como componentWillUnmunt
+            }
 
       }, []);
 
@@ -82,8 +127,9 @@ export function QueryChat({navigation}) {
                              "messages_date": currentDate,
                              "messages_content": "typing...",
                              "messages_origin": "user",
+                             "clients_id": 0, //KEEPS THIS STATIC COS THE BACKEND TRANSLATE LIKE NULL ON TABLE
                              "user_id": store.users_id,
-                             "lawyer_id": 1
+                             "lawyer_id": 1 //SE PUSO EL LAWYER FIJO MIENTRAS
                            }
 
           let options2 = {
@@ -93,15 +139,14 @@ export function QueryChat({navigation}) {
 
            if(!stillTypingAdvisor){
 
-           fetch("http://patoexer.pythonanywhere.com/message/1", options2)
-              .then((response)=> response.json())
+           fetch("http://patoexer.pythonanywhere.com/message/1/0/0", options2)
+              .then((response)=> { return response.json()})
               .then((data)=> {
-              setReturnedMessageId(data.messages_id)
-              console.log(JSON.stringify(data))})
+              setReturnedMessageId(data.resp.messages_id)
+              })
+              .catch(error => console.log(JSON.stringify(error)))
+              booleanStillTypingAdvisor(true);
            }
-
-        booleanStillTypingAdvisor(true);
-
    }
 
    const enterNewMessage = () =>{
@@ -114,6 +159,7 @@ export function QueryChat({navigation}) {
                       "messages_id": returnedMessageId,
                       "messages_origin": "user",
                       "user_id": store.users_id,
+                      "clients_id": 0, //KEEPS THIS STATIC COS THE BACKEND TRANSLATE LIKE NULL ON TABLE
                       "lawyer_id": 1
                     }
 
@@ -124,13 +170,14 @@ export function QueryChat({navigation}) {
 
     if(stillTypingAdvisor){
 
-    fetch("http://patoexer.pythonanywhere.com/message/1", options2)
+    fetch("http://patoexer.pythonanywhere.com/message/1/0/0", options2)
        .then((response)=> response.json())
        .then((data)=> {console.log(JSON.stringify(data))})
+       inputRef.current.clear()
     }
 
     booleanStillTypingAdvisor(false);
-    inputRef.current.clear()
+
 
    }
 
@@ -146,8 +193,6 @@ export function QueryChat({navigation}) {
                     return navigation.reset([NavigationActions.navigate({routeName: 'ClientRegister'})]);
                  })
                  .catch(error => {})
-
-
    }
 
    const showCase =() => {
@@ -156,37 +201,61 @@ export function QueryChat({navigation}) {
     if(registerBtnDisplayed == 0){
        //this.setState({flex:{registerView:8}, registerBtnDisplayed: true})
        setNewRegisterBtnDisplayed(1)
+<<<<<<< HEAD
         Animated.timing(animate, {toValue: 100, duration: 300, useNativeDriver: true, }).start()
+=======
+        Animated.timing(animate, {toValue: windowHeightPercentUnit*4, duration: 300}).start()
+>>>>>>> 97095b680fd39d29c379330b7eb20dc1afa521b6
     }
     else if(registerBtnDisplayed == 1){
-       //this.setState({flex:{registerView:0}, registerBtnDisplayed: false})
-       setNewRegisterBtnDisplayed(0)
-       Animated.timing(animate, {toValue: 4, duration: 300, useNativeDriver: true, }).start()
-    }
 
+       setNewRegisterBtnDisplayed(0)
+<<<<<<< HEAD
+       Animated.timing(animate, {toValue: 4, duration: 300, useNativeDriver: true, }).start()
+=======
+       Animated.timing(animate, {toValue: windowHeightPercentUnit*1, duration: 300}).start()
+>>>>>>> 97095b680fd39d29c379330b7eb20dc1afa521b6
+    }
+  }
+
+  const waitingForLawyersResponse =()=> {
+    setModalVisibility(true)
+    let fetchLawyerResponseInterval = setInterval(()=>{
+    fetch("http://patoexer.pythonanywhere.com/user/" + store.users_id)
+                             .then(response =>{return response.json()})
+                             .then((data)=>{
+                             (data.rejectionReazon!= null)?setLawyerRespone("El abogado ha decidido no seguir con la conversación, ya que: " + data.rejectionReazon): console.log("lawyerResponse null")
+
+                             }
+                              )
+                              .catch((error)=> console.log("error"))
+
+
+
+    },1000)
   }
 
 
     return (
-
+    <KeyboardAvoidingView style={{flex:1}} behavior="padding" keyboardVerticalOffset={windowHeightPercentUnit*5} >
     <View style={{flex: 1, flexDirection: 'column', backgroundColor: "white"}}>
         <Animated.View style={{ flex: animate, flexDirection: 'row', backgroundColor: "#4170f9"}}>
-            <View style={{flex: 2, flexDirection:"column"}}>
-                <View style={{flex: 1}}></View>
+            <View style={{flex: windowHeightPercentUnit*2, flexDirection:"column"}}>
+                <View style={{flex: windowHeightPercentUnit*1}}></View>
             </View>
-            <View style={{flex: 35}}>
-                <View style={{flex: 5}}>
-                    <Text onPress={showCase} style={styles.welcomeSmall}>RESUMEN CASO</Text>
+            <View  style={{flex: windowHeightPercentUnit*35}}>
+                <View style={{flex: windowHeightPercentUnit*5}}>
+                    <Text onPress={showCase} style={styles.welcomeSmall}>RESUMEN CASO </Text>
                     <ScrollView>
-                    <Text style={{fontSize: 20, color: "white", textAlign: 'justify', paddingRight:30}}>{textoEjemplo}</Text>
+
+                    <Text style={{fontSize: windowHeightPercentUnit*3, color: "white", textAlign: 'justify', paddingRight:30, paddingTop: windowHeightPercentUnit*3}}>{description}</Text>
                     </ScrollView>
                 </View>
             </View>
-            <View style={{flex: 1}}>
+            <View style={{flex: windowHeightPercentUnit*20}}></View>
 
-            </View>
         </Animated.View >
-        <View style={{flex: 70}}>
+        <View style={{flex: windowHeightPercentUnit*10}}>
         <Text ref={typingRef} style={{display: 'none'}}>El abogado esta escribiendo...</Text>
             <ScrollView style={{flex: 5, flexDirection: 'column', height: 150, backgroundColor: "white"}}>
                 {
@@ -194,22 +263,69 @@ export function QueryChat({navigation}) {
                     function(item, index)
                     {
                         let style;
+                        let color;
+                        let align;
+                        let initialValue = 0;
                         if(item.messages_origin=="lawyer"){
                             style = styles.lawyerStyle;
-                        }else{style = styles.clientStyle;}
-                        return <Text key={index} style={style}> {item.messages_content} </Text>
+                            color = 'white';
+                            align = 'left';
+                        }else if(item.messages_origin=="user"){style = styles.clientStyle; color = 'black'; align = 'right';}
+                        return <TouchableHighlight style={style}><Animated.Text key={index} style={{fontWeight: "bold", textAlign: align , fontSize: windowHeightPercentUnit*3, color:color}}> {item.messages_content} </Animated.Text></TouchableHighlight>
                     }
 
                                 )
                 }
             </ScrollView>
         </View>
-        <View style={{flex: 13, flexDirection: 'row', borderColor: "#4170f9", borderTopWidth: 3}}>
-            <View style={{flex:1, flexDirection:'column'}}><Text>  </Text><Icon size={50} name='credit-card' color='gold'  onPress={() => { payment() }}/></View>
+
+
+        <CountDown
+            until={20}
+            onFinish={() => ("users_id" in store && unlocked===false)? waitingForLawyersResponse():setModalVisibility(false)}
+            style={(startCountDown && unlocked===false)?{marginRight: windowWidthPercentUnit*80, borderTopLeftRadius: 10, borderTopRightRadius: 10, backgroundColor: "#4170f9"}:{display: "none"}}
+            size={20}
+            timeToShow={['M','S']}
+            digitStyle={{marginRight: 0, padding: 0 , backgroundColor: '#4170f9', borderColor: '#4170f9'}}
+            digitTxtStyle={{color: 'white'}}
+            timeLabelStyle={{color: '#4170f9', fontWeight: 'bold'}}
+            separatorStyle={{color: 'white'}}
+            timeLabels={{m: null, s: null}}
+            showSeparator={true}
+            />
+
+
+        <View style={{ marginBottom: windowHeightPercentUnit*5, flexDirection: 'row', borderColor: "#4170f9", borderTopWidth: 3}}>
+
+            <View style={{flex:1, flexDirection:'column'}}><Text>  </Text>{/*<Icon size={50} name='credit-card' color='gold'  onPress={() => { payment() }}/>*/}</View>
             <View style={{flex:4}}><Text> </Text><TextInput ref={inputRef} onChangeText={x=> {setMessageInputContent(x); typing(x)}} style={{backgroundColor: "white", borderWidth:2, borderColor:"gray", borderRadius:10, height:60}}/></View>
             <View style={{flex:1}}><Text> </Text><Icon onPress={enterNewMessage} size={50} name='send' color='#4170f9'/></View>
+
         </View>
+
+
+        <ModalPortal />
+                <Modal
+                    visible={modalVisibility}
+                    onTouchOutside={() => {
+
+                    }}
+                  >
+                    <ModalContent>
+                      <Text style={styles.modalStyle}>Se ha acabado el tiempo!</Text>
+                      <Text> </Text>
+                      <Text style={styles.modalStyle}>Si su caso le interesó a su abogado, éste debloqueará el chat ilimitado</Text>
+                      <Text> </Text>
+                      <Text style={styles.modalStyle}>Por favor espere unos minutos, no salga de la aplicación</Text>
+                      <Text style={styles.modalStyle}> </Text>
+                      <Text style={{textAlign: 'center', fontSize:windowHeightPercentUnit*3, color: "red", fontWeight: "bold"}}>{lawyerRespone}</Text>
+                      <Text style={styles.modalStyle}> </Text>
+                      {(lawyerRespone.length>10)?<Button color={Platform.OS === 'ios'?"#4170f9":"#4170f9"} title="VOLVER" onPress={()=>navigation.navigate('Query')} />: console.log("no display query view btn ")}
+
+                    </ModalContent>
+                  </Modal>
      </View>
+     </KeyboardAvoidingView>
 
     );
 
@@ -220,7 +336,7 @@ const styles = StyleSheet.create({
       textAlign: 'left',
       margin: 0,
       color: 'white',
-      fontSize: 22,
+      fontSize: windowHeightPercentUnit*4,
       fontWeight: 'bold'
     },
   lawyerStyle: {
@@ -228,31 +344,31 @@ const styles = StyleSheet.create({
     borderColor: 'white',
     borderRadius: 10,
     backgroundColor: "#4170f9",
-    color:"white",
-    fontWeight: "bold",
-    fontSize:18,
+    fontSize: windowHeightPercentUnit*2,
     marginRight:50,
     marginLeft: 10,
     marginTop: 20,
     padding:15,
     paddingRight: 5,
-    textAlign: 'left'
-
   },
   clientStyle: {
     backgroundColor: "#E5E7E9",
-    color:"black",
     borderWidth:1,
     borderColor: 'white',
     borderRadius: 10,
-    fontWeight: "bold",
-    fontSize:18,
     marginRight:10,
     marginLeft: 50,
     marginTop: 20,
     padding:15,
     paddingRight: 5,
-    textAlign: 'right'
+    },
+  modalStyle:{
+    color:"black",
+    borderWidth:1,
+    borderColor: 'white',
+    borderRadius: 10,
+    fontSize:windowHeightPercentUnit*3,
+    textAlign: 'center',
     },
 });
 
