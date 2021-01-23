@@ -42,6 +42,7 @@ export function QueryChat({navigation}) {
     const [startCountDown, InitCountDown] = useState(false);
     const [modalVisibility, setModalVisibility] = useState(false);
     const [unlocked, setUnlocked] = useState(false);
+    const [lawyerRespone, setLawyerRespone] = useState("LOADING...");
 
 
 
@@ -58,7 +59,7 @@ export function QueryChat({navigation}) {
 
 
 
-                      let fetchInterval = setInterval(()=>{ console.log(JSON.stringify(store))
+                      let fetchInterval = setInterval(()=>{
 
                                          fetch("http://patoexer.pythonanywhere.com/user/" + store.users_id)
                                          .then((response)=> { return response.json()})
@@ -142,7 +143,6 @@ export function QueryChat({navigation}) {
               .then((response)=> { return response.json()})
               .then((data)=> {
               setReturnedMessageId(data.resp.messages_id)
-              console.log(JSON.stringify(data))
               })
               .catch(error => console.log(JSON.stringify(error)))
               booleanStillTypingAdvisor(true);
@@ -211,11 +211,20 @@ export function QueryChat({navigation}) {
   }
 
   const waitingForLawyersResponse =()=> {
-    let fetchLawyerResponseInterval = fetch("http://patoexer.pythonanywhere.com/user/" + store.users_id)
-                         .then(response =>{return response.json()})
-                         .then((data)=>{
-                          console.log("ACA: " + JSON.stringify(data))
-                          })
+    setModalVisibility(true)
+    let fetchLawyerResponseInterval = setInterval(()=>{
+    fetch("http://patoexer.pythonanywhere.com/user/" + store.users_id)
+                             .then(response =>{return response.json()})
+                             .then((data)=>{
+                             (data.rejectionReazon!= null)?setLawyerRespone("El abogado ha decidido no seguir con la conversación, ya que: " + data.rejectionReazon): console.log("lawyerResponse null")
+
+                             }
+                              )
+                              .catch((error)=> console.log("error"))
+
+
+
+    },1000)
   }
 
 
@@ -265,7 +274,7 @@ export function QueryChat({navigation}) {
 
         <CountDown
             until={20}
-            onFinish={() => ("users_id" in store && unlocked===false)?setModalVisibility(true):setModalVisibility(false)}
+            onFinish={() => ("users_id" in store && unlocked===false)? waitingForLawyersResponse():setModalVisibility(false)}
             style={(startCountDown && unlocked===false)?{marginRight: windowWidthPercentUnit*80, borderTopLeftRadius: 10, borderTopRightRadius: 10, backgroundColor: "#4170f9"}:{display: "none"}}
             size={20}
             timeToShow={['M','S']}
@@ -300,7 +309,11 @@ export function QueryChat({navigation}) {
                       <Text style={styles.modalStyle}>Si su caso le interesó a su abogado, éste debloqueará el chat ilimitado</Text>
                       <Text> </Text>
                       <Text style={styles.modalStyle}>Por favor espere unos minutos, no salga de la aplicación</Text>
-                      <Text style={styles.modalStyle}>LOADING ...</Text>
+                      <Text style={styles.modalStyle}> </Text>
+                      <Text style={{textAlign: 'center', fontSize:windowHeightPercentUnit*3, color: "red", fontWeight: "bold"}}>{lawyerRespone}</Text>
+                      <Text style={styles.modalStyle}> </Text>
+                      {(lawyerRespone.length>10)?<Button color={Platform.OS === 'ios'?"#4170f9":"#4170f9"} title="VOLVER" onPress={()=>navigation.navigate('Query')} />: console.log("no display query view btn ")}
+
                     </ModalContent>
                   </Modal>
      </View>

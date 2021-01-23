@@ -36,7 +36,7 @@ export default function Query({navigation}){//ESTA PARTE ES LA VISTA DE EL INICI
     const [descriptionAnimation, setDescriptionAnimation] = useState(new Animated.Value(0));
     const [nameAnimation, setNameAnimation] = useState(new Animated.Value(0));
 
-    const [selectedValue, setSelectedValue] = useState("");
+    const [selectedValue, setSelectedValue] = useState("propiedades");
 
     //REDUX STATE
     const store = useSelector(state => state.userData);
@@ -205,6 +205,7 @@ export default function Query({navigation}){//ESTA PARTE ES LA VISTA DE EL INICI
             "taken": false,
             "unlocked": false
         }
+        console.log(JSON.stringify(clientData))
 
         let options = {
                     method: 'POST',
@@ -283,26 +284,27 @@ export default function Query({navigation}){//ESTA PARTE ES LA VISTA DE EL INICI
         </View>
 
         <View style={{flex:windowHeightPercentUnit*5}} >
-            <View style={(hourOfTheDay<24)?{flex: windowHeightPercentUnit*3, flexDirection: 'row', backgroundColor: "#4170f9"}:{ display:'none'}} >
+            <View style={(hourOfTheDay<24)?{flex: windowHeightPercentUnit*2, padding: windowHeightPercentUnit*2, flexDirection: 'row', backgroundColor: "#4170f9"}:{ display:'none'}}>
+                <View style={{flex: 1}}></View>
+                    <Animated.View style={[{ flex:windowHeightPercentUnit*2, left: nameAnimation, flexDirection: 'column', backgroundColor: "#4170f9"}]}>
+                        <TextInput placeholder="NOMBRE" onChangeText={x=> setNewUserName(x)} style={{fontSize: windowHeightPercentUnit*2.5, textAlign: 'center',backgroundColor: 'white', borderRadius:10}} />
+                        <View style={{flex:1, flexDirection: 'row', backgroundColor: "#4170f9"}}>
+                            <Text></Text>
+                        </View>
+                    </Animated.View>
+                <View style={{flex: 1}}></View>
+            </View>
+            <View style={(hourOfTheDay<24)?{flex: windowHeightPercentUnit*10, flexDirection: 'row', backgroundColor: "#4170f9"}:{ display:'none'}} >
                 <View style={{flex: 1}}>
                 </View>
                 <Animated.View style={[{ width: '80%', left: descriptionAnimation, flexDirection: 'column', backgroundColor: "#4170f9"}]}>
-                    <TextInput placeholder="¿CUAL ES TU PROBLEMA LEGAL?" onChangeText={x=> setNewCaseDescription(x)} multiline={false} style={{textAlign: 'center',backgroundColor: 'white', fontSize: windowHeightPercentUnit*2.5, height: '100%', borderRadius:10}} />
+                    <TextInput placeholder="¿CUAL ES TU PROBLEMA LEGAL?" onChangeText={x=> setNewCaseDescription(x)} multiline={false} style={{textAlign: 'center',backgroundColor: 'white', fontSize: windowHeightPercentUnit*2.5, height: '90%', borderRadius:10}} />
                 </Animated.View>
                 <View style={{flex: 1}}>
                 </View>
             </View>
 
-            <View style={(hourOfTheDay<24)?{flex: windowHeightPercentUnit*2, padding: windowHeightPercentUnit*2, flexDirection: 'row', backgroundColor: "#4170f9"}:{ display:'none'}}>
-                <View style={{flex: 1}}></View>
-                <Animated.View style={[{ flex:windowHeightPercentUnit*2, left: nameAnimation, flexDirection: 'column', backgroundColor: "#4170f9"}]}>
-                    <TextInput placeholder="NOMBRE" onChangeText={x=> setNewUserName(x)} style={{fontSize: windowHeightPercentUnit*2.5, textAlign: 'center',backgroundColor: 'white', borderRadius:10}} />
-                    <View style={{flex:1, flexDirection: 'row', backgroundColor: "#4170f9"}}>
-                        <Text></Text>
-                    </View>
-                </Animated.View>
-                <View style={{flex: 1}}></View>
-            </View>
+
         </View>
 
         <View style={{flex:windowHeightPercentUnit}}>

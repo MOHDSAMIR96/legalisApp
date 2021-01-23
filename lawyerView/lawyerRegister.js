@@ -334,7 +334,7 @@ export default function LawyerRegister({navigation}) {
                  let today = new Date();
                  let currentDate = today.getFullYear() + "-" + (today.getMonth() + 1) + "-" + today.getDate()
 
-                 //POST TO CLIENTS/
+                 //POST TO LAWYERS/
 
                  fetch("http://patoexer.pythonanywhere.com/lawyer/" + registerRut)
                  .then(response =>{return response.json()})
@@ -342,7 +342,7 @@ export default function LawyerRegister({navigation}) {
 
                    if(data.lawyers_rut!=registerRut){
 
-                           let lawyerData = {
+                           let lawyerData = { // VALIDACION DE NUMERO O TEXTO HACER
                                    "lawyers_name": registerName,
                                     "lawyers_password": registerPassword,
                                     "lawyers_email": registerMail,
@@ -353,8 +353,11 @@ export default function LawyerRegister({navigation}) {
                                     "lawyers_file_speciality": " " ,
                                     "lawyers_bank": registerBank,
                                     "lawyers_account": " ",
-                                    "lawyers_bank_number": registerAccount
+                                    "lawyers_bank_number": registerAccount,
+                                    "approved": 0
                                }
+
+                               console.log("*******************"  +JSON.stringify(lawyerData))
 
                                let options = {
                                            method: 'POST',
@@ -363,11 +366,11 @@ export default function LawyerRegister({navigation}) {
 
                            fetch("http://patoexer.pythonanywhere.com/lawyer/1", options)
                                        .then((response)=>{ return response.json()})
-                                       .then((data)=> {
+                                       .then((data)=> { console.log("paso")
                                            setSendingRegistration("none")
                                            navigation.navigate('ThanksMsg')
                                        })
-                                       .catch(error => {console.log(error)})
+                                       .catch(error => {console.log('error')})
 
                    } else{
                               console.log("YA ESTAS REGISTRADO!!")
@@ -525,7 +528,7 @@ export default function LawyerRegister({navigation}) {
             <View style={{flex: 1, flexDirection: 'row', backgroundColor: "#4170f9"}}>
               <View style={{flex:1, backgroundColor: "#4170f9"}}></View>
                 <Animated.View style={{flex:windowWidthPercentUnit*1, left: registerPhoneAnimation, flexDirection: 'row', backgroundColor: "#4170f9"}}>
-                   <TextInput onChangeText={x=> setNewRegisterPhone(x)} placeholder = "Teléfono" style={{ backgroundColor: inputColorValidation.registerPhone, height: windowHeightPercentUnit*5, width: "100%", borderColor: 'gray', borderWidth: 1, fontSize:windowHeightPercentUnit*3, borderRadius: 10, textAlign:'center' }}/>
+                   <TextInput keyboardType={"numeric"} onChangeText={x=> setNewRegisterPhone(x)} placeholder = "Teléfono" style={{ backgroundColor: inputColorValidation.registerPhone, height: windowHeightPercentUnit*5, width: "100%", borderColor: 'gray', borderWidth: 1, fontSize:windowHeightPercentUnit*3, borderRadius: 10, textAlign:'center' }}/>
                 </Animated.View>
               <View style={{flex:1}}></View>
             </View>
@@ -533,7 +536,7 @@ export default function LawyerRegister({navigation}) {
             <View style={{flex: 1, flexDirection: 'row', backgroundColor: "#4170f9"}}>
                           <View style={{flex:1, backgroundColor: "#4170f9"}}></View>
                             <Animated.View style={{flex:windowWidthPercentUnit*1, left: registerRutAnimation, flexDirection: 'row', backgroundColor: "#4170f9"}}>
-                               <TextInput value={registerRut} onChangeText={x=> RegisterRutificator(x)} placeholder = "Rut" style={{ backgroundColor: inputColorValidation.registerRut, height: windowHeightPercentUnit*5, width: "100%", borderColor: 'gray', borderWidth: 1, fontSize:windowHeightPercentUnit*3, borderRadius: 10, textAlign:'center' }}/>
+                               <TextInput keyboardType={"name-phone-pad "} value={registerRut} onChangeText={x=> RegisterRutificator(x)} placeholder = "Rut" style={{ backgroundColor: inputColorValidation.registerRut, height: windowHeightPercentUnit*5, width: "100%", borderColor: 'gray', borderWidth: 1, fontSize:windowHeightPercentUnit*3, borderRadius: 10, textAlign:'center' }}/>
                           </Animated.View>
               <View style={{flex:1}}></View>
             </View>
@@ -571,7 +574,7 @@ export default function LawyerRegister({navigation}) {
             <View style={{flex: 1, flexDirection: 'row', backgroundColor: "#4170f9"}}>
               <View style={{flex:1, backgroundColor: "#4170f9"}}></View>
                                         <Animated.View style={{flex:windowWidthPercentUnit*1, left: registerAccountAnimation,flexDirection: 'row', backgroundColor: "#4170f9"}}>
-                                           <TextInput onChangeText={x=> setNewRegisterAccount(x)} placeholder = "Número de Cuenta" style={{ backgroundColor: inputColorValidation.registerAccount, height: windowHeightPercentUnit*5, width: "100%", borderColor: 'gray', borderWidth: 1, fontSize:windowHeightPercentUnit*3, borderRadius: 10, textAlign:'center' }}/>
+                                           <TextInput keyboardType={"numeric"} onChangeText={x=> setNewRegisterAccount(x)} placeholder = "Número de Cuenta" style={{ backgroundColor: inputColorValidation.registerAccount, height: windowHeightPercentUnit*5, width: "100%", borderColor: 'gray', borderWidth: 1, fontSize:windowHeightPercentUnit*3, borderRadius: 10, textAlign:'center' }}/>
                                         </Animated.View>
               <View style={{flex:1}}></View>
             </View>

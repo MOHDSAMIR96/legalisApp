@@ -283,7 +283,7 @@ export default function LawyerCaseChat({navigation}) {
                urlnotify: 'https://des.payku.cl/', // cuando el banco confirma el proceso del pago, se envía a una url los detalles de confirmacion de pago. HAy que hacer bkan con python para almacenar en base de datos
                order:  "unicofdc" + store.selectedCase.users_id,
                subject: 'desbloqueo chat abogado',
-               amount: 350,
+               amount: 1000,
                payment: 1
            };
 
