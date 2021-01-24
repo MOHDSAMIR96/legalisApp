@@ -9,6 +9,8 @@ import {KeyboardAvoidingView, Animated, Dimensions} from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import CountDown from 'react-native-countdown-component'; // DOCUMENTATION ON https://github.com/talalmajali/react-native-countdown-component
 import { ModalPortal, Modal, ModalContent } from 'react-native-modals';
+import LottieView from 'lottie-react-native';
+import {Transition, Transitioning} from 'react-native-reanimated'
 
 //IMPORTATION OF VIEW COMPONENTS
 import Query from './query.js';
@@ -43,6 +45,7 @@ export function QueryChat({navigation}) {
     const [modalVisibility, setModalVisibility] = useState(false);
     const [unlocked, setUnlocked] = useState(false);
     const [lawyerRespone, setLawyerRespone] = useState("LOADING...");
+    const [chatLoaderColor, setchatLoaderColor] = useState('#4170f9');
 
 
 
@@ -50,14 +53,33 @@ export function QueryChat({navigation}) {
     const inputRef = useRef(null);
     const typingRef = useRef(null);
     const timerRef = useRef(null);
+    const chatLoader = useRef(null);
+    const mappedRefs= useRef([]);
+
+    //TRANSITION
+    const transition = (
+
+    <Transition.Together>
+        <Transition.In
+            type="scale"
+            durationMs={200}
+            interpolation='easeInOut'
+        />
+    </Transition.Together>
+    )
+
 
     useEffect(()=>{
     Animated.timing(messageAnimation,{toValue: 350,duration: 1000}).start();
+
+    if(mappedRefs.current.length>0){
+    console.log("aumentó : " + mappedRefs.current.length);
+    let last = mappedRefs.current.length - 1;
+    mappedRefs.current[last].animateNextTransition();
+    }
     },[message])
 
      useEffect(()=>{
-
-
 
                       let fetchInterval = setInterval(()=>{
 
@@ -201,20 +223,12 @@ export function QueryChat({navigation}) {
     if(registerBtnDisplayed == 0){
        //this.setState({flex:{registerView:8}, registerBtnDisplayed: true})
        setNewRegisterBtnDisplayed(1)
-<<<<<<< HEAD
-        Animated.timing(animate, {toValue: 100, duration: 300, useNativeDriver: true, }).start()
-=======
         Animated.timing(animate, {toValue: windowHeightPercentUnit*4, duration: 300}).start()
->>>>>>> 97095b680fd39d29c379330b7eb20dc1afa521b6
     }
     else if(registerBtnDisplayed == 1){
 
        setNewRegisterBtnDisplayed(0)
-<<<<<<< HEAD
-       Animated.timing(animate, {toValue: 4, duration: 300, useNativeDriver: true, }).start()
-=======
        Animated.timing(animate, {toValue: windowHeightPercentUnit*1, duration: 300}).start()
->>>>>>> 97095b680fd39d29c379330b7eb20dc1afa521b6
     }
   }
 
@@ -258,6 +272,7 @@ export function QueryChat({navigation}) {
         <View style={{flex: windowHeightPercentUnit*10}}>
         <Text ref={typingRef} style={{display: 'none'}}>El abogado esta escribiendo...</Text>
             <ScrollView style={{flex: 5, flexDirection: 'column', height: 150, backgroundColor: "white"}}>
+
                 {
                   message.map(
                     function(item, index)
@@ -266,22 +281,47 @@ export function QueryChat({navigation}) {
                         let color;
                         let align;
                         let initialValue = 0;
+                        let chatLoaderColor;
                         if(item.messages_origin=="lawyer"){
                             style = styles.lawyerStyle;
                             color = 'white';
                             align = 'left';
-                        }else if(item.messages_origin=="user"){style = styles.clientStyle; color = 'black'; align = 'right';}
-                        return <TouchableHighlight style={style}><Animated.Text key={index} style={{fontWeight: "bold", textAlign: align , fontSize: windowHeightPercentUnit*3, color:color}}> {item.messages_content} </Animated.Text></TouchableHighlight>
+                            chatLoaderColor = "#4170f9";
+                        }else if(item.messages_origin=="user"){style = styles.clientStyle; color = 'black'; align = 'right';chatLoaderColor = "#E5E7E9";}
+                        return (
+                        <Transitioning.View
+                            transition={transition}
+                            ref={(el) => (mappedRefs.current[index] = el)}
+                            >
+                        <TouchableHighlight style={style}>
+                            <Animated.Text key={index} style={{fontWeight: "bold", textAlign: (item.messages_content=='typing...')?"center": align , fontSize: windowHeightPercentUnit*3, color:color}}>
+                                <LottieView
+                                     ref={chatLoader}
+                                     autoPlay
+                                     loop
+                                     style={{
+                                     width: windowWidthPercentUnit*20,
+                                     backgroundColor: chatLoaderColor,
+                                     display: (item.messages_content=='typing...')?'flex':'none'
+                                     }}
+                                     source={require('../assetsLottie/chat-loader2.json')}
+                                 />
+                                 {(item.messages_content!='typing...')?item.messages_content: ""}
+                            </Animated.Text>
+                        </TouchableHighlight>
+                        </Transitioning.View>
+                        )
                     }
 
                                 )
                 }
+
             </ScrollView>
         </View>
 
 
         <CountDown
-            until={20}
+            until={2000}
             onFinish={() => ("users_id" in store && unlocked===false)? waitingForLawyersResponse():setModalVisibility(false)}
             style={(startCountDown && unlocked===false)?{marginRight: windowWidthPercentUnit*80, borderTopLeftRadius: 10, borderTopRightRadius: 10, backgroundColor: "#4170f9"}:{display: "none"}}
             size={20}
@@ -350,6 +390,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
     padding:15,
     paddingRight: 5,
+
   },
   clientStyle: {
     backgroundColor: "#E5E7E9",
@@ -361,6 +402,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
     padding:15,
     paddingRight: 5,
+    alignItems: 'center'
     },
   modalStyle:{
     color:"black",

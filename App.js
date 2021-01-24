@@ -1,9 +1,5 @@
-<<<<<<< HEAD
-import React, { Component } from 'react';
 import { Platform } from 'react-native'
-=======
 import React, {Component, useState, useEffect}  from 'react';
->>>>>>> 97095b680fd39d29c379330b7eb20dc1afa521b6
 import { createAppContainer, TabNavigator  } from 'react-navigation';
 import { NavigationActions, StackActions } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';

@@ -19,15 +19,11 @@
     "axios": "^0.21.0",
     "expo": "~39.0.2",
     "expo-av": "~8.6.0",
-<<<<<<< HEAD
-    "expo-status-bar": "~1.0.2",
-    "lottie-react-native": "~2.6.1",
-=======
     "expo-notifications": "~0.7.2",
     "expo-permissions": "~9.3.0",
     "expo-status-bar": "~1.0.2",
     "firebase": "^8.2.1",
->>>>>>> 97095b680fd39d29c379330b7eb20dc1afa521b6
+    "lottie-react-native": "~2.6.1",
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "react-instantsearch-native": "^6.8.2",
@@ -41,14 +37,11 @@
     "react-native-modals": "^0.22.3",
     "react-native-picker-select": "^8.0.4",
     "react-native-push-notification": "^7.0.0",
-    "react-native-reanimated": "~1.13.0",
+    "react-native-reanimated": "^1.13.2",
     "react-native-safe-area-context": "3.1.4",
     "react-native-screens": "~2.10.1",
-<<<<<<< HEAD
-    "react-native-voice-oop": "^2.0.0",
-=======
     "react-native-set-soft-input-mode": "^1.1.0",
->>>>>>> 97095b680fd39d29c379330b7eb20dc1afa521b6
+    "react-native-voice-oop": "^2.0.0",
     "react-native-web": "~0.13.12",
     "react-navigation": "^4.4.2",
     "react-navigation-redux-helpers": "^4.0.1",

@@ -1,5 +1,5 @@
-import React, {Component, useState, useEffect}  from 'react';
-import { KeyboardAvoidingView, TouchableOpacity, Alert, Platform, StyleSheet, Text, View, Button, Image, TextInput, FormLabel, FormInput, FormValidationMessage, ScrollView } from 'react-native';
+import React, {Component, useState, useEffect, useRef}  from 'react';
+import { KeyboardAvoidingView, TouchableWithoutFeedback, TouchableOpacity, Alert, Platform, StyleSheet, Text, View, Button, Image, TextInput, FormLabel, FormInput, FormValidationMessage, ScrollView } from 'react-native';
 import { ThemeProvider, Avatar, Card, ListItem, Icon} from 'react-native-elements';
 import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
@@ -7,6 +7,7 @@ import {PanResponder, Animated, Dimensions, Picker } from 'react-native';
 import { Video } from 'expo-av';
 
 import { useSelector, useDispatch } from 'react-redux';
+import LottieView from 'lottie-react-native';
 
 
     // DEVICE SIZE
@@ -38,11 +39,20 @@ export default function Query({navigation}){//ESTA PARTE ES LA VISTA DE EL INICI
 
     const [selectedValue, setSelectedValue] = useState("propiedades");
 
+    const [lottieRecognitionPathBoolean, setLottieRecognitionPathBoolean] = useState(false);
+
+    //USE REF'S
+    const drunkenOwl = useRef(null);
+    const voiceRecognition = useRef(null);
+
     //REDUX STATE
     const store = useSelector(state => state.userData);
     const dispatch = useDispatch();
 
     useEffect(()=>{
+
+    drunkenOwl.current.play();
+    voiceRecognition.current.play();
     let hour = new Date().getHours()
     sethourOfTheDay(hour)
 
@@ -118,11 +128,6 @@ export default function Query({navigation}){//ESTA PARTE ES LA VISTA DE EL INICI
             // The gesture has started. Show visual feedback so the user knows
             // what is happening!
             // gestureState.d{x,y} will be set to zero now
-<<<<<<< HEAD
-            //Animated.timing(this.state.animatePosition, {toValue: 40, duration: 500, useNativeDriver: true, }).start()
-=======
-
->>>>>>> 97095b680fd39d29c379330b7eb20dc1afa521b6
           },
           onPanResponderMove: (evt, gestureState) => {
                //console.log(gestureState)
@@ -136,14 +141,6 @@ export default function Query({navigation}){//ESTA PARTE ES LA VISTA DE EL INICI
           // responder. This typically means a gesture has succeeded
 
             if(gestureState.dx<0){
-<<<<<<< HEAD
-                  Animated.timing(animatePosition, {toValue: animatePosition.__getValue() + 80, duration: 500, useNativeDriver: true, }).start()
-                  setNewActiveSubjectCounter(activeSubjectCounter + 1)
-                }
-                else{
-                Animated.timing(animatePosition, {toValue: animatePosition.__getValue() - 80, duration: 500, useNativeDriver: true, }).start()
-                setNewActiveSubjectCounter(activeSubjectCounter - 1)
-=======
                     if(subjects[activeSubjectCounter]!= "OTRAS CONSULTAS"){console.log(windowWidthPercentUnit)
                          Animated.timing(animatePosition, {toValue: animatePosition.__getValue() - windowWidthPercentUnit, duration: 500}).start()
                          setNewActiveSubjectCounter(activeSubjectCounter + 1)
@@ -155,7 +152,6 @@ export default function Query({navigation}){//ESTA PARTE ES LA VISTA DE EL INICI
                         setNewActiveSubjectCounter(activeSubjectCounter - 1)
 
                     }
->>>>>>> 97095b680fd39d29c379330b7eb20dc1afa521b6
                 }
           },
           onPanResponderTerminate: (evt, gestureState) => {
@@ -239,15 +235,20 @@ export default function Query({navigation}){//ESTA PARTE ES LA VISTA DE EL INICI
 
 }
 
+    const startRecognize=()=>{
+
+    setLottieRecognitionPathBoolean(true);
+    voiceRecognition.current.reset();
+    setTimeout(()=>{voiceRecognition.current.play();},100)
+
+
+    }
+
 
 
 
 
     return (
-<<<<<<< HEAD
-    <ScrollView style={{flex: 1, backgroundColor: "#4170f9"}}>
-=======
->>>>>>> 97095b680fd39d29c379330b7eb20dc1afa521b6
 
     <KeyboardAvoidingView behavior='height' style={{flex: windowHeightPercentUnit, backgroundColor: "#4170f9"}}>
 
@@ -259,8 +260,20 @@ export default function Query({navigation}){//ESTA PARTE ES LA VISTA DE EL INICI
             <Text style={styles.welcome}>Estamos descanzando</Text>
         </View>
 
-        <View style={(hourOfTheDay>=24)?{flex: windowHeightPercentUnit*5, backgroundColor: "#4170f9"}:{ display:'none'}}>
+        <View style={(hourOfTheDay>=24)?{alignItems: "center", flex: windowHeightPercentUnit*5, backgroundColor: "#4170f9"}:{ display:'none'}}>
             <Text style={styles.instructions}>Los sentimos, nuestros abgados estan descanzando. Nuestra hora de atención es de 8:00 a 20:00 hrs. Por favor, vuelva más tarde. </Text>
+            <LottieView
+                ref={drunkenOwl}
+                style={{
+                width: windowWidthPercentUnit*50,
+                height: windowHeightPercentUnit*50,
+                backgroundColor: '#4170f9'
+                }}
+                source={require('../assetsLottie/lf30_editor_a6hbsovx.json')}
+                // OR find more Lottie files @ https://lottiefiles.com/featured
+                // Just click the one you like, place that file in the 'assets' folder to the left, and replace the above 'require' statement
+            />
+
         </View>
 
 
@@ -294,8 +307,21 @@ export default function Query({navigation}){//ESTA PARTE ES LA VISTA DE EL INICI
 
         <View style={(hourOfTheDay<24)?{flex: windowHeightPercentUnit, padding: windowHeightPercentUnit , flexDirection: 'row', backgroundColor: "#4170f9"}:{ display:'none'}}>
             <View style={{flex: 2}}></View>
-            <View style={[{ width: "100%", flex:1, flexDirection: 'column',backgroundColor: '#4170f9'}]}>
-                <Icon size={windowHeightPercentUnit*6} name='mic' color='white' />
+            <View style={[{ width: "100%", flex:1, alignItems: "center" ,flexDirection: 'column',backgroundColor: '#4170f9'}]}>
+                <TouchableWithoutFeedback onPress={() => startRecognize()}>
+                    <LottieView
+                                    ref={voiceRecognition}
+                                    style={{
+                                    width: windowWidthPercentUnit*10,
+                                    height: windowHeightPercentUnit*10,
+                                    backgroundColor: '#4170f9'
+                                    }}
+                                    source={(!lottieRecognitionPathBoolean)?require("../assetsLottie/lf30_editor_a5fkbzjs.json"):require("../assetsLottie/lf30_editor_evaugxq0.json")}
+                                    // OR find more Lottie files @ https://lottiefiles.com/featured
+                                    // Just click the one you like, place that file in the 'assets' folder to the left, and replace the above 'require' statement
+                                />
+                </TouchableWithoutFeedback>
+
             </View>
             <View style={{flex: 2}}></View>
         </View>
@@ -324,22 +350,6 @@ export default function Query({navigation}){//ESTA PARTE ES LA VISTA DE EL INICI
 
         </View>
 
-<<<<<<< HEAD
-            <View style={{flex: 2, flexDirection: 'row', backgroundColor: "#4170f9"}}>
-                   <View style={{flex: 2}}></View>
-                   <View style={[{ width: "100%", flex:1, flexDirection: 'column', backgroundColor: "#4170f9"}]}>
-                             <TouchableOpacity
-                              style={{backgroundColor: "#747A87", borderRadius: 100, width: 90, height:90, paddingTop:10}}><Icon size={60} name='mic' color='white' 
-                              onPress={()=>{navigation.navigate('VoiceRecognition')}}
-                              />
-                             </TouchableOpacity>
-                             <View style={{flex:1, flexDirection: 'row', backgroundColor: "#4170f9"}}>
-                               <Text> </Text>
-                             </View>
-                   </View>
-                   <View style={{flex: 2}}></View>
-            </View>
-=======
         <View style={{flex:windowHeightPercentUnit}}>
             <TouchableOpacity
                style={(hourOfTheDay<=24)?{padding: windowHeightPercentUnit*3, paddingTop: windowHeightPercentUnit ,backgroundColor: "#747A87", color: 'white', alignItems: "center"}:{ display:'none'}}
@@ -350,45 +360,9 @@ export default function Query({navigation}){//ESTA PARTE ES LA VISTA DE EL INICI
                 <Text style={{fontSize:windowHeightPercentUnit*4, color: "white"}}>SIGUIENTE</Text>
             </TouchableOpacity>
         </View>
->>>>>>> 97095b680fd39d29c379330b7eb20dc1afa521b6
 
     </KeyboardAvoidingView>
 
-<<<<<<< HEAD
-                          <View style={{flex:1, flexDirection: 'row', backgroundColor: "#4170f9"}}ki>
-                            <Text></Text>
-                          </View>
-                       </View>
-
-                     <View style={{flex: 1}}></View>
-                 </View>
-
-                <View style={{flex: 2, flexDirection: 'row', backgroundColor: "#4170f9"}}>
-                                     <View style={{flex: 1}}></View>
-                                       <View style={[{ flex:10, flexDirection: 'column', backgroundColor: "#4170f9"}]}>
-                                         <TextInput onChangeText={x=> setNewUserName(x)} style={{backgroundColor: 'white', borderRadius:10, marginTop: 20, marginBottom: 10}} />
-
-                                          <View style={{flex:1, flexDirection: 'row', backgroundColor: "#4170f9"}}ki>
-                                            <Text></Text>
-                                          </View>
-                                       </View>
-
-                                     <View style={{flex: 1}}></View>
-                                 </View>
-
-                <TouchableOpacity
-                        style={{backgroundColor: "#747A87", height: 70, color: 'white', alignItems: "center"}}
-                        color="white"
-                        onPress={()=> {  sendDescription()
-                        }}
-                      >
-                      <Text></Text>
-                        <Text style={{fontSize:20, color: "white"}}>SIGUIENTE</Text>
-                      </TouchableOpacity>
-
-     </ScrollView>
-=======
->>>>>>> 97095b680fd39d29c379330b7eb20dc1afa521b6
     );
   //}
 }

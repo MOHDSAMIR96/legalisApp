@@ -9,6 +9,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import {dispatchListOfCases, dispatchSelectCase} from '../redux/dispatcher.js'
 import {Animated, Dimensions} from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage'
+import LottieView from 'lottie-react-native';
 
 
 import CheckBox from '@react-native-community/checkbox'; //DOCS:  https://github.com/react-native-checkbox/react-native-checkbox
@@ -93,6 +94,9 @@ export default function LawyerRegister({navigation}) {
    const [passwordAnimation, setPasswordAnimation] = useState(new Animated.Value(0));
    const [toggleCheckBoxLogin, setToggleCheckBoxLogin] = useState(false)
    const [isEnabledLogin, setIsEnabledLogin] = useState(false);
+   const [displayLoaderOne, setDisplayLoaderOne] = useState("none");
+   const [displayLoaderTwo, setDisplayLoaderTwo] = useState("none");
+
 
    const registerCheckbox =  (Platform.OS !== 'ios')?<CheckBox
                                           tintColors={{true:"#27F900", false: "white" }}
@@ -122,10 +126,16 @@ export default function LawyerRegister({navigation}) {
                                                        style={{marginLeft: windowWidthPercentUnit}}
                                                        />
 
+    //USE REF'S
+    const loaderOne = useRef(null);
+    const loaderTwo = useRef(null);
+
 
    useEffect(()=>{// ONLY IF THE USERDATA ARRIVES TO THE STORE THE NAVIGATOR IS UPDATED
 
        showAsyncStorageData(navigation)
+       loaderOne.current.play()
+       loaderTwo.current.play()
 
        if( letEnterBoolean ){
 
@@ -143,6 +153,7 @@ export default function LawyerRegister({navigation}) {
 
                                                                      dispatchListOfCases(arrayOfCasesAndQueries)
                                                                      setverifyingLogIn("none")
+                                                                     setDisplayLoaderTwo("none")
                                                                      navigation.navigate('LawyerProfile')
                                                                      })
                                                                      .catch(error => console.log(error))
@@ -155,55 +166,6 @@ export default function LawyerRegister({navigation}) {
 
   const register =()=>{
 
-<<<<<<< HEAD
-      setLetEnterBoolean(false)
-
-      let today = new Date();
-      let currentDate = today.getFullYear() + "-" + (today.getMonth() + 1) + "-" + today.getDate()
-
-      //POST TO CLIENTS/
-      navigation.navigate('ThanksMsg')
-
-      // fetch("http://patoexer.pythonanywhere.com/lawyer/" + registerRut)
-      // .then(response =>{return response.json()})
-      // .then((data)=>{
-
-      //   if(data.lawyers_rut!=registerRut){
-
-      //           let lawyerData = {
-      //                   "lawyers_name": registerName,
-      //                    "lawyers_password": registerPassword,
-      //                    "lawyers_email": registerMail,
-      //                    "lawyers_rut": registerRut,
-      //                    "lawyers_phone": registerPhone,
-      //                    "lawyers_field": registerField,
-      //                    "lawyers_title": " ",
-      //                    "lawyers_file_speciality": " " ,
-      //                    "lawyers_bank": registerBank,
-      //                    "lawyers_account": registerAccountType,
-      //                    "lawyers_bank_number": registerAccount
-      //               }
-
-      //               let options = {
-      //                           method: 'POST',
-      //                           body: JSON.stringify(lawyerData),
-      //                           headers: {'Content-Type': 'application/json'}};
-
-      //           fetch("http://patoexer.pythonanywhere.com/lawyer/1", options)
-      //                       .then((response)=>{ return response.json()})
-      //                       .then((data)=> {
-      //                           console.log(JSON.stringify(data))
-      //                           navigation.navigate('ThanksMsg')
-      //                       })
-      //                       .catch(error => {console.log(error)})
-
-      //   } else{
-      //              console.log("YA ESTAS REGISTRADO!!")
-      //   }
-
-      // })
-      // .catch((error) => console.log(error))
-=======
        switch(0){
        case registerName.length:
         setInputColorValidation({...inputColorValidation, registerName: "#FBC1C1" })
@@ -377,6 +339,7 @@ export default function LawyerRegister({navigation}) {
            break;
            default:
                  setSendingRegistration("flex")
+                 setDisplayLoaderOne("flex")
                  setLetEnterBoolean(false)
 
 
@@ -417,6 +380,7 @@ export default function LawyerRegister({navigation}) {
                                        .then((response)=>{ return response.json()})
                                        .then((data)=> { console.log("paso")
                                            setSendingRegistration("none")
+                                           setDisplayLoaderOne("none")
                                            navigation.navigate('ThanksMsg')
                                        })
                                        .catch(error => {console.log('error')})
@@ -432,18 +396,17 @@ export default function LawyerRegister({navigation}) {
 
        }
 
->>>>>>> 97095b680fd39d29c379330b7eb20dc1afa521b6
 
   }
 
   const showRegisterView = () => {
     if(!registerBtnDisplayed){
        setRegisterBtnDisplayed(true)//this.setState({registerBtnDisplayed: true})
-        Animated.timing(animate, {toValue: 3, duration: 500, useNativeDriver: true, }).start()
+        Animated.timing(animate, {toValue: 3, duration: 500}).start()
     }
     else if(registerBtnDisplayed){
        setRegisterBtnDisplayed(false)//this.setState({ registerBtnDisplayed: false})
-       Animated.timing(animate, {toValue: 0, duration: 500, useNativeDriver: true, }).start()
+       Animated.timing(animate, {toValue: 0, duration: 500}).start()
     }
 
   }
@@ -529,7 +492,8 @@ export default function LawyerRegister({navigation}) {
             break;
 
             default:
-             setverifyingLogIn("flex")
+             setverifyingLogIn("flex");
+             setDisplayLoaderTwo("flex");
              fetch("http://patoexer.pythonanywhere.com/lawyer/" + rut)
                                             .then((response)=> {return response.json()})
                                             .then((data)=> {
@@ -607,7 +571,6 @@ export default function LawyerRegister({navigation}) {
                         items={[
                             { label: 'Cuenta Corriente', value: 'cuenta corriente' },
                             { label: 'Cuenta Vista', value: 'cuenta vista' },
-
                         ]}
                     /></View>*/}
 
@@ -646,7 +609,20 @@ export default function LawyerRegister({navigation}) {
                    <View style={{flex:windowWidthPercentUnit*1, flexDirection: 'column', backgroundColor: "#4170f9"}}>
                         <Button title="REGISTRARSE" color={Platform.OS === 'ios'?"white":"#747A87"} type="clear" style={{width: 100}} onPress={register}/>
                    </View>
-               <View style={{flex:1}}><Text style={{display: sendingRegistration}}>!!!!!</Text></View>
+               <View style={{flex:1}}>
+               <LottieView
+                           ref={loaderOne}
+                           style={{
+                             width: windowWidthPercentUnit*6,
+                             height: windowHeightPercentUnit*6,
+                             backgroundColor: '#4170f9',
+                             display: displayLoaderOne
+                           }}
+                           source={require('../assetsLottie/lf30_editor_ads3etgv.json')}
+                         // OR find more Lottie files @ https://lottiefiles.com/featured
+                         // Just click the one you like, place that file in the 'assets' folder to the left, and replace the above 'require' statement
+                         />
+               </View>
             </View>
 
 
@@ -679,7 +655,20 @@ export default function LawyerRegister({navigation}) {
                 <View style={{flex:windowWidthPercentUnit, flexDirection: 'column', height: windowHeightPercentUnit*100 , backgroundColor: "#4170f9"}}>
                     <Button title="INGRESAR" color={Platform.OS === 'ios'?"white":"#747A87"} type="clear" style={{width: '100%'}} onPress={singInValidation}/>
                 </View>
-             <View style={{flex:1}}><Text style={{display: verifyingLogIn}}>!!!?!!</Text></View>
+             <View style={{flex:1}}>
+             <LottieView
+                                        ref={loaderTwo}
+                                        style={{
+                                          width: windowWidthPercentUnit*6,
+                                          height: windowHeightPercentUnit*6,
+                                          backgroundColor: '#4170f9',
+                                          display: displayLoaderTwo
+                                        }}
+                                        source={require('../assetsLottie/lf30_editor_ads3etgv.json')}
+                                      // OR find more Lottie files @ https://lottiefiles.com/featured
+                                      // Just click the one you like, place that file in the 'assets' folder to the left, and replace the above 'require' statement
+                                      />
+             </View>
         </View>
 
         </Animated.View>

@@ -177,27 +177,14 @@ export default function LawyerCaseChat({navigation}) {
        booleanStillTypingAdvisor(false);
 
 
-<<<<<<< HEAD
-        Animated.timing(this.state.animateCaseContainer, {toValue: 30, duration: 300, useNativeDriver: true, }).start()
-        Animated.timing(this.state.animateCaseUpdate, {toValue: 1, duration: 0, useNativeDriver: true, }).start()
-        this.setState({registerBtnDisplayed: true})
-=======
->>>>>>> 97095b680fd39d29c379330b7eb20dc1afa521b6
     }
 
-<<<<<<< HEAD
-    Animated.timing(this.state.animateCaseSummary, {toValue: 5, duration: 0, useNativeDriver: true, }).start()
-      Animated.timing(this.state.animateCaseContainer, {toValue: 8, duration: 300, useNativeDriver: true, }).start()
-      Animated.timing(this.state.animateCaseUpdate, {toValue: 5, duration: 300, useNativeDriver: true, }).start()
-       this.setState({registerBtnDisplayed: false})
-=======
   const showCaseSummary=()=>{
     if(!registerBtnDisplayed){
 
         Animated.timing(animateCaseContainer, {toValue: 40, duration: 500}).start()
         //Animated.timing(animateCaseUpdate, {toValue: 1, duration: 0}).start()
         setRegisterBtnDisplayed(true)
->>>>>>> 97095b680fd39d29c379330b7eb20dc1afa521b6
     }
     else if(registerBtnDisplayed){
 
@@ -212,36 +199,14 @@ export default function LawyerCaseChat({navigation}) {
     const showCaseUpdate=()=>{
        /* if(!registerBtnDisplayed){
 
-<<<<<<< HEAD
-           Animated.timing(this.state.animateCaseSummary, {toValue: 1, duration: 0, useNativeDriver: true, }).start()
-            Animated.timing(this.state.animateCaseContainer, {toValue: 25, duration: 300, useNativeDriver: true, }).start()
-            Animated.timing(this.state.animateCaseUpdate, {toValue: 5, duration: 300, useNativeDriver: true, }).start()
-            this.setState({registerBtnDisplayed: true})
-=======
            //Animated.timing(animateCaseSummary, {toValue: 1, duration: 0}).start()
             Animated.timing(animateCaseContainer, {toValue: 10, duration: 500}).start()
            // Animated.timing(animateCaseUpdate, {toValue: 5, duration: 300}).start()
             setRegisterBtnDisplayed(true)
->>>>>>> 97095b680fd39d29c379330b7eb20dc1afa521b6
         }
         else if(registerBtnDisplayed){
 
 
-<<<<<<< HEAD
-           Animated.timing(this.state.animateCaseSummary, {toValue: 5, duration: 0, useNativeDriver: true, }).start()
-           Animated.timing(this.state.animateCaseContainer, {toValue: 8, duration: 300, useNativeDriver: true, }).start()
-           Animated.timing(this.state.animateCaseUpdate, {toValue: 5, duration: 300, useNativeDriver: true, }).start()
-            this.setState({registerBtnDisplayed: false})
-        }
-
-      }
-
-    showPhase(phase){
-         console.log("hola" + phase.id)
-        this.setState({phaseShowedOnTimeline: phase.phase})
-        Animated.timing(this.state.animatephaseShowedOnTimeline, {toValue: 0, duration: 0}).start(()=>{
-        Animated.timing(this.state.animatephaseShowedOnTimeline, {toValue: 1, duration: 800, useNativeDriver: true, }).start()})
-=======
            //Animated.timing(animateCaseSummary, {toValue: 5, duration: 0}).start()
            Animated.timing(animateCaseContainer, {toValue: 1, duration: 500}).start()
            //Animated.timing(animateCaseUpdate, {toValue: 5, duration: 300}).start()
@@ -251,7 +216,6 @@ export default function LawyerCaseChat({navigation}) {
       }
 
     const showPhase = (phase) => {
->>>>>>> 97095b680fd39d29c379330b7eb20dc1afa521b6
 
         enteranimatephaseShowedOnTimeline(phase.phase);
         Animated.timing(animatephaseShowedOnTimeline, {toValue: 0, duration: 0}).start(()=>{
@@ -266,17 +230,10 @@ export default function LawyerCaseChat({navigation}) {
 
     const editCaseSummary=()=>{
 
-<<<<<<< HEAD
-        this.setState({touchableOpacityZindex: 1})
-        this.setState({editableStatus: {color: "#4170f9", backGround: "white"}})
-        this.CaseSummaryTextInput.current.focus()
-        Animated.timing(this.state.animateCaseContainer, {toValue: 100, duration: 300, useNativeDriver: true, }).start()
-=======
         entertouchableOpacityZindex(1);
         enterEditableStatus({color: "#4170f9", backGround: "white"});
         CaseSummaryTextInput.current.focus() //arreglar
         Animated.timing(animateCaseContainer, {toValue: 100, duration: 300}).start()
->>>>>>> 97095b680fd39d29c379330b7eb20dc1afa521b6
     }
 
     const TextInputEnterKeyPressed=(e)=>{
@@ -292,14 +249,6 @@ export default function LawyerCaseChat({navigation}) {
                 cases_id: store.selectedCase.cases_id
                 }
 
-<<<<<<< HEAD
-                this.setState({editableStatus: {color: "white", backGround: "#4170f9"}})
-                this.setState({touchableOpacityZindex: 5})
-                Animated.timing(this.state.animateCaseContainer, {toValue: 30, duration: 300, useNativeDriver: true, }).start()
-                Keyboard.dismiss()
-                //fetch() POST TO DE DB
-
-=======
                 let options = {
                                 method: 'PUT',
                                 body: JSON.stringify(putMethodData),
@@ -315,7 +264,6 @@ export default function LawyerCaseChat({navigation}) {
                     console.log("case sumary " + caseSummary)
                 })
                 .catch(error => console.log(JSON.stringify(error)))
->>>>>>> 97095b680fd39d29c379330b7eb20dc1afa521b6
            }
     }
 
