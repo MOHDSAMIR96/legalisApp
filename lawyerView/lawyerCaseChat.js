@@ -387,7 +387,7 @@ export default function LawyerCaseChat({navigation}) {
             </View>
 
             <CountDown
-                until={20}
+                until={2400}
                 onFinish={() => ("users_id" in store.selectedCase && unlocked===false)?setModalVisibility(true):setModalVisibility(false)}
                 style={("users_id" in store.selectedCase && unlocked===false)?{marginRight: '60%', borderTopLeftRadius: 10, borderTopRightRadius: 10,  backgroundColor: "#4170f9"}:{display: "none"}}
                 size={20}

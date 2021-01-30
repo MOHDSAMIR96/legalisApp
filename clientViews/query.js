@@ -165,6 +165,26 @@ export default function Query({navigation}){//ESTA PARTE ES LA VISTA DE EL INICI
   const sendDescription=()=>{
 
   switch(0){
+   case userName.length:
+    Animated.sequence([
+            	Animated.timing(nameAnimation, {
+            		toValue: 10,
+            		duration: 50
+            	}),
+            	Animated.timing(nameAnimation, {
+            		toValue: -10,
+            		duration: 50
+            	}),
+                Animated.timing(nameAnimation, {
+            		toValue: 10,
+            		duration: 50
+            	}),
+            	Animated.timing(nameAnimation, {
+            		toValue: 0,
+            		duration: 50
+            	})
+            ]).start()
+      break;
   case caseDescription.length:
     Animated.sequence([
               	Animated.timing(descriptionAnimation, {
@@ -185,26 +205,6 @@ export default function Query({navigation}){//ESTA PARTE ES LA VISTA DE EL INICI
               	})
               ]).start()
       break;
-  case userName.length:
-  Animated.sequence([
-          	Animated.timing(nameAnimation, {
-          		toValue: 10,
-          		duration: 50
-          	}),
-          	Animated.timing(nameAnimation, {
-          		toValue: -10,
-          		duration: 50
-          	}),
-              Animated.timing(nameAnimation, {
-          		toValue: 10,
-          		duration: 50
-          	}),
-          	Animated.timing(nameAnimation, {
-          		toValue: 0,
-          		duration: 50
-          	})
-          ]).start()
-    break;
   default:
     let clientData = {
             "users_name": userName,
@@ -225,7 +225,6 @@ export default function Query({navigation}){//ESTA PARTE ES LA VISTA DE EL INICI
             fetch("http://patoexer.pythonanywhere.com/user/1", options)
                     .then((response)=> response.json())
                     .then((data)=> {
-                        console.log(JSON.stringify(data))
                         dispatch({type: "USERDATA", doneAction: data});
                         navigation.navigate('videoComponent')
                     })
@@ -267,9 +266,10 @@ export default function Query({navigation}){//ESTA PARTE ES LA VISTA DE EL INICI
                 style={{
                 width: windowWidthPercentUnit*50,
                 height: windowHeightPercentUnit*50,
-                backgroundColor: '#4170f9'
+                backgroundColor: '#4170f9'//,
+                //display:(Platform.OS === 'ios')?"flex":"none"
                 }}
-                source={require('../assetsLottie/lf30_editor_a6hbsovx.json')}
+                source={require('../assetsLottie/the-drunken-owl.json')}
                 // OR find more Lottie files @ https://lottiefiles.com/featured
                 // Just click the one you like, place that file in the 'assets' folder to the left, and replace the above 'require' statement
             />
@@ -308,7 +308,7 @@ export default function Query({navigation}){//ESTA PARTE ES LA VISTA DE EL INICI
         <View style={(hourOfTheDay<24)?{flex: windowHeightPercentUnit, padding: windowHeightPercentUnit , flexDirection: 'row', backgroundColor: "#4170f9"}:{ display:'none'}}>
             <View style={{flex: 2}}></View>
             <View style={[{ width: "100%", flex:1, alignItems: "center" ,flexDirection: 'column',backgroundColor: '#4170f9'}]}>
-                <TouchableWithoutFeedback onPress={() => startRecognize()}>
+                <TouchableWithoutFeedback style={(Platform.OS === 'ios')? {display:'flex'}: {display:'none'}} onPress={() => startRecognize()}>
                     <LottieView
                                     ref={voiceRecognition}
                                     style={{
@@ -316,7 +316,7 @@ export default function Query({navigation}){//ESTA PARTE ES LA VISTA DE EL INICI
                                     height: windowHeightPercentUnit*10,
                                     backgroundColor: '#4170f9'
                                     }}
-                                    source={(!lottieRecognitionPathBoolean)?require("../assetsLottie/lf30_editor_a5fkbzjs.json"):require("../assetsLottie/lf30_editor_evaugxq0.json")}
+                                    source={(!lottieRecognitionPathBoolean)?require("../assetsLottie/lf30_editor_a5fkbzjs.json"):require("../assetsLottie/sound-wave.json")}
                                     // OR find more Lottie files @ https://lottiefiles.com/featured
                                     // Just click the one you like, place that file in the 'assets' folder to the left, and replace the above 'require' statement
                                 />

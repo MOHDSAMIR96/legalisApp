@@ -272,7 +272,11 @@ export function QueryChat({navigation}) {
         <View style={{flex: windowHeightPercentUnit*10}}>
         <Text ref={typingRef} style={{display: 'none'}}>El abogado esta escribiendo...</Text>
             <ScrollView style={{flex: 5, flexDirection: 'column', height: 150, backgroundColor: "white"}}>
-
+                <TouchableHighlight style={{display: (unlocked)?'none': 'flex', backgroundColor:'#D6EAF8', borderRadius:10, margin:10, padding: 10}}>
+                    <Text style={{fontWeight: "bold", textAlign: "center", fontSize: windowHeightPercentUnit*2, color:'#2E86C1'}}>
+                        Por favor espera mentras uno de nuestros abogados ingresa al chat para atenderte
+                    </Text>
+                </TouchableHighlight>
                 {
                   message.map(
                     function(item, index)
@@ -321,7 +325,7 @@ export function QueryChat({navigation}) {
 
 
         <CountDown
-            until={2000}
+            until={42000}
             onFinish={() => ("users_id" in store && unlocked===false)? waitingForLawyersResponse():setModalVisibility(false)}
             style={(startCountDown && unlocked===false)?{marginRight: windowWidthPercentUnit*80, borderTopLeftRadius: 10, borderTopRightRadius: 10, backgroundColor: "#4170f9"}:{display: "none"}}
             size={20}

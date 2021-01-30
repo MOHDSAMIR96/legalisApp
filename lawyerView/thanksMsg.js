@@ -39,24 +39,24 @@ export default class ThanksMsg extends Component {
       <View style={{flex: 1, flexDirection: 'column', padding: '5%', backgroundColor: "#4170f9"}}>
 
         <View style={{flex: windowHeightPercentUnit*2, backgroundColor: "#4170f9"}}>
-            <Text style={styles.welcome}>Hemos Recibido tus datos!</Text>
+            <Text style={styles.welcome}>¡Hemos Recibido tus datos!</Text>
         </View>
 
         <View style={{flex: windowHeightPercentUnit*2, flexDirection: 'row', backgroundColor: "#4170f9"}}>
-            <Text style={styles.instructions}>En lo pronto uno de nuestros colaboradores te contactará, luego de revisar tus antecedentes. Gracias por elegir Legalis!</Text>
+            <Text style={styles.instructions}>En lo pronto, uno de nuestros colaboradores te contactará, luego de revisar tus antecedentes. Gracias por elegir Legalis</Text>
         </View>
 
-        <View style={{ flex: windowHeightPercentUnit*5, alignItems: "center", justifyContent: "center" }}>
+        <View style={{/*display:(Platform.OS === 'ios')?"flex":"none",*/  flex: windowHeightPercentUnit*5, alignItems: "center", justifyContent: "center" }}>
         <LottieView
             ref={animation => {
               this.animation = animation;
             }}
             style={{
-              width: 400,
-              height: 300,
-              backgroundColor: '#4170f9',
+              //width: 400,
+              //height: 300,
+              backgroundColor: '#4170f9'//,
             }}
-            source={require('../assetsLottie/45140-app-update.json')}
+            source={require('../assetsLottie/45140-app-update2.json')} // Problema el require no funciona en adroid
           // OR find more Lottie files @ https://lottiefiles.com/featured
           // Just click the one you like, place that file in the 'assets' folder to the left, and replace the above 'require' statement
           />
