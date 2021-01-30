@@ -7,6 +7,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import {Animated, TouchableHighlight, KeyboardAvoidingView, Linking, Dimensions} from 'react-native';
 import CountDown from 'react-native-countdown-component'; // DOCUMENTATION ON https://github.com/talalmajali/react-native-countdown-component
 import { ModalPortal, Modal, ModalContent } from 'react-native-modals';
+import LottieView from 'lottie-react-native';
+import {Transition, Transitioning} from 'react-native-reanimated'
 
 import {dispatchListOfCases, dispatchSelectCase} from '../redux/dispatcher.js'
 import { JSHash, JSHmac, CONSTANTS } from "react-native-hash";
@@ -28,6 +30,20 @@ export default function LawyerCaseChat({navigation}) {
         const CaseSummaryTextInput = useRef(null);
         const typingRef = useRef(null);
         const timerRef = useRef(null);
+        const chatLoader = useRef(null);
+        const mappedRefs= useRef([]);
+
+    //TRANSITION
+        const transition = (
+
+        <Transition.Together>
+            <Transition.In
+                type="scale"
+                durationMs={200}
+                interpolation='easeInOut'
+            />
+        </Transition.Together>
+        )
 
     const [data, setData] = useState({time: 6, title: 'Event 1', description: 'Event 1 Description'});
     const [animateCaseContainer, setAnimateCaseContainer] = useState(new Animated.Value(5));
@@ -41,6 +57,8 @@ export default function LawyerCaseChat({navigation}) {
     const [modalVisibility, setModalVisibility] = useState(false);
     const [unlocked, setUnlocked] = useState(false);
     const [startCountDown, InitCountDown] = useState(false);
+    const [chatLoaderColor, setchatLoaderColor] = useState('#4170f9');
+
 
     const [caseSummary, enterCaseSummary] = ("users_id" in store.selectedCase)?useState(store.selectedCase.users_issue_description):useState(store.selectedCase.cases_description);
     const [timeLine, entertimeLine] = useState([ {succeded: 3},{ id: 1, phase: "Presentación demanda"}, { id: 2, phase: "Ratificación firma"}, {id: 3, phase: "Contestación"}, { id: 4, phase: "Término Probatorio"}, {id: 5, phase: "Dictación de sentencia"}]);
@@ -378,7 +396,30 @@ export default function LawyerCaseChat({navigation}) {
                                 color = 'white';
                                 align = 'left';
                             }else if(item.messages_origin=="user"){style = styles.clientStyle; color = 'black'; align = 'right';}
-                            return <TouchableHighlight style={style}><Text key={index} style={{fontWeight: "bold", textAlign: align , fontSize: windowHeightPercentUnit*3, color:color}}>{item.messages_content}</Text></TouchableHighlight>
+                            return (
+
+                                   <Transitioning.View
+                                       transition={transition}
+                                       ref={(el) => (mappedRefs.current[index] = el)}
+                                       >
+                                           <TouchableHighlight style={style}>
+                                                <Animated.Text key={index} style={{fontWeight: "bold", textAlign: (item.messages_content=='typing...')?"center": align , fontSize: windowHeightPercentUnit*3, color:color}}>
+                                                    <LottieView
+                                                        ref={chatLoader}
+                                                        autoPlay
+                                                        loop
+                                                        style={{
+                                                        width: windowWidthPercentUnit*20,
+                                                        backgroundColor: chatLoaderColor,
+                                                        display: (item.messages_content=='typing...')?'flex':'none'
+                                                        }}
+                                                        source={require('../assetsLottie/chat-loader2.json')}
+                                                        />
+                                                    {(item.messages_content!='typing...')?item.messages_content: ""}
+                                                </Animated.Text>
+                                           </TouchableHighlight>
+                                   </Transitioning.View>
+                                )
                         }
 
                                     )
@@ -387,7 +428,7 @@ export default function LawyerCaseChat({navigation}) {
             </View>
 
             <CountDown
-                until={2400}
+                until={420}
                 onFinish={() => ("users_id" in store.selectedCase && unlocked===false)?setModalVisibility(true):setModalVisibility(false)}
                 style={("users_id" in store.selectedCase && unlocked===false)?{marginRight: '60%', borderTopLeftRadius: 10, borderTopRightRadius: 10,  backgroundColor: "#4170f9"}:{display: "none"}}
                 size={20}

@@ -32,7 +32,7 @@ export default function VideoComponent({navigation}){//ESTA PARTE ES LA VISTA DE
 
     useEffect(()=>{
     videoLoader.current.play();
-    setTimeout(()=>{ setSkip(true);}, 48000)
+    setTimeout(()=>{ setSkip(true);}, 52000)
     if(skip){navigation.reset([NavigationActions.navigate({routeName: 'QueryChat'})]);}
     },[])
 

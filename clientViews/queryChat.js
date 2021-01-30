@@ -293,7 +293,7 @@ export function QueryChat({navigation}) {
                             chatLoaderColor = "#4170f9";
                         }else if(item.messages_origin=="user"){style = styles.clientStyle; color = 'black'; align = 'right';chatLoaderColor = "#E5E7E9";}
                         return (
-                        <Transitioning.View
+                      <Transitioning.View
                             transition={transition}
                             ref={(el) => (mappedRefs.current[index] = el)}
                             >
@@ -313,7 +313,7 @@ export function QueryChat({navigation}) {
                                  {(item.messages_content!='typing...')?item.messages_content: ""}
                             </Animated.Text>
                         </TouchableHighlight>
-                        </Transitioning.View>
+                      </Transitioning.View>
                         )
                     }
 
@@ -325,7 +325,7 @@ export function QueryChat({navigation}) {
 
 
         <CountDown
-            until={42000}
+            until={420}
             onFinish={() => ("users_id" in store && unlocked===false)? waitingForLawyersResponse():setModalVisibility(false)}
             style={(startCountDown && unlocked===false)?{marginRight: windowWidthPercentUnit*80, borderTopLeftRadius: 10, borderTopRightRadius: 10, backgroundColor: "#4170f9"}:{display: "none"}}
             size={20}
@@ -362,9 +362,8 @@ export function QueryChat({navigation}) {
                       <Text> </Text>
                       <Text style={styles.modalStyle}>Por favor espere unos minutos, no salga de la aplicación</Text>
                       <Text style={styles.modalStyle}> </Text>
-                      <Text style={{textAlign: 'center', fontSize:windowHeightPercentUnit*3, color: "red", fontWeight: "bold"}}>{lawyerRespone}</Text>
+                      <View style={{textAlign: 'center', alignItems: 'center', fontSize:windowHeightPercentUnit*3, color: "red", fontWeight: "bold"}}>{(lawyerRespone== 'LOADING...')?<LottieView autoPlay loop style={{width: windowWidthPercentUnit*20}} source={require('../assetsLottie/15146-clock-waiting-animation2.json')} />:<Text style={{textAlign: 'center', alignItems: 'center', }}>{lawyerRespone}</Text>}</View>
                       <Text style={styles.modalStyle}> </Text>
-                      {(lawyerRespone.length>10)?<Button color={Platform.OS === 'ios'?"#4170f9":"#4170f9"} title="VOLVER" onPress={()=>navigation.navigate('Query')} />: console.log("no display query view btn ")}
 
                     </ModalContent>
                   </Modal>
