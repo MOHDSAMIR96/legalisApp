@@ -52,28 +52,40 @@ export default function LawyerProfile({navigation}) {
                //EXPO PUSH NOTIFICATION, WE GET THE DEVICE TOKEN AND STORE ON FIREBASE SERVER
                getNotificactionToken();
 
-               let arrayOfCasesAndQueries = [];
 
-               fetch("http://patoexer.pythonanywhere.com/lawyerCases/" + store.userData.lawyers_id)//WE GET ALL LAWYER'S CASES
-                     .then(response =>{return response.json()})
-                     .then((data)=>{
-                      arrayOfCasesAndQueries.push(...data.resp)
 
-                     fetch("http://patoexer.pythonanywhere.com/userByLawyers/1")// WE GET ALL NEW CLIENTS NOT TAKEN BY ANY OTRHER LAWYER
+               let casesTracker = setInterval(()=>{
+
+                 let arrayOfCasesAndQueries = [];
+                 fetch("http://patoexer.pythonanywhere.com/lawyerCases/" + store.userData.lawyers_id)//WE GET ALL LAWYER'S CASES
                                                          .then(response =>{return response.json()})
                                                          .then((data)=>{
-                                                         arrayOfCasesAndQueries.push(...data.resp)
+                                                          arrayOfCasesAndQueries.push(...data.resp)
 
-                                                         setCases(arrayOfCasesAndQueries)
-                                                         dispatchListOfCases(arrayOfCasesAndQueries)
+                                                         fetch("http://patoexer.pythonanywhere.com/userByLawyers/1")// WE GET ALL NEW CLIENTS NOT TAKEN BY ANY OTRHER LAWYER
+                                                                                             .then(response =>{return response.json()})
+                                                                                             .then((data)=>{
+                                                                                             arrayOfCasesAndQueries.push(...data.resp)
+
+                                                                                             setCases(arrayOfCasesAndQueries)
+                                                                                             dispatchListOfCases(arrayOfCasesAndQueries)
+
+
+                                                                                             })
+                                                                                             .catch(error => console.log(error))
+
                                                          })
                                                          .catch(error => console.log(error))
+                }, 1000);
 
-                     })
-                     .catch(error => console.log(error))
+               //let casesTracker = setInterval(()=>{
+
+             //  },3000)
+
+
 
                  return ()=>{
-
+                 clearInterval(casesTracker);
                  dispatch({type: "USERDATA", doneAction: ""})
 
                  }

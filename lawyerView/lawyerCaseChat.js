@@ -74,7 +74,7 @@ export default function LawyerCaseChat({navigation}) {
      if("users_id" in store.selectedCase){ url = "http://patoexer.pythonanywhere.com/message/" + store.selectedCase.users_id + "/0/" + store.userData.lawyers_id}
      else{ url = "http://patoexer.pythonanywhere.com/message/0/" + store.selectedCase.client_id + "/" + store.userData.lawyers_id;}
 
-                 let fetchInterval = setInterval(()=>{ console.log(JSON.stringify(store.selectedCase.users_issue_description))
+                 let fetchInterval = setInterval(()=>{
                                                        fetch(url)
                                                        .then((response)=> response.json())
                                                        .then((data)=>

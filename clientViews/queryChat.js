@@ -44,6 +44,7 @@ export function QueryChat({navigation}) {
     const [startCountDown, InitCountDown] = useState(false);
     const [modalVisibility, setModalVisibility] = useState(false);
     const [unlocked, setUnlocked] = useState(false);
+    const [taken, setTaken] = useState(false);
     const [lawyerRespone, setLawyerRespone] = useState("LOADING...");
     const [chatLoaderColor, setchatLoaderColor] = useState('#4170f9');
 
@@ -73,22 +74,27 @@ export function QueryChat({navigation}) {
     Animated.timing(messageAnimation,{toValue: 350,duration: 1000}).start();
 
     if(mappedRefs.current.length>0){
-    console.log("aumentó : " + mappedRefs.current.length);
     let last = mappedRefs.current.length - 1;
     mappedRefs.current[last].animateNextTransition();
     }
     },[message])
 
      useEffect(()=>{
+                        setTimeout(()=>{
+                        setNewRegisterBtnDisplayed(0)
+                        Animated.timing(animate, {toValue: windowHeightPercentUnit*1, duration: 300}).start()
+                        }, 3000);
 
-                      let fetchInterval = setInterval(()=>{
+
+                      let fetchInterval = setInterval(()=>{ console.log(store.users_id)
 
                                          fetch("http://patoexer.pythonanywhere.com/user/" + store.users_id)
                                          .then((response)=> { return response.json()})
-                                         .then((data)=>{
+                                         .then((data)=>{ console.log("********* " + data.unlocked)
 
                                              if(data.taken){
                                              InitCountDown(true)
+                                             setTaken(true)
                                              }
                                              if(data.unlocked){
                                                setUnlocked(true)
@@ -238,7 +244,7 @@ export function QueryChat({navigation}) {
     fetch("http://patoexer.pythonanywhere.com/user/" + store.users_id)
                              .then(response =>{return response.json()})
                              .then((data)=>{
-                             (data.rejectionReazon!= null)?setLawyerRespone("El abogado ha decidido no seguir con la conversación, ya que: " + data.rejectionReazon): console.log("lawyerResponse null")
+                             (data.rejectionReazon!= "null")?setLawyerRespone("El abogado ha decidido no seguir con la conversación, ya que: " + data.rejectionReazon): console.log("lawyerResponse null")
 
                              }
                               )
@@ -272,9 +278,9 @@ export function QueryChat({navigation}) {
         <View style={{flex: windowHeightPercentUnit*10}}>
         <Text ref={typingRef} style={{display: 'none'}}>El abogado esta escribiendo...</Text>
             <ScrollView style={{flex: 5, flexDirection: 'column', height: 150, backgroundColor: "white"}}>
-                <TouchableHighlight style={{display: (unlocked)?'none': 'flex', backgroundColor:'#D6EAF8', borderRadius:10, margin:10, padding: 10}}>
+                <TouchableHighlight style={{display: (taken)?'none': 'flex', backgroundColor:'#D6EAF8', borderRadius:10, margin:10, padding: 10}}>
                     <Text style={{fontWeight: "bold", textAlign: "center", fontSize: windowHeightPercentUnit*2, color:'#2E86C1'}}>
-                        Por favor espera mentras uno de nuestros abogados ingresa al chat para atenderte
+                        Por favor espera mentras uno de nuestros abogados ingresa al chat para atenderte {JSON.stringify(unlocked)}
                     </Text>
                 </TouchableHighlight>
                 {
@@ -325,6 +331,7 @@ export function QueryChat({navigation}) {
 
 
         <CountDown
+            //running={("users_id" in store && unlocked===false)?false:true}
             until={420}
             onFinish={() => ("users_id" in store && unlocked===false)? waitingForLawyersResponse():setModalVisibility(false)}
             style={(startCountDown && unlocked===false)?{marginRight: windowWidthPercentUnit*80, borderTopLeftRadius: 10, borderTopRightRadius: 10, backgroundColor: "#4170f9"}:{display: "none"}}
