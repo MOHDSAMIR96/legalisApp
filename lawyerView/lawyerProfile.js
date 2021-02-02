@@ -152,7 +152,7 @@ export default function LawyerProfile({navigation}) {
     const notify =(token) => { // THIS ASYNC FUNCTION EXECUTE THE NOTIFICATION ITSELF ON THE DEVICE, REMEMBER DEVICE SIMULATORS DO NOT SHOW NOTIFICATION, THEY ARE NOT SUPPORTED
                 console.log("HERE 4 **********: " + `"${token}"`)
                 const message = {
-                 to: "ExponentPushToken[J7t6TCPxhGT-GG5R6WGEeI]",
+                 to: token,//"ExponentPushToken[J7t6TCPxhGT-GG5R6WGEeI]",
                  title: "sahdjoaisd",
                  body: "",
                  sound: "default"
@@ -168,7 +168,7 @@ export default function LawyerProfile({navigation}) {
                                 }
                 }
 
-                fetch('https://exp.host/--/api/v2/push/send', options) // El problema es que wnvió el tocken a expo y me dice que no está registrado
+                fetch('https://exp.host/--/api/v2/push/send', options)
                 .then((response)=>{ return response.json()})
                 .then((data)=>{console.log("resp: " + JSON.stringify(data))})
                 .catch((error)=>{ console.log(error)})
