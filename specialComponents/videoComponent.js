@@ -53,8 +53,7 @@ export default function VideoComponent({navigation}){//ESTA PARTE ES LA VISTA DE
            ref={videoLoader}
            style={{
            paddingTop: '20%',
-           width: windowWidthPercentUnit*50,
-           height: windowHeightPercentUnit*50,
+           flex:1,
            backgroundColor: '#f2f2f2',
            display: (!avExpoShouldPlay)?'flex':'none'
            }}

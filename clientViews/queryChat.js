@@ -47,6 +47,7 @@ export function QueryChat({navigation}) {
     const [taken, setTaken] = useState(false);
     const [lawyerRespone, setLawyerRespone] = useState("LOADING...");
     const [chatLoaderColor, setchatLoaderColor] = useState('#4170f9');
+    const [countDownStarter, setCountDownStarter] = useState(false);
 
 
 
@@ -56,6 +57,8 @@ export function QueryChat({navigation}) {
     const timerRef = useRef(null);
     const chatLoader = useRef(null);
     const mappedRefs= useRef([]);
+    const countDownRef = useRef(null);
+
 
     //TRANSITION
     const transition = (
@@ -80,21 +83,23 @@ export function QueryChat({navigation}) {
     },[message])
 
      useEffect(()=>{
+
                         setTimeout(()=>{
                         setNewRegisterBtnDisplayed(0)
                         Animated.timing(animate, {toValue: windowHeightPercentUnit*1, duration: 300}).start()
                         }, 3000);
 
 
-                      let fetchInterval = setInterval(()=>{ console.log(store.users_id)
+                      let fetchInterval = setInterval(()=>{ console.log("********* " + CountDown.defaultProps.running)
 
                                          fetch("http://patoexer.pythonanywhere.com/user/" + store.users_id)
                                          .then((response)=> { return response.json()})
-                                         .then((data)=>{ console.log("********* " + data.unlocked)
+                                         .then((data)=>{
 
                                              if(data.taken){
                                              InitCountDown(true)
                                              setTaken(true)
+                                             CountDown.defaultProps = {running: false}
                                              }
                                              if(data.unlocked){
                                                setUnlocked(true)
@@ -331,7 +336,8 @@ export function QueryChat({navigation}) {
 
 
         <CountDown
-            //running={("users_id" in store && unlocked===false)?false:true}
+            ref={countDownRef}
+            running={true}
             until={420}
             onFinish={() => ("users_id" in store && unlocked===false)? waitingForLawyersResponse():setModalVisibility(false)}
             style={(startCountDown && unlocked===false)?{marginRight: windowWidthPercentUnit*80, borderTopLeftRadius: 10, borderTopRightRadius: 10, backgroundColor: "#4170f9"}:{display: "none"}}

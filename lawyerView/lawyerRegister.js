@@ -40,7 +40,6 @@ export default function LawyerRegister({navigation}) {
                             let name = AsyncStorage.getItem("lawyerSession")
                             .then((value) =>{
                             if(value!==null){
-                                   console.log("funcionaaaa")
                                   navigation.navigate('LawyerProfile')
                               }
                               else

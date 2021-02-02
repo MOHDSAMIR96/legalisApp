@@ -46,13 +46,13 @@ export default function LawyerProfile({navigation}) {
        const [notificationToken, setNotificationToken] = useState([]);
 
         useEffect(()=>{
-
-               showAsyncStorageData()
+               setInterval(()=>{
+               getNotificactionToken();
+               },3000)
+               showAsyncStorageData();
 
                //EXPO PUSH NOTIFICATION, WE GET THE DEVICE TOKEN AND STORE ON FIREBASE SERVER
-               getNotificactionToken();
-
-
+               //getNotificactionToken();
 
                let casesTracker = setInterval(()=>{
 
@@ -134,8 +134,9 @@ export default function LawyerProfile({navigation}) {
             }
 
             let token = await Notifications.getExpoPushTokenAsync();
-            console.log(token);
-            setNotificationToken(token)
+            token = JSON.stringify(token.data).slice(1, -1);
+
+            //setNotificationToken(token)
 
             if(token){ //WE SEND TO FIREBASE BAKEND THE TOKEN
             const resp = await firebase
@@ -144,26 +145,34 @@ export default function LawyerProfile({navigation}) {
             .doc('Q6vBYWYcUrAnlxNYBkji')
             .set({token}, {merge: true});
              }
+
+             notify(token);
         }
 
-    const notify = async(token) => { // THIS ASYNC FUNCTION EXECUTE THE NOTIFICATION ITSELF ON THE DEVICE, REMEMBER DEVICE SIMULATORS DO NOT SHOW NOTIFICATION, THEY ARE NOT SUPPORTED
-                console.log("notify function runin7g")
+    const notify =(token) => { // THIS ASYNC FUNCTION EXECUTE THE NOTIFICATION ITSELF ON THE DEVICE, REMEMBER DEVICE SIMULATORS DO NOT SHOW NOTIFICATION, THEY ARE NOT SUPPORTED
+                console.log("HERE 4 **********: " + `"${token}"`)
                 const message = {
-                  to: token,
-                  sound: 'default',
-                  title: 'NOTIFICACION DE PRUEBA',
-                  body: 'And here is the body!',
+                 to: "ExponentPushToken[J7t6TCPxhGT-GG5R6WGEeI]",
+                 title: "sahdjoaisd",
+                 body: "",
+                 sound: "default"
                 };
 
-                await fetch('https://exp.host/--/api/v2/push/send', {
-                  method: 'POST',
-                  headers: {
-                    Accept: 'application/json',
-                    'Accept-encoding': 'gzip, deflate',
-                    'Content-Type': 'application/json',
-                  },
-                  body: JSON.stringify(message),
-                });
+                const options =  {
+                   method: 'POST',
+                   body: JSON.stringify(message),
+                   headers: {
+                                  Accept: 'application/json',
+                                  'Accept-encoding': 'gzip, deflate',
+                                  'Content-Type': 'application/json',
+                                }
+                }
+
+                fetch('https://exp.host/--/api/v2/push/send', options) // El problema es que wnvió el tocken a expo y me dice que no está registrado
+                .then((response)=>{ return response.json()})
+                .then((data)=>{console.log("resp: " + JSON.stringify(data))})
+                .catch((error)=>{ console.log(error)})
+
 
               }
 
@@ -203,7 +212,7 @@ export default function LawyerProfile({navigation}) {
 
 
     return (
-          <View style={{flex:1, flexDirection: 'column', backgroundColor: "#4170f9"}}><Text onPress={()=>{removeItemValue('lawyerSession')}}>Cerrar Sesión</Text>
+          <View style={{flex:1, flexDirection: 'column', backgroundColor: "#4170f9"}}><Text style={{color: 'white', padding: '5%'}} onPress={()=>{removeItemValue('lawyerSession')}}>Cerrar Sesión</Text>
             <View style={{flex:windowHeightPercentUnit}}>
             </View>
             <View style={{flex:windowHeightPercentUnit*2, flexDirection:'row'}}>
@@ -211,7 +220,7 @@ export default function LawyerProfile({navigation}) {
                     <Text> </Text>
                 </View>
                 <View style={{flex:2, flexDirection:'column'}}>
-                    <Avatar onPress={()=> console.log(JSON.stringify(store))} rounded size="large" icon={{name: 'user', type: 'font-awesome'}} />
+                    <Avatar onPress={()=> getNotificactionToken()} rounded size="large" icon={{name: 'user', type: 'font-awesome'}} />
                 </View>
                 <View style={{flex:7, flexDirection:'column'}}>
                     <Text style={styles.welcome}>{asyncStore.lawyers_name }</Text>
