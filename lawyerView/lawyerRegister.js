@@ -95,6 +95,11 @@ export default function LawyerRegister({navigation}) {
    const [isEnabledLogin, setIsEnabledLogin] = useState(false);
    const [displayLoaderOne, setDisplayLoaderOne] = useState("none");
    const [displayLoaderTwo, setDisplayLoaderTwo] = useState("none");
+   const [displayErrorOne, setDisplayErrorOne] = useState("none");
+   const [displayErrorTwo, setDisplayErrorTwo] = useState("none");
+
+   const [lottieAnimationFile, setLottieAnimationFile] = useState("../assetsLottie/error-response.json");
+
 
 
    const registerCheckbox =  (Platform.OS !== 'ios')?<CheckBox
@@ -128,6 +133,8 @@ export default function LawyerRegister({navigation}) {
     //USE REF'S
     const loaderOne = useRef(null);
     const loaderTwo = useRef(null);
+    const errorOne = useRef(null);
+    const errorTwo = useRef(null);
 
 
    useEffect(()=>{// ONLY IF THE USERDATA ARRIVES TO THE STORE THE NAVIGATOR IS UPDATED
@@ -135,6 +142,7 @@ export default function LawyerRegister({navigation}) {
        showAsyncStorageData(navigation)
        loaderOne.current.play()
        loaderTwo.current.play()
+       errorTwo.current.play()
 
        if( letEnterBoolean ){
 
@@ -503,9 +511,19 @@ export default function LawyerRegister({navigation}) {
                                                 if(dataToDispatch.lawyers_password==password){
                                                 save(dataToDispatch)
                                                 setLetEnterBoolean(true)
-                                                } else{console.log("not verified")}
+                                                } else{
+                                                console.log("not verified2")
+                                                setDisplayLoaderTwo("none")
+                                                setDisplayErrorTwo("flex")
+
+                                                }
                                             })
-                                            .catch(error => { console.log(error)})
+                                            .catch(error => {
+                                            setDisplayLoaderTwo("none")
+                                            setDisplayErrorTwo("flex")
+                                            console.log(error)
+
+                                            })
 
             }
       }
@@ -549,7 +567,7 @@ export default function LawyerRegister({navigation}) {
             <View style={{flex: 1, flexDirection: 'row', backgroundColor: "#4170f9"}}>
                           <View style={{flex:1, backgroundColor: "#4170f9"}}></View>
                             <Animated.View style={{flex:windowWidthPercentUnit*1, left: registerRutAnimation, flexDirection: 'row', backgroundColor: "#4170f9"}}>
-                               <TextInput keyboardType={"name-phone-pad "} value={registerRut} onChangeText={x=> RegisterRutificator(x)} placeholder = "Rut" style={{ backgroundColor: inputColorValidation.registerRut, height: windowHeightPercentUnit*5, width: "100%", borderColor: 'gray', borderWidth: 1, fontSize:windowHeightPercentUnit*3, borderRadius: 10, textAlign:'center' }}/>
+                               <TextInput keyboardType={"numeric"} value={registerRut} onChangeText={x=> RegisterRutificator(x)} placeholder = "Rut" style={{ backgroundColor: inputColorValidation.registerRut, height: windowHeightPercentUnit*5, width: "100%", borderColor: 'gray', borderWidth: 1, fontSize:windowHeightPercentUnit*3, borderRadius: 10, textAlign:'center' }}/>
                           </Animated.View>
               <View style={{flex:1}}></View>
             </View>
@@ -610,18 +628,31 @@ export default function LawyerRegister({navigation}) {
                    </View>
                <View style={{flex:1}}>
                <LottieView
-                           ref={loaderOne}
-                           style={{
-                             width: windowWidthPercentUnit*6,
-                             height: windowHeightPercentUnit*6,
-                             backgroundColor: '#4170f9',
-                             display: displayLoaderOne
-                           }}
-                           source={require('../assetsLottie/lf30_editor_ads3etgv.json')}
-                         // OR find more Lottie files @ https://lottiefiles.com/featured
-                         // Just click the one you like, place that file in the 'assets' folder to the left, and replace the above 'require' statement
-                         />
+                  ref={loaderOne}
+                  style={{
+                  width: windowWidthPercentUnit*6,
+                  height: windowHeightPercentUnit*6,
+                  backgroundColor: '#4170f9',
+                  display: displayLoaderOne
+                  }}
+                  source={require('../assetsLottie/lf30_editor_ads3etgv.json')}
+                  // OR find more Lottie files @ https://lottiefiles.com/featured
+                  // Just click the one you like, place that file in the 'assets' folder to the left, and replace the above 'require' statement
+                  />
+                <LottieView
+                   ref={errorOne}
+                   loop={true}
+                   style={{
+                   height: windowHeightPercentUnit*10,
+                   backgroundColor: '#4170f9',
+                   display: displayErrorOne
+                   }}
+                   source={require('../assetsLottie/error-response.json')}
+                   // OR find more Lottie files @ https://lottiefiles.com/featured
+                   // Just click the one you like, place that file in the 'assets' folder to the left, and replace the above 'require' statement
+                   />
                </View>
+
             </View>
 
 
@@ -656,17 +687,29 @@ export default function LawyerRegister({navigation}) {
                 </View>
              <View style={{flex:1}}>
              <LottieView
-                                        ref={loaderTwo}
-                                        style={{
-                                          width: windowWidthPercentUnit*6,
-                                          height: windowHeightPercentUnit*6,
-                                          backgroundColor: '#4170f9',
-                                          display: displayLoaderTwo
-                                        }}
-                                        source={require('../assetsLottie/lf30_editor_ads3etgv.json')}
-                                      // OR find more Lottie files @ https://lottiefiles.com/featured
-                                      // Just click the one you like, place that file in the 'assets' folder to the left, and replace the above 'require' statement
-                                      />
+                  ref={loaderTwo}
+                  style={{
+                  width: windowWidthPercentUnit*6,
+                  height: windowHeightPercentUnit*6,
+                  backgroundColor: '#4170f9',
+                  display: displayLoaderTwo
+                  }}
+                  source={require('../assetsLottie/lf30_editor_ads3etgv.json')}
+                  // OR find more Lottie files @ https://lottiefiles.com/featured
+                  // Just click the one you like, place that file in the 'assets' folder to the left, and replace the above 'require' statement
+                  />
+             <LottieView
+                  ref={errorTwo}
+                  loop={true}
+                  style={{
+                  height: windowHeightPercentUnit*10,
+                  backgroundColor: '#4170f9',
+                  display: displayErrorTwo
+                  }}
+                  source={require('../assetsLottie/error-response.json')}
+                  // OR find more Lottie files @ https://lottiefiles.com/featured
+                  // Just click the one you like, place that file in the 'assets' folder to the left, and replace the above 'require' statement
+                  />
              </View>
         </View>
 

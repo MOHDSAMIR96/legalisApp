@@ -43,45 +43,57 @@ export default function LawyerProfile({navigation}) {
        const dispatch = useDispatch();
        const [asyncStore, setAsyncStore] = useState([]); //THIS REPLACE THE USESELECTOR
        const [cases, setCases] = useState([]);
+       const [casesCounting, setCasesCounting] = useState(0);
        const [notificationToken, setNotificationToken] = useState([]);
 
         useEffect(()=>{
-               setInterval(()=>{
-               getNotificactionToken();
-               },3000)
+                 if(cases.length !== casesCounting ){
+
+                 setCasesCounting(cases.length)
+                 getNotificactionToken();
+                 }
+        },[cases])
+
+        useEffect(()=>{
+
                showAsyncStorageData();
-
-               //EXPO PUSH NOTIFICATION, WE GET THE DEVICE TOKEN AND STORE ON FIREBASE SERVER
-               //getNotificactionToken();
-
                let casesTracker = setInterval(()=>{
 
                  let arrayOfCasesAndQueries = [];
-                 fetch("http://patoexer.pythonanywhere.com/lawyerCases/" + store.userData.lawyers_id)//WE GET ALL LAWYER'S CASES
-                                                         .then(response =>{return response.json()})
-                                                         .then((data)=>{
-                                                          arrayOfCasesAndQueries.push(...data.resp)
+                 fetch("http://patoexer.pythonanywhere.com/userByLawyers/1")// WE GET ALL NEW CLIENTS NOT TAKEN BY ANY OTHER LAWYER
+                     .then(response =>{ return response.json()})
+                     .then((data)=>{
+                         arrayOfCasesAndQueries.push(...data.resp)
+                         dispatchListOfCases(arrayOfCasesAndQueries)
+                         setCases(arrayOfCasesAndQueries)
 
-                                                         fetch("http://patoexer.pythonanywhere.com/userByLawyers/1")// WE GET ALL NEW CLIENTS NOT TAKEN BY ANY OTRHER LAWYER
-                                                                                             .then(response =>{return response.json()})
-                                                                                             .then((data)=>{
+                 })
+                 .catch(error => console.log(error))
+                 /*fetch("http://patoexer.pythonanywhere.com/lawyerCases/" + store.userData.lawyers_id)//WE GET ALL LAWYER'S CASES
+                                                         .then(response => response.json())
+                                                         .then((data)=>{
+                                                            alert("dsd")
+                                                          //arrayOfCasesAndQueries.push(...data.resp)
+
+
+                                                         fetch("http://patoexer.pythonanywhere.com/userByLawyers/1")// WE GET ALL NEW CLIENTS NOT TAKEN BY ANY OTHER LAWYER
+                                                                                             .then(response =>{ response.json()})
+                                                                                             .then((data)=>{ //alert("rgtgtgr")
+
                                                                                              arrayOfCasesAndQueries.push(...data.resp)
 
                                                                                              setCases(arrayOfCasesAndQueries)
                                                                                              dispatchListOfCases(arrayOfCasesAndQueries)
 
 
+
+
                                                                                              })
                                                                                              .catch(error => console.log(error))
 
                                                          })
-                                                         .catch(error => console.log(error))
-                }, 1000);
-
-               //let casesTracker = setInterval(()=>{
-
-             //  },3000)
-
+                                                         .catch(error => console.log(error))*/
+                }, 3000);
 
 
                  return ()=>{
@@ -124,18 +136,23 @@ export default function LawyerProfile({navigation}) {
             console.log(existingStatus);
             let finalStatus = existingStatus;
 
+
             if(existingStatus !== 'granted'){
                 const {status} = await Permissions.askAsync(Permissions.NOTIFICATIONS);
                 finalStatus = status;
+
             }
 
             if(finalStatus!=='granted'){
                 return;
             }
 
+
+
             let token = await Notifications.getExpoPushTokenAsync();
             token = JSON.stringify(token.data).slice(1, -1);
 
+             notify(token);
             //setNotificationToken(token)
 
             if(token){ //WE SEND TO FIREBASE BAKEND THE TOKEN
@@ -145,17 +162,17 @@ export default function LawyerProfile({navigation}) {
             .doc('Q6vBYWYcUrAnlxNYBkji')
             .set({token}, {merge: true});
              }
-
-             notify(token);
         }
 
-    const notify =(token) => { // THIS ASYNC FUNCTION EXECUTE THE NOTIFICATION ITSELF ON THE DEVICE, REMEMBER DEVICE SIMULATORS DO NOT SHOW NOTIFICATION, THEY ARE NOT SUPPORTED
-                console.log("HERE 4 **********: " + `"${token}"`)
+
+    const notify = (token) => { // THIS ASYNC FUNCTION EXECUTE THE NOTIFICATION ITSELF ON THE DEVICE, REMEMBER DEVICE SIMULATORS DO NOT SHOW NOTIFICATION, THEY ARE NOT SUPPORTED
+
                 const message = {
                  to: token,//"ExponentPushToken[J7t6TCPxhGT-GG5R6WGEeI]",
-                 title: "sahdjoaisd",
-                 body: "",
-                 sound: "default"
+                 title: "LEGALIS",
+                 body: "Un nuevo cliente te esta esperando",
+                 sound: "default",
+                 ios: { _displayInForeground: true }
                 };
 
                 const options =  {
@@ -239,7 +256,7 @@ export default function LawyerProfile({navigation}) {
                 <ScrollView>
                                     {cases.map((item, index)=>{
                                     if(!item.taken){
-                                        return <TouchableOpacity onPress={()=>{selectCase(index)}} key={index}  style={("cases_id" in item)? styles.button: styles.newUser }><Text style={{color: "white", fontSize: windowWidthPercentUnit*6}}>{("cases_id" in item)? item.client_name: item.users_name + " NUEVO" }</Text><Text style={{color: "white", fontSize: windowWidthPercentUnit*3}}>  {("cases_id" in item)?item.cases_matter: item.users_issue_subject}    </Text></TouchableOpacity>
+                                        return <TouchableOpacity onPress={()=>{selectCase(index)}} key={index}  style={("cases_id" in item)? styles.button: styles.newUser }><Text style={{color: "white", fontSize: windowWidthPercentUnit*6}}>{("cases_id" in item)? item.client_name: item.users_name}</Text><Text style={{color: "white", fontSize: windowWidthPercentUnit*3}}>  {("cases_id" in item)?item.cases_matter: item.users_issue_subject}    </Text></TouchableOpacity>
                                     }
                                     })}
 
@@ -302,4 +319,3 @@ const styles = StyleSheet.create({
               borderRadius: 10
             }
 });
-

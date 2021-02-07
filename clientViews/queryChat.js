@@ -72,6 +72,12 @@ export function QueryChat({navigation}) {
     </Transition.Together>
     )
 
+    useEffect(()=>{
+
+       //setLawyerRespone("El abogado ha decidido no seguir con la conversación, ya que: " + lawyerRespone)
+
+    }, [lawyerRespone])
+
 
     useEffect(()=>{
     Animated.timing(messageAnimation,{toValue: 350,duration: 1000}).start();
@@ -244,12 +250,17 @@ export function QueryChat({navigation}) {
   }
 
   const waitingForLawyersResponse =()=> {
+
+    let posibleRjectionArr =["No es un caso real", "No requiere gestión alguna", "No piensa contratar abogado en lo pronto", "No tiene capacidad de pago", "Quien consulta no toma la desición de contratar"]
     setModalVisibility(true)
     let fetchLawyerResponseInterval = setInterval(()=>{
     fetch("http://patoexer.pythonanywhere.com/user/" + store.users_id)
                              .then(response =>{return response.json()})
-                             .then((data)=>{
-                             (data.rejectionReazon!= "null")?setLawyerRespone("El abogado ha decidido no seguir con la conversación, ya que: " + data.rejectionReazon): console.log("lawyerResponse null")
+                             .then((data)=>{ console.log(JSON.stringify(data))
+
+                                 if(posibleRjectionArr.includes(data.rejectionReazon)){
+                                         setLawyerRespone("El abogado a rechazado tu caso, ya que " + data.rejectionReazon)
+                                 }
 
                              }
                               )
