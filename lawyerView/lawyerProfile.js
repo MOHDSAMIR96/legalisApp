@@ -3,8 +3,9 @@ import { TouchableOpacity, Alert, Platform, StyleSheet, Text, View, Button, Imag
 import { ThemeProvider, Avatar, Card, ListItem, Icon, FlatList} from 'react-native-elements';
 import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
-import {Dimensions } from 'react-native';
+import {Dimensions, AppState} from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage'
+//import BackgroundTimer from 'react-native-background-timer';
 
 import { useSelector, useDispatch } from 'react-redux';
 import {dispatchListOfCases, dispatchSelectCase} from '../redux/dispatcher.js'
@@ -47,11 +48,15 @@ export default function LawyerProfile({navigation}) {
        const [notificationToken, setNotificationToken] = useState([]);
 
         useEffect(()=>{
-                 if(cases.length !== casesCounting ){
+        /*BackgroundTimer.runBackgroundTimer(() => { console.log("****************************en silencio")
+            if(cases.length !== casesCounting ){
 
-                 setCasesCounting(cases.length)
-                 getNotificactionToken();
-                 }
+                             setCasesCounting(cases.length)
+                             getNotificactionToken();
+                             }
+        },
+        3000);*/
+
         },[cases])
 
         useEffect(()=>{
@@ -237,7 +242,7 @@ export default function LawyerProfile({navigation}) {
                     <Text> </Text>
                 </View>
                 <View style={{flex:2, flexDirection:'column'}}>
-                    <Avatar onPress={()=> getNotificactionToken()} rounded size="large" icon={{name: 'user', type: 'font-awesome'}} />
+                    <Avatar rounded size="large" icon={{name: 'user', type: 'font-awesome'}} />
                 </View>
                 <View style={{flex:7, flexDirection:'column'}}>
                     <Text style={styles.welcome}>{asyncStore.lawyers_name }</Text>

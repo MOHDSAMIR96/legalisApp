@@ -376,7 +376,7 @@ export default function LawyerRegister({navigation}) {
                                     "approved": 0
                                }
 
-                               console.log("*******************"  +JSON.stringify(lawyerData))
+                               //console.log("*******************"  +JSON.stringify(lawyerData))
 
                                let options = {
                                            method: 'POST',
@@ -627,7 +627,7 @@ export default function LawyerRegister({navigation}) {
                         <Button title="REGISTRARSE" color={Platform.OS === 'ios'?"white":"#747A87"} type="clear" style={{width: 100}} onPress={register}/>
                    </View>
                <View style={{flex:1}}>
-               <LottieView
+              <LottieView
                   ref={loaderOne}
                   style={{
                   width: windowWidthPercentUnit*6,
@@ -635,11 +635,11 @@ export default function LawyerRegister({navigation}) {
                   backgroundColor: '#4170f9',
                   display: displayLoaderOne
                   }}
-                  source={require('../assetsLottie/lf30_editor_ads3etgv.json')}
+                  source={require('../assetsLottie/data.json')}
                   // OR find more Lottie files @ https://lottiefiles.com/featured
                   // Just click the one you like, place that file in the 'assets' folder to the left, and replace the above 'require' statement
                   />
-                <LottieView
+                 <LottieView
                    ref={errorOne}
                    loop={true}
                    style={{
@@ -694,7 +694,7 @@ export default function LawyerRegister({navigation}) {
                   backgroundColor: '#4170f9',
                   display: displayLoaderTwo
                   }}
-                  source={require('../assetsLottie/lf30_editor_ads3etgv.json')}
+                  source={require('../assetsLottie/data.json')}
                   // OR find more Lottie files @ https://lottiefiles.com/featured
                   // Just click the one you like, place that file in the 'assets' folder to the left, and replace the above 'require' statement
                   />
