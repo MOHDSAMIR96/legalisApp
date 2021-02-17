@@ -8,6 +8,8 @@ import { Provider } from 'react-redux';
 import store from './redux/store.js'
 import AsyncStorage from '@react-native-community/async-storage'
 
+//import BackgroundTimer from 'react-native-background-timer';
+
 
 //IMPORTATION OF VIEW COMPONENTS
 import Query from './clientViews/query.js';
@@ -22,7 +24,6 @@ import LawyerRegister from './lawyerView/lawyerRegister.js';
 import ThanksMsg from './lawyerView/thanksMsg.js';
 import LawyerProfile from './lawyerView/lawyerProfile.js';
 import LawyerCaseChat from './lawyerView/lawyerCaseChat.js';
-
 
 const instructions = Platform.select({
   ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
@@ -51,6 +52,13 @@ const AppNavigator = createStackNavigator(
   }
 );
 
+/*const intervalId = BackgroundTimer.setInterval(() => {
+	// this will be executed every 200 ms
+	// even when app is the the background
+	console.log('tic');
+}, 2000);*/
+
+
 const AppContainer = createAppContainer(AppNavigator);
 
 export default function App() {
@@ -61,5 +69,6 @@ export default function App() {
         </Provider>
 
     )
-
 }
+
+

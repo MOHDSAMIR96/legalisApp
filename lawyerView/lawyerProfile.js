@@ -5,7 +5,6 @@ import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 import {Dimensions, AppState} from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage'
-//import BackgroundTimer from 'react-native-background-timer';
 
 import { useSelector, useDispatch } from 'react-redux';
 import {dispatchListOfCases, dispatchSelectCase} from '../redux/dispatcher.js'
@@ -48,14 +47,7 @@ export default function LawyerProfile({navigation}) {
        const [notificationToken, setNotificationToken] = useState([]);
 
         useEffect(()=>{
-        /*BackgroundTimer.runBackgroundTimer(() => { console.log("****************************en silencio")
-            if(cases.length !== casesCounting ){
 
-                             setCasesCounting(cases.length)
-                             getNotificactionToken();
-                             }
-        },
-        3000);*/
 
         },[cases])
 
@@ -65,7 +57,7 @@ export default function LawyerProfile({navigation}) {
                let casesTracker = setInterval(()=>{
 
                  let arrayOfCasesAndQueries = [];
-                 fetch("http://patoexer.pythonanywhere.com/userByLawyers/1")// WE GET ALL NEW CLIENTS NOT TAKEN BY ANY OTHER LAWYER
+                 fetch("http://patoexer.pythonanywhere.com/userByLawyers/16")// WE GET ALL NEW CLIENTS NOT TAKEN BY ANY OTHER LAWYER
                      .then(response =>{ return response.json()})
                      .then((data)=>{
                          arrayOfCasesAndQueries.push(...data.resp)
@@ -108,6 +100,7 @@ export default function LawyerProfile({navigation}) {
                  }
 
            },[])
+
 
     const showAsyncStorageData = async () =>{
         try{

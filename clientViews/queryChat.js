@@ -166,9 +166,9 @@ export function QueryChat({navigation}) {
                              "messages_date": currentDate,
                              "messages_content": "typing...",
                              "messages_origin": "user",
-                             "clients_id": 0, //KEEPS THIS STATIC COS THE BACKEND TRANSLATE LIKE NULL ON TABLE
+                             "client_id": 0, //KEEPS THIS STATIC COS THE BACKEND TRANSLATE LIKE NULL ON TABLE
                              "user_id": store.users_id,
-                             "lawyer_id": 1 //SE PUSO EL LAWYER FIJO MIENTRAS
+                             "lawyer_id": 16 //SE PUSO EL LAWYER FIJO MIENTRAS
                            }
 
           let options2 = {
@@ -198,8 +198,8 @@ export function QueryChat({navigation}) {
                       "messages_id": returnedMessageId,
                       "messages_origin": "user",
                       "user_id": store.users_id,
-                      "clients_id": 0, //KEEPS THIS STATIC COS THE BACKEND TRANSLATE LIKE NULL ON TABLE
-                      "lawyer_id": 1
+                      "client_id": 0, //KEEPS THIS STATIC COS THE BACKEND TRANSLATE LIKE NULL ON TABLE
+                      "lawyer_id": 16
                     }
 
    let options2 = {

@@ -12,6 +12,7 @@ import {Transition, Transitioning} from 'react-native-reanimated'
 
 import {dispatchListOfCases, dispatchSelectCase} from '../redux/dispatcher.js'
 import { JSHash, JSHmac, CONSTANTS } from "react-native-hash";
+import AsyncStorage from '@react-native-community/async-storage'
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -20,6 +21,8 @@ const windowWidthPercentUnit = parseInt(windowWidth/100);
 
 
 export default function LawyerCaseChat({navigation}) {
+
+       const [asyncStore, setAsyncStore] = useState([]); //THIS REPLACE THE USESELECTOR
 
     //REDUX STATE
         const store = useSelector(state => state);
@@ -70,15 +73,17 @@ export default function LawyerCaseChat({navigation}) {
 
 
      useEffect(()=>{
+
+     showAsyncStorageData();
      let url;
-     if("users_id" in store.selectedCase){ url = "http://patoexer.pythonanywhere.com/message/" + store.selectedCase.users_id + "/0/" + store.userData.lawyers_id}
-     else{ url = "http://patoexer.pythonanywhere.com/message/0/" + store.selectedCase.client_id + "/" + store.userData.lawyers_id;}
+     if("users_id" in store.selectedCase){ url = "http://patoexer.pythonanywhere.com/message/" + store.selectedCase.users_id + "/0/" + asyncStore.lawyers_id}
+     else{ url = "http://patoexer.pythonanywhere.com/message/0/" + store.selectedCase.client_id + "/" + asyncStore.lawyers_id;}
 
                  let fetchInterval = setInterval(()=>{
                                                        fetch(url)
                                                        .then((response)=> response.json())
                                                        .then((data)=>
-                                                                    {
+                                                                    { console.log(JSON.stringify(data)) // al actualizar toma el get
                                                                       if(messages[messages.length - 1 ]!= data[data.length - 1].messages_content){
                                                                       if(data[data.length - 1].messages_content == "typing..." && data[data.length - 1].messages_origin=="client" ){
                                                                       this.typingRef.current.style = "inline";
@@ -101,7 +106,7 @@ export default function LawyerCaseChat({navigation}) {
              clearInterval(fetchInterval);
              let arrayOfCasesAndQueries = [];
 
-                           fetch("http://patoexer.pythonanywhere.com/lawyerCases/" + store.userData.lawyers_id)//WE GET ALL LAWYER'S CASES
+                           fetch("http://patoexer.pythonanywhere.com/lawyerCases/" + asyncStore.lawyers_id)//WE GET ALL LAWYER'S CASES
                                  .then(response =>{return response.json()})
                                  .then((data)=>{
                                   arrayOfCasesAndQueries.push(...data.resp)
@@ -119,8 +124,64 @@ export default function LawyerCaseChat({navigation}) {
                 }
                },[])
 
+     const showAsyncStorageData = async () =>{
+             try{
+                 let name = AsyncStorage.getItem("lawyerSession")
+                 .then((value) =>{
+                 value = JSON.parse(value)
+                 //THE RETRIVED DATA IS STORED ON COMPONENT HOOK
+                 setAsyncStore(value)
+                 })
+
+             }
+             catch(err){
+                 console.log(err)
+                 }
+             }
+
+     const censureRules = (x) => {
+
+        let typifiedString = x;
+        let lawyerData = [asyncStore.lawyers_email, asyncStore.lawyers_phone, asyncStore.lawyers_account, asyncStore.lawyers_bank ]
+        let emailClues = ["@", ".com", ".net", ".cl", ".es", ".org", "gmail", "hotmail", "yahoo"]
+
+        lawyerData.forEach(element => {
+         if(typifiedString.includes(element)){
+                            inputRef.current.clear();
+                            Alert.alert("¡MUCHO CUIDADO!","Por favor no enviar datos personales, estamos revisando sus conversaciones. Para tener libertad en el chat, desbloquear al chat ilimitado")
+                            return true;
+                        }
+        } );
+
+        emailClues.forEach(element => {
+                 if(typifiedString.includes(element)){
+                                    inputRef.current.clear();
+                                    Alert.alert("¡MUCHO CUIDADO!","Por favor no enviar datos personales, estamos revisando sus conversaciones. Para tener libertad en el chat, desbloquear al chat ilimitado")
+                                    return true;
+                                }
+                } );
+
+        let splitedStr = typifiedString.split("");
+        let positionOnArray = 0;
+
+        for (i = 0; i < splitedStr.length; i++) {
+          if(parseInt(splitedStr[i]) != 'NaN'){
+               positionOnArray = positionOnArray + 1;
+          }
+          else{
+            positionOnArray = 0
+          }
+        }
+
+        if(positionOnArray >= 7){
+            inputRef.current.clear();
+            Alert.alert("¡MUCHO CUIDADO!","Por favor no enviar datos personales, estamos revisando sus conversaciones. Para tener libertad en el chat, desbloquear al chat ilimitado")
+            return true;
+        }
+     }
 
      const typing = (x) => {
+
                 let today = new Date();
                 let currentDate = today.getFullYear() + "-" + (today.getMonth() + 1) + "-" + today.getDate()
                 let casesData;
@@ -131,7 +192,7 @@ export default function LawyerCaseChat({navigation}) {
                                  "messages_origin": "lawyer",
                                  "client_id": 0, //KEEPS THIS STATIC COS THE BACKEND TRANSLATE LIKE NULL ON TABLE
                                  "user_id": store.selectedCase.users_id,
-                                 "lawyer_id": store.userData.lawyers_id //SE PUSO EL LAWYER FIJO MIENTRAS
+                                 "lawyer_id": asyncStore.lawyers_id
                                                  }
 
                 }
@@ -142,7 +203,7 @@ export default function LawyerCaseChat({navigation}) {
                                "messages_origin": "lawyer",
                                "client_id": store.selectedCase.client_id, //KEEPS THIS STATIC COS THE BACKEND TRANSLATE LIKE NULL ON TABLE
                                "user_id": 0,
-                               "lawyer_id": store.userData.lawyers_id //SE PUSO EL LAWYER FIJO MIENTRAS
+                               "lawyer_id": asyncStore.lawyers_id //SE PUSO EL LAWYER FIJO MIENTRAS
                              }
 
                 }
@@ -167,34 +228,36 @@ export default function LawyerCaseChat({navigation}) {
 
   const sendMessage = () => {
 
-   let today = new Date();
-      let currentDate = today.getFullYear() + "-" + (today.getMonth() + 1) + "-" + today.getDate()
-      let casesData = {
-                         "messages_date": currentDate,
-                         "messages_content": messageInputContent,
-                         "messages_id": returnedMessageId,
-                         "messages_origin": "lawyer",
-                         "user_id": store.users_id,
-                         "clients_id": 0, //KEEPS THIS STATIC COS THE BACKEND TRANSLATE LIKE NULL ON TABLE
-                         "lawyer_id": 1
-                       }
+   let censure = censureRules(messageInputContent)
+       if(!censure){
 
-      let options2 = {
-                         method: 'PUT',
-                         body: JSON.stringify(casesData),
-                         headers: {'Content-Type': 'application/json'}};
+        let today = new Date();
+              let currentDate = today.getFullYear() + "-" + (today.getMonth() + 1) + "-" + today.getDate()
+              let casesData = {
+                                 "messages_date": currentDate,
+                                 "messages_content": messageInputContent,
+                                 "messages_id": returnedMessageId,
+                                 "messages_origin": "lawyer",
+                                 "user_id": store.users_id,
+                                 "client_id": 0, //KEEPS THIS STATIC COS THE BACKEND TRANSLATE LIKE NULL ON TABLE
+                                 "lawyer_id": 1
+                               }
 
-       if(stillTypingAdvisor){
+              let options2 = {
+                                 method: 'PUT',
+                                 body: JSON.stringify(casesData),
+                                 headers: {'Content-Type': 'application/json'}};
 
-       fetch("http://patoexer.pythonanywhere.com/message/0/0/1", options2)
-          .then((response)=> response.json())
-          .then((data)=> {console.log(JSON.stringify(data))})
-          inputRef.current.clear()
+               if(stillTypingAdvisor){
+
+               fetch("http://patoexer.pythonanywhere.com/message/0/0/1", options2)
+                  .then((response)=> response.json())
+                  .then((data)=> {console.log(JSON.stringify(data))})
+                  inputRef.current.clear()
+               }
+
+               booleanStillTypingAdvisor(false);
        }
-
-       booleanStillTypingAdvisor(false);
-
-
     }
 
   const showCaseSummary=()=>{
@@ -277,9 +340,7 @@ export default function LawyerCaseChat({navigation}) {
                 fetch("http://patoexer.pythonanywhere.com/case/" + store.selectedCase.client_id, options)
                 .then((response)=>{ return response.json();})
                 .then( data => {
-                    console.log("data modified ************************************: " + JSON.stringify(data))
                     enterCaseSummary(data.modifiedFields[0].cases_description)
-                    console.log("case sumary " + caseSummary)
                 })
                 .catch(error => console.log(JSON.stringify(error)))
            }
@@ -287,53 +348,78 @@ export default function LawyerCaseChat({navigation}) {
 
     const payment = () => {
 
+    let lawyers_name = asyncStore.lawyers_name
+    let lawyers_rut = asyncStore.lawyers_rut
+    let email = asyncStore.lawyers_email
+    let basePath= '';
+    //alert(lawyers_name)
+    //alert(lawyers_rut)
+
+        if(lawyers_name == 'Administrador' && lawyers_rut == '17.402.744-7'){
+            basePath = 'https://des.payku.cl/api/transaction';//"https://des.payku.cl/api/transaction";
+
+        }else{
+            alert('https://app.payku.cl/api/transaction')
+            basePath='https://app.payku.cl/api/transaction';
+        }
+
+
        // hay dos paginas para probar la api, que entregan token diferentes. Una es para el sandbox y la otra para transacciones reales. Intenga ocupar los token para cada fin específico
        // una vez hecho el post confirma transacción con get, poniendo en authorization del header el token público ej: Bearer 87933aa65bc6af7ceae8fda096054dc3
        // la respueta 200 trae url que es donde se inicia el proceso de pago, una vez concluye proceso y se paga efectivamente, lo que pusiste como returnurl se ejecuta luego del pago y trae al cliente allá
-           const basePath = encodeURIComponent('/api/transaction');//"https://des.payku.cl/api/transaction";
+
            const secretKey = "07c81310fe1dbc717a6f77218d0be7c4";// token privado
 
-            let spending = parseInt(store.userData.lawyers_spending) + 350;
+            let spending = parseInt(asyncStore.lawyers_spending) + 1200;
+            let order = store.selectedCase.users_id;
 
-           const data = {
-               email: store.userData.lawyers_email,// el correo del pagador
-               urlreturn: 'http://patoexer.pythonanywhere.com/paymentOk/' + store.selectedCase.users_id + "/" + store.userData.lawyers_rut + "/" + spending, // colocar un identificador de pago, hacer tabla de pagos, endpoint flask de tabla pagos
-               urlnotify: 'https://des.payku.cl/', // cuando el banco confirma el proceso del pago, se envía a una url los detalles de confirmacion de pago. HAy que hacer bkan con python para almacenar en base de datos
-               order:  "unicofdc" + store.selectedCase.users_id,
-               subject: 'desbloqueo chat abogado',
-               amount: 1000,
-               payment: 1
-           };
+            JSHash(order, CONSTANTS.HashAlgorithms.sha256)
+              .then(hash => {
+                order = hash
 
-           const orderedData = {};
-           Object.keys(data).sort().forEach(function(key) {
-             orderedData[key] = data[key];
-           });
+                 const data = {
+                               email: email,// el correo del pagador
+                               urlreturn: 'http://patoexer.pythonanywhere.com/paymentOk/' + store.selectedCase.users_id + "/" + asyncStore.lawyers_rut + "/" + spending, // colocar un identificador de pago, hacer tabla de pagos, endpoint flask de tabla pagos
+                               urlnotify: 'https://des.payku.cl/', // cuando el banco confirma el proceso del pago, se envía a una url los detalles de confirmacion de pago. HAy que hacer bkan con python para almacenar en base de datos
+                               order:  order,
+                               subject: 'desbloqueo chat abogado',
+                               amount: 1200,
+                               payment: 1
+                           };
 
-           const arrayConcat = new URLSearchParams(orderedData).toString(); //obj se tranforma en url string
+                           const orderedData = {};
+                           Object.keys(data).sort().forEach(function(key) {
+                             orderedData[key] = data[key];
+                           });
 
-           const concat = basePath + "&" + arrayConcat;
+                           const arrayConcat = new URLSearchParams(orderedData).toString(); //obj se tranforma en url string
 
-           let sign;
+                           const concat = basePath + "&" + arrayConcat;
 
-           JSHmac(concat, "79c5481cffd3ecbd0c8ade5e5b5fc2c6", CONSTANTS.HmacAlgorithms.HmacSHA256)
-             .then(hash =>{return sign = hash})//adonde dejo esto?
-             .catch(e => console.log(e));
+                           let sign;
 
-           const options = {method: 'POST',
-                                headers: {
-                                  'Content-Type': 'application/json',
-                                  'Authorization': 'Bearer 87933aa65bc6af7ceae8fda096054dc3' //token publico
-                                },
-                                body: JSON.stringify(data) // se envia denuevo el obj, se envia por aca y denuevo en la firma, doble seguridad
-                              }
-            console.log(JSON.stringify(options))
-           fetch("https://des.payku.cl/api/transaction", options)
-           .then( (resp)=>{return resp.json()})
-           .then( (data)=>{
-            console.log(JSON.stringify(data))
-            Linking.openURL(data.url).catch(err => console.error("Couldn't load page", err));
-            })
+                           JSHmac(concat, "79c5481cffd3ecbd0c8ade5e5b5fc2c6", CONSTANTS.HmacAlgorithms.HmacSHA256)
+                             .then(hash =>{return sign = hash})//adonde dejo esto?
+                             .catch(e => console.log(e));
+
+                           const options = {method: 'POST',
+                                                headers: {
+                                                  'Content-Type': 'application/json',
+                                                  'Authorization': 'Bearer 87933aa65bc6af7ceae8fda096054dc3' //token publico
+                                                },
+                                                body: JSON.stringify(data) // se envia denuevo el obj, se envia por aca y denuevo en la firma, doble seguridad
+                                              }
+                           fetch(basePath, options)
+                           .then( (resp)=>{return resp.json()})
+                           .then( (data)=>{
+                            Linking.openURL(data.url).catch(err => console.error("Couldn't load page", err));
+                            })
+
+
+
+              })
+              .catch(e => console.log(e));
+
 
        }
 
@@ -352,10 +438,9 @@ export default function LawyerCaseChat({navigation}) {
                        fetch("http://patoexer.pythonanywhere.com/user/" + store.selectedCase.users_id, options2)
                           .then((response)=> { return response.json()})
                           .then((data)=> {
-                          console.log(JSON.stringify(data))
                           navigation.navigate('Home');
                           })
-                          .catch(error => console.log("errorrr"))
+                          .catch(error => console.log(error))
     }
 
     return (
