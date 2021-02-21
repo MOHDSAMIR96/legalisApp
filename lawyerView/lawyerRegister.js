@@ -141,6 +141,7 @@ export default function LawyerRegister({navigation}) {
 
        showAsyncStorageData(navigation)
        loaderOne.current.play()
+       errorOne.current.play()
        loaderTwo.current.play()
        errorTwo.current.play()
 
@@ -390,7 +391,12 @@ export default function LawyerRegister({navigation}) {
                                            setDisplayLoaderOne("none")
                                            navigation.navigate('ThanksMsg')
                                        })
-                                       .catch(error => {console.log('error')})
+                                       .catch(error => {
+                                       console.log('error aca')
+                                       setDisplayLoaderOne("none")
+                                       setDisplayErrorOne("flex")
+
+                                       })
 
                    } else{
                               console.log("YA ESTAS REGISTRADO!!")

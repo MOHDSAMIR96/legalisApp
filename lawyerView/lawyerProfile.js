@@ -57,7 +57,7 @@ export default function LawyerProfile({navigation}) {
                let casesTracker = setInterval(()=>{
 
                  let arrayOfCasesAndQueries = [];
-                 fetch("http://patoexer.pythonanywhere.com/userByLawyers/16")// WE GET ALL NEW CLIENTS NOT TAKEN BY ANY OTHER LAWYER
+                 fetch("http://patoexer.pythonanywhere.com/userByLawyers/1")// WE GET ALL NEW CLIENTS NOT TAKEN BY ANY OTHER LAWYER
                      .then(response =>{ return response.json()})
                      .then((data)=>{
                          arrayOfCasesAndQueries.push(...data.resp)
@@ -196,7 +196,7 @@ export default function LawyerProfile({navigation}) {
 
         dispatchSelectCase(store.listOfCases[index])
 
-        if("users_name" in store.listOfCases[index] && store.listOfCases[index].taken == false){// BECAUSE IT'S A USER, HE HAVE TO MARK IT AS TAKEN, FOR ANY ANOTHER LAWYER TAKE THE USER
+        if("users_name" in store.listOfCases[index] && store.listOfCases[index].taken == false){// BECAUSE IT'S A USER, IT HAVE TO MARK IT AS TAKEN, FOR ANY ANOTHER LAWYER TAKE THE USER
 
 
         let updateUserData = {

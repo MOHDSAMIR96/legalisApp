@@ -168,7 +168,7 @@ export function QueryChat({navigation}) {
                              "messages_origin": "user",
                              "client_id": 0, //KEEPS THIS STATIC COS THE BACKEND TRANSLATE LIKE NULL ON TABLE
                              "user_id": store.users_id,
-                             "lawyer_id": 16 //SE PUSO EL LAWYER FIJO MIENTRAS
+                             "lawyer_id": 1 //SE PUSO EL LAWYER FIJO MIENTRAS
                            }
 
           let options2 = {
@@ -199,7 +199,7 @@ export function QueryChat({navigation}) {
                       "messages_origin": "user",
                       "user_id": store.users_id,
                       "client_id": 0, //KEEPS THIS STATIC COS THE BACKEND TRANSLATE LIKE NULL ON TABLE
-                      "lawyer_id": 16
+                      "lawyer_id": 1
                     }
 
    let options2 = {

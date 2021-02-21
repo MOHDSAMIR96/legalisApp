@@ -83,7 +83,7 @@ export default function LawyerCaseChat({navigation}) {
                                                        fetch(url)
                                                        .then((response)=> response.json())
                                                        .then((data)=>
-                                                                    { console.log(JSON.stringify(data)) // al actualizar toma el get
+                                                                    {  // al actualizar toma el get, PUEDE SER LA BAJA CONECCION EN MORRILLOS
                                                                       if(messages[messages.length - 1 ]!= data[data.length - 1].messages_content){
                                                                       if(data[data.length - 1].messages_content == "typing..." && data[data.length - 1].messages_origin=="client" ){
                                                                       this.typingRef.current.style = "inline";
@@ -94,12 +94,14 @@ export default function LawyerCaseChat({navigation}) {
                                                                         }
                                                                      }
                                                                         })
+                                                       .catch((error)=> console.log(error))
 
                                                        fetch('http://patoexer.pythonanywhere.com/user/' + store.selectedCase.users_id)
                                                        .then((resp)=>{return resp.json()})
                                                        .then((data) => {
                                                         (data.unlocked === true)? setUnlocked(true): setUnlocked(false)
                                                        })
+                                                       .catch((error)=> console.log(error))
                                                                                 }, 1000);
 
         return ()=>{
@@ -348,19 +350,39 @@ export default function LawyerCaseChat({navigation}) {
 
     const payment = () => {
 
-    let lawyers_name = asyncStore.lawyers_name
-    let lawyers_rut = asyncStore.lawyers_rut
-    let email = asyncStore.lawyers_email
-    let basePath= '';
-    //alert(lawyers_name)
-    //alert(lawyers_rut)
+        let lawyers_name = asyncStore.lawyers_name
+        let lawyers_rut = asyncStore.lawyers_rut
+        let email = asyncStore.lawyers_email
+
+        let basePath= '';
+        let secretKey = '';
+        let urlnotify = '';
+        let options = {};
+        let data = {};
 
         if(lawyers_name == 'Administrador' && lawyers_rut == '17.402.744-7'){
             basePath = 'https://des.payku.cl/api/transaction';//"https://des.payku.cl/api/transaction";
+            secretKey = "07c81310fe1dbc717a6f77218d0be7c4";// token privado
+            urlnotify = 'https://des.payku.cl/'
+            options = {method: 'POST',
+                             headers: {
+                                  'Content-Type': 'application/json',
+                                  'Authorization': 'Bearer 87933aa65bc6af7ceae8fda096054dc3' //token publico
+                                  },
+                             body: JSON.stringify(data) // se envia denuevo el obj, se envia por aca y denuevo en la firma, doble seguridad
+                             }
 
         }else{
-            alert('https://app.payku.cl/api/transaction')
             basePath='https://app.payku.cl/api/transaction';
+            secretKey = "d7243a0609351f4e7024ad497790efce";
+            urlnotify = 'https://app.payku.cl/'
+            options = {method: 'POST',
+                       headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': 'Bearer 4fd3f80a2a367d545d9af93ab3c01979' //token publico
+                            },
+                       body: JSON.stringify(data) // se envia denuevo el obj, se envia por aca y denuevo en la firma, doble seguridad
+                        }
         }
 
 
@@ -368,24 +390,25 @@ export default function LawyerCaseChat({navigation}) {
        // una vez hecho el post confirma transacción con get, poniendo en authorization del header el token público ej: Bearer 87933aa65bc6af7ceae8fda096054dc3
        // la respueta 200 trae url que es donde se inicia el proceso de pago, una vez concluye proceso y se paga efectivamente, lo que pusiste como returnurl se ejecuta luego del pago y trae al cliente allá
 
-           const secretKey = "07c81310fe1dbc717a6f77218d0be7c4";// token privado
+
 
             let spending = parseInt(asyncStore.lawyers_spending) + 1200;
-            let order = store.selectedCase.users_id;
 
-            JSHash(order, CONSTANTS.HashAlgorithms.sha256)
+
+            JSHash(store.selectedCase.users_id, CONSTANTS.HashAlgorithms.sha256)
               .then(hash => {
-                order = hash
 
-                 const data = {
+                       data = {
                                email: email,// el correo del pagador
                                urlreturn: 'http://patoexer.pythonanywhere.com/paymentOk/' + store.selectedCase.users_id + "/" + asyncStore.lawyers_rut + "/" + spending, // colocar un identificador de pago, hacer tabla de pagos, endpoint flask de tabla pagos
-                               urlnotify: 'https://des.payku.cl/', // cuando el banco confirma el proceso del pago, se envía a una url los detalles de confirmacion de pago. HAy que hacer bkan con python para almacenar en base de datos
-                               order:  order,
+                               urlnotify: urlnotify,// 'https://des.payku.cl/', // cuando el banco confirma el proceso del pago, se envía a una url los detalles de confirmacion de pago. HAy que hacer bkan con python para almacenar en base de datos
+                               order:  hash.substring(1, 18),
                                subject: 'desbloqueo chat abogado',
-                               amount: 1200,
+                               amount: 10, //1200
                                payment: 1
-                           };
+                               };
+
+                       options.body = JSON.stringify(data)
 
                            const orderedData = {};
                            Object.keys(data).sort().forEach(function(key) {
@@ -397,26 +420,17 @@ export default function LawyerCaseChat({navigation}) {
                            const concat = basePath + "&" + arrayConcat;
 
                            let sign;
+                           console.log("mira aca wn***********************: " + JSON.stringify(options))
 
                            JSHmac(concat, "79c5481cffd3ecbd0c8ade5e5b5fc2c6", CONSTANTS.HmacAlgorithms.HmacSHA256)
                              .then(hash =>{return sign = hash})//adonde dejo esto?
                              .catch(e => console.log(e));
 
-                           const options = {method: 'POST',
-                                                headers: {
-                                                  'Content-Type': 'application/json',
-                                                  'Authorization': 'Bearer 87933aa65bc6af7ceae8fda096054dc3' //token publico
-                                                },
-                                                body: JSON.stringify(data) // se envia denuevo el obj, se envia por aca y denuevo en la firma, doble seguridad
-                                              }
                            fetch(basePath, options)
                            .then( (resp)=>{return resp.json()})
-                           .then( (data)=>{
+                           .then( (data)=>{ console.log(JSON.stringify(data))
                             Linking.openURL(data.url).catch(err => console.error("Couldn't load page", err));
                             })
-
-
-
               })
               .catch(e => console.log(e));
 
@@ -484,6 +498,7 @@ export default function LawyerCaseChat({navigation}) {
                             return (
 
                                    <Transitioning.View
+                                       key={index}
                                        transition={transition}
                                        ref={(el) => (mappedRefs.current[index] = el)}
                                        >
