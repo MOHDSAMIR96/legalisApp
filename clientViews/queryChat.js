@@ -273,7 +273,7 @@ export function QueryChat({navigation}) {
 
 
     return (
-    <KeyboardAvoidingView style={{flex:1}} behavior="padding" keyboardVerticalOffset={windowHeightPercentUnit*5} >
+    <KeyboardAvoidingView style={{flex:1, paddingTop: windowHeightPercentUnit*5}} behavior="padding" keyboardVerticalOffset={windowHeightPercentUnit*5} >
     <View style={{flex: 1, flexDirection: 'column', backgroundColor: "white"}}>
         <Animated.View style={{ flex: animate, flexDirection: 'row', backgroundColor: "#4170f9"}}>
             <View style={{flex: windowHeightPercentUnit*2, flexDirection:"column"}}>

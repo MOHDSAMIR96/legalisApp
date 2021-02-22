@@ -45,6 +45,7 @@ export default function LawyerProfile({navigation}) {
        const [cases, setCases] = useState([]);
        const [casesCounting, setCasesCounting] = useState(0);
        const [notificationToken, setNotificationToken] = useState([]);
+       const [randomIcon, setRandomIcon] = useState("")
 
         useEffect(()=>{
 
@@ -91,6 +92,12 @@ export default function LawyerProfile({navigation}) {
                                                          })
                                                          .catch(error => console.log(error))*/
                 }, 3000);
+
+                //RANDOM ICON ON PROFILE ONLY FOR JOKE
+
+                let randomIconArr = ['law', 'law', 'bug', 'law', 'rocket', 'law', 'law', 'octoface', 'law', 'law'];
+                let randomPosition = Math.floor(Math.random() * 10);
+                setRandomIcon(randomIconArr[randomPosition]);
 
 
                  return ()=>{
@@ -227,7 +234,7 @@ export default function LawyerProfile({navigation}) {
 
 
     return (
-          <View style={{flex:1, flexDirection: 'column', backgroundColor: "#4170f9"}}><Text style={{color: 'white', padding: '5%'}} onPress={()=>{removeItemValue('lawyerSession')}}>Cerrar Sesión</Text>
+          <View style={{flex:1, flexDirection: 'column', backgroundColor: "#4170f9", paddingTop: windowHeightPercentUnit*5}}><Text style={{color: 'white', padding: '5%'}} onPress={()=>{removeItemValue('lawyerSession')}}>Cerrar Sesión</Text>
             <View style={{flex:windowHeightPercentUnit}}>
             </View>
             <View style={{flex:windowHeightPercentUnit*2, flexDirection:'row'}}>
@@ -235,7 +242,7 @@ export default function LawyerProfile({navigation}) {
                     <Text> </Text>
                 </View>
                 <View style={{flex:2, flexDirection:'column'}}>
-                    <Avatar rounded size="large" icon={{name: 'user', type: 'font-awesome'}} />
+                    <Icon rounded color='white' size='60' name={randomIcon} type='octicon' />
                 </View>
                 <View style={{flex:7, flexDirection:'column'}}>
                     <Text style={styles.welcome}>{asyncStore.lawyers_name }</Text>

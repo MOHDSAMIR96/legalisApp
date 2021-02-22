@@ -36,7 +36,7 @@ export default class ThanksMsg extends Component {
 
   render() {
     return (
-      <View style={{flex: 1, flexDirection: 'column', padding: '5%', backgroundColor: "#4170f9"}}>
+      <View style={{flex: 1, flexDirection: 'column', padding: '5%', paddingTop: windowHeightPercentUnit*5, backgroundColor: "#4170f9"}}>
 
         <View style={{flex: windowHeightPercentUnit*2, backgroundColor: "#4170f9"}}>
             <Text style={styles.welcome}>¡Hemos Recibido tus datos!</Text>

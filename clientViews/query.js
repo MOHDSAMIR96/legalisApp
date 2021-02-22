@@ -3,8 +3,10 @@ import { KeyboardAvoidingView, TouchableWithoutFeedback, TouchableOpacity, Alert
 import { ThemeProvider, Avatar, Card, ListItem, Icon} from 'react-native-elements';
 import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
-import {PanResponder, Animated, Dimensions, Picker } from 'react-native';
+import {PanResponder, Animated, Dimensions, Picker, Keyboard, Linking } from 'react-native';
 import { Video } from 'expo-av';
+import Textarea from 'react-native-textarea';
+import { JSHash, JSHmac, CONSTANTS } from "react-native-hash";
 
 import { useSelector, useDispatch } from 'react-redux';
 import LottieView from 'lottie-react-native';
@@ -41,9 +43,12 @@ export default function Query({navigation}){//ESTA PARTE ES LA VISTA DE EL INICI
 
     const [lottieRecognitionPathBoolean, setLottieRecognitionPathBoolean] = useState(false);
 
+    const [paymentTracker, setPaymentTracker] = useState(false);
+
     //USE REF'S
     const drunkenOwl = useRef(null);
     const voiceRecognition = useRef(null);
+    const textarea = useRef(null);
 
     //REDUX STATE
     const store = useSelector(state => state.userData);
@@ -57,6 +62,30 @@ export default function Query({navigation}){//ESTA PARTE ES LA VISTA DE EL INICI
     sethourOfTheDay(hour)
 
     },[])
+
+    useEffect(()=>{ //WE TRACK IF THE PAYMENT IS DONE, may be this could be recoded for more efficiency
+       if(paymentTracker){//************************ IMPLEMENTAR REACT NATIVE BACKGROUND TIMER
+       const trackingPaymentInterval = setInterval(()=>{
+
+               fetch("http://patoexer.pythonanywhere.com/userByLawyers/2")
+                      .then((resp)=> {return resp.json()})
+                      .then((data)=> {
+                      let lastAdviceUSer = data.resp[data.resp.length - 1];
+
+
+                      if(lastAdviceUSer.users_name == userName){
+        console.log("true")
+                            dispatch({type: "USERDATA", doneAction: lastAdviceUSer});
+                            navigation.navigate('QueryChat');//navigation.reset([NavigationActions.navigate({routeName: 'QueryChat'})]);
+
+                        }
+                      })
+                      .catch( error => console.log(error))
+               },1000)
+       }
+
+
+        },[paymentTracker])
 
     useEffect(()=>{
             //HERE WE ANIMATE THE FONT ON THE SUBJECT SELECTOR
@@ -164,72 +193,78 @@ export default function Query({navigation}){//ESTA PARTE ES LA VISTA DE EL INICI
 
   const sendDescription=()=>{
 
-  switch(0){
-   case userName.length:
-    Animated.sequence([
-            	Animated.timing(nameAnimation, {
-            		toValue: 10,
-            		duration: 50
-            	}),
-            	Animated.timing(nameAnimation, {
-            		toValue: -10,
-            		duration: 50
-            	}),
-                Animated.timing(nameAnimation, {
-            		toValue: 10,
-            		duration: 50
-            	}),
-            	Animated.timing(nameAnimation, {
-            		toValue: 0,
-            		duration: 50
-            	})
-            ]).start()
-      break;
-  case caseDescription.length:
-    Animated.sequence([
-              	Animated.timing(descriptionAnimation, {
-              		toValue: 10,
-              		duration: 50
-              	}),
-              	Animated.timing(descriptionAnimation, {
-              		toValue: -10,
-              		duration: 50
-              	}),
-                  Animated.timing(descriptionAnimation, {
-              		toValue: 10,
-              		duration: 50
-              	}),
-              	Animated.timing(descriptionAnimation, {
-              		toValue: 0,
-              		duration: 50
-              	})
-              ]).start()
-      break;
-  default:
-    let clientData = {
-            "users_name": userName,
-            "users_issue_subject": (Platform.OS==='ios')?selectedValue:subjects[activeSubjectCounter],
-            "users_issue_description": caseDescription,
-            "lawyer_id": 1,
-            "taken": false,
-            "unlocked": false
-        }
-        console.log(JSON.stringify(clientData))
+  if(selectedValue == 'otras consultas'){
 
-        let options = {
-                    method: 'POST',
-                    body: JSON.stringify(clientData),
-                    headers: {'Content-Type': 'application/json'}};
+      payment()
+  }
+  else{
 
-        if(caseDescription.length>0 || userName.length>0){
-            fetch("http://patoexer.pythonanywhere.com/user/1", options)
-                    .then((response)=> response.json())
-                    .then((data)=> {
-                        dispatch({type: "USERDATA", doneAction: data});
-                        navigation.navigate('videoComponent')
+      switch(0){
+       case userName.length:
+        Animated.sequence([
+                    Animated.timing(nameAnimation, {
+                        toValue: 10,
+                        duration: 50
+                    }),
+                    Animated.timing(nameAnimation, {
+                        toValue: -10,
+                        duration: 50
+                    }),
+                    Animated.timing(nameAnimation, {
+                        toValue: 10,
+                        duration: 50
+                    }),
+                    Animated.timing(nameAnimation, {
+                        toValue: 0,
+                        duration: 50
                     })
-                    .catch(error => {console.log(JSON.stringify(error))})
-        }
+                ]).start()
+          break;
+      case caseDescription.length:
+        Animated.sequence([
+                    Animated.timing(descriptionAnimation, {
+                        toValue: 10,
+                        duration: 50
+                    }),
+                    Animated.timing(descriptionAnimation, {
+                        toValue: -10,
+                        duration: 50
+                    }),
+                      Animated.timing(descriptionAnimation, {
+                        toValue: 10,
+                        duration: 50
+                    }),
+                    Animated.timing(descriptionAnimation, {
+                        toValue: 0,
+                        duration: 50
+                    })
+                  ]).start()
+          break;
+      default:
+        let clientData = {
+                "users_name": userName,
+                "users_issue_subject": (Platform.OS==='ios')?selectedValue:subjects[activeSubjectCounter],
+                "users_issue_description": caseDescription,
+                "lawyer_id": 1,
+                "taken": false,
+                "unlocked": false
+            }
+
+            let options = {
+                        method: 'POST',
+                        body: JSON.stringify(clientData),
+                        headers: {'Content-Type': 'application/json'}};
+
+            if(caseDescription.length>0 || userName.length>0){
+                fetch("http://patoexer.pythonanywhere.com/user/1", options)
+                        .then((response)=> response.json())
+                        .then((data)=> {
+                            dispatch({type: "USERDATA", doneAction: data});
+                            navigation.navigate('videoComponent');
+                        })
+                        .catch(error => {console.log(JSON.stringify(error))})
+            }
+      }
   }
 
 }
@@ -243,13 +278,83 @@ export default function Query({navigation}){//ESTA PARTE ES LA VISTA DE EL INICI
 
     }
 
+    const payment = () => {
+
+            let random = Math.floor(Math.random()*10000000);
+
+            let basePath= '';
+            let secretKey = '';
+            let urlnotify = '';
+            let options = {};
+            let data = {};
+
+            basePath= 'https://des.payku.cl/api/transaction'; //'https://app.payku.cl/api/transaction';
+            secretKey = "07c81310fe1dbc717a6f77218d0be7c4"//"d7243a0609351f4e7024ad497790efce";
+            urlnotify = 'https://des.payku.cl/' //'https://app.payku.cl/'
+            options = {method: 'POST',
+                           headers: {
+                                'Content-Type': 'application/json',
+                                'Authorization': 'Bearer 87933aa65bc6af7ceae8fda096054dc3'//'Bearer 4fd3f80a2a367d545d9af93ab3c01979' //token publico
+                                },
+                       body: JSON.stringify(data) // se envia denuevo el obj, se envia por aca y denuevo en la firma, doble seguridad
+                       }
+           // hay dos paginas para probar la api, que entregan token diferentes. Una es para el sandbox y la otra para transacciones reales. Intenga ocupar los token para cada fin específico
+           // una vez hecho el post confirma transacción con get, poniendo en authorization del header el token público ej: Bearer 87933aa65bc6af7ceae8fda096054dc3
+           // la respueta 200 trae url que es donde se inicia el proceso de pago, una vez concluye proceso y se paga efectivamente, lo que pusiste como returnurl se ejecuta luego del pago y trae al cliente allá
+
+                JSHash(random, CONSTANTS.HashAlgorithms.sha256) // HASHING RANDOM IS NOW UNNECESARY, BUT I WILL LET LIKE THIS
+                  .then(hash => {
+
+                           let urlReturn = "http://patoexer.pythonanywhere.com/paymentOk/1/userName=" + userName + "&description=" + caseDescription + "/5000";
+                           urlReturn = urlReturn.replace(/ /g, "_")
+                           urlReturn = urlReturn.replace(/\n/g, "")
+                           urlReturn = urlReturn.normalize("NFD").replace(/[\u0300-\u036f]/g, "")// WE PREVENT URL ERRORS NORMALIZING THE STRING
+
+                            console.log(urlReturn.slice(-1));
+                            console.log(urlReturn);
+                           data = {
+                                   email: "legalisproyect@gmail.com",// WE DON'T HAVE CLIENT EMAIL, SO WE LET OUR MAIL.
+                                   urlreturn: urlReturn, //colocar un identificador de pago, hacer tabla de pagos, endpoint flask de tabla pagos
+                                   urlnotify: urlnotify,// 'https://des.payku.cl/', // cuando el banco confirma el proceso del pago, se envía a una url los detalles de confirmacion de pago. HAy que hacer bkan con python para almacenar en base de datos
+                                   order:  random,
+                                   subject: 'chat ilimitado por OTRAS CONSULTAS',
+                                   amount: 5000,
+                                   payment: 1
+                                   };
+
+                           options.body = JSON.stringify(data)
+
+                               const orderedData = {};
+                               Object.keys(data).sort().forEach(function(key) {
+                                 orderedData[key] = data[key];
+                               });
+
+                               const arrayConcat = new URLSearchParams(orderedData).toString(); //obj se tranforma en url string
+
+                               const concat = basePath + "&" + arrayConcat;
+
+                               let sign;
+
+                               JSHmac(concat, "79c5481cffd3ecbd0c8ade5e5b5fc2c6", CONSTANTS.HmacAlgorithms.HmacSHA256)
+                                 .then(hash =>{return sign = hash})//adonde dejo esto?
+                                 .catch(e => console.log(e));
+
+                               fetch(basePath, options)
+                               .then( (resp)=>{return resp.json()})
+                               .then( (data)=>{
+                                console.log("se setio el tracker");
+                                setPaymentTracker(true)
+                                Linking.openURL(data.url).catch(err => console.error("Couldn't load page", err));
+                                })
+                  })
+                  .catch(e => console.log("error" + e));
 
 
-
+           }
 
     return (
 
-    <KeyboardAvoidingView behavior='height' style={{flex: windowHeightPercentUnit, backgroundColor: "#4170f9"}}>
+    <KeyboardAvoidingView behavior='height' style={{flex: windowHeightPercentUnit, backgroundColor: "#4170f9", paddingTop: windowHeightPercentUnit*5}}>
 
         <View  style={(hourOfTheDay<24)?{flex: windowHeightPercentUnit, backgroundColor: "#4170f9"}:{ display:'none'}}>
             <Text style={[styles.welcome, {fontSize: windowHeightPercentUnit*4, padding: windowHeightPercentUnit }]}>Cuéntanos tu problema...</Text>
@@ -260,7 +365,7 @@ export default function Query({navigation}){//ESTA PARTE ES LA VISTA DE EL INICI
         </View>
 
         <View style={(hourOfTheDay>=24)?{alignItems: "center", flex: windowHeightPercentUnit*5, backgroundColor: "#4170f9"}:{ display:'none'}}>
-            <Text style={styles.instructions}>Los sentimos, nuestros abgados estan descanzando. Nuestra hora de atención es de 8:00 a 20:00 hrs. Por favor, vuelva más tarde. </Text>
+            <Text style={styles.instructions}>Los sentimos, nuestros abogados estan descanzando. Nuestra hora de atención es de 8:00 a 20:00 hrs. Por favor, vuelva más tarde. </Text>
             <LottieView
                 ref={drunkenOwl}
                 style={{
@@ -280,6 +385,7 @@ export default function Query({navigation}){//ESTA PARTE ES LA VISTA DE EL INICI
         <View style={(hourOfTheDay<24)?{ flex: windowHeightPercentUnit*3, padding: windowHeightPercentUnit, backgroundColor: '#4170f9', flexDirection: 'row'}:{ display:'none'}} >
 
             <View style={Platform.OS!=='ios'?{display: 'none'}:{flex:1}} >
+            <Text style={[styles.instructions, {color: "white", fontWeight: 'bold', textAlign: 'center', display: (selectedValue == 'otras consultas')?'flex':'none' }]}>*El item de OTRAS CONSULTAS requiere pagar por asesoría un valor de $5.000</Text>
             <Picker
                     selectedValue={selectedValue}
                     style={Platform.OS==='android'?{display: 'none'}:{ height: windowHeightPercentUnit/2, width: '100%'}}
@@ -301,11 +407,13 @@ export default function Query({navigation}){//ESTA PARTE ES LA VISTA DE EL INICI
                 <Animated.Text style={(subjects[activeSubjectCounter]==subjects[3])?{ marginLeft: '10%', position: 'relative',left: animatePosition , textAlign: 'center', fontSize: animateFontSize4 ,backgroundColor: 'white', color: "#4170f9", fontWeight: "bold"}:{ marginLeft: '10%',  position:'relative', left: animatePosition ,textAlign: 'center', fontSize: animateFontSize4 , color: "#4170f9", fontWeight: "bold"}}>{subjects[3]}</Animated.Text>
                 <Animated.Text style={(subjects[activeSubjectCounter]==subjects[4])?{marginLeft: '10%', position: 'relative',left: animatePosition, textAlign: 'center', fontSize: animateFontSize5 ,backgroundColor: 'white', color: "#4170f9", fontWeight: "bold"}:{ marginLeft: '10%',  position:'relative', left: animatePosition ,textAlign: 'center', fontSize: animateFontSize5 , color: "#4170f9", fontWeight: "bold"}}>{subjects[4]}</Animated.Text>
                 <Animated.Text style={(subjects[activeSubjectCounter]==subjects[5])?{marginLeft: '10%', position: 'relative',left: animatePosition , textAlign: 'center', fontSize: animateFontSize6 ,backgroundColor: 'white', color: "#4170f9", fontWeight: "bold"}:{ marginLeft: '10%',  position:'relative',left: animatePosition , textAlign: 'center', fontSize: animateFontSize6 , color: "#4170f9", fontWeight: "bold"}}>{subjects[5]}</Animated.Text>
+
             </View>
 
         </View>
 
         <View style={(hourOfTheDay<24)?{flex: windowHeightPercentUnit, padding: windowHeightPercentUnit , flexDirection: 'row', backgroundColor: "#4170f9"}:{ display:'none'}}>
+
             <View style={{flex: 2}}></View>
             <View style={[{ width: "100%", flex:1, alignItems: "center" ,flexDirection: 'column',backgroundColor: '#4170f9'}]}>
                 <TouchableWithoutFeedback style={(Platform.OS === 'ios')? {display:'flex'}: {display:'none'}} onPress={() => startRecognize()}>
@@ -314,7 +422,7 @@ export default function Query({navigation}){//ESTA PARTE ES LA VISTA DE EL INICI
                                     style={{
                                     width: windowWidthPercentUnit*10,
                                     height: windowHeightPercentUnit*10,
-                                    backgroundColor: '#4170f9'
+                                    backgroundColor: '#4170f9',
                                     }}
                                     source={(!lottieRecognitionPathBoolean)?require("../assetsLottie/lf30_editor_a5fkbzjs.json"):require("../assetsLottie/sound-wave.json")}
                                     // OR find more Lottie files @ https://lottiefiles.com/featured
@@ -341,7 +449,30 @@ export default function Query({navigation}){//ESTA PARTE ES LA VISTA DE EL INICI
                 <View style={{flex: 1}}>
                 </View>
                 <Animated.View style={[{ width: '80%', left: descriptionAnimation, flexDirection: 'column', backgroundColor: "#4170f9"}]}>
-                    <TextInput placeholder="¿CUAL ES TU PROBLEMA LEGAL?" onChangeText={x=> setNewCaseDescription(x)} multiline={false} style={{textAlign: 'center',backgroundColor: 'white', fontSize: windowHeightPercentUnit*2.5, height: '90%', borderRadius:10}} />
+                    <Textarea
+                        ref={textarea}
+                        containerStyle={{ borderRadius:10}}
+                        style={{borderRadius:10, textAlignVertical: 'center', textAlign: 'center',backgroundColor: 'white', fontSize: windowHeightPercentUnit*2.5, height: '100%'}}
+                        onChangeText={x=>{
+                        setNewCaseDescription(x)
+                        }}
+                        onKeyPress={e =>{
+                         if(e.nativeEvent.key === 'Enter')
+                             {
+                              let cutTheEnter = caseDescription.substring(0, caseDescription.length - 1);
+                              textarea.current.value = cutTheEnter
+                              setNewCaseDescription(cutTheEnter)
+                              Keyboard.dismiss()
+                              console.log(caseDescription.length)
+                             }
+                         }
+                        }
+                        maxLength={120}
+                        placeholder={'¿CUAL ES TU PROBLEMA LEGAL?'}
+                        placeholderTextColor={'#c7c7c7'}
+                        underlineColorAndroid={'transparent'}
+
+                      />
                 </Animated.View>
                 <View style={{flex: 1}}>
                 </View>
@@ -405,5 +536,7 @@ const styles = StyleSheet.create({
         color: 'black',
         paddingRight: 30, // to ensure the text is never behind the icon
       },
+
+
 });
 

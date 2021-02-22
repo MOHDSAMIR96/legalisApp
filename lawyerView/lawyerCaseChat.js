@@ -404,7 +404,7 @@ export default function LawyerCaseChat({navigation}) {
                                urlnotify: urlnotify,// 'https://des.payku.cl/', // cuando el banco confirma el proceso del pago, se envía a una url los detalles de confirmacion de pago. HAy que hacer bkan con python para almacenar en base de datos
                                order:  hash.substring(1, 18),
                                subject: 'desbloqueo chat abogado',
-                               amount: 10, //1200
+                               amount: 1200,
                                payment: 1
                                };
 
@@ -420,7 +420,6 @@ export default function LawyerCaseChat({navigation}) {
                            const concat = basePath + "&" + arrayConcat;
 
                            let sign;
-                           console.log("mira aca wn***********************: " + JSON.stringify(options))
 
                            JSHmac(concat, "79c5481cffd3ecbd0c8ade5e5b5fc2c6", CONSTANTS.HmacAlgorithms.HmacSHA256)
                              .then(hash =>{return sign = hash})//adonde dejo esto?
@@ -458,7 +457,7 @@ export default function LawyerCaseChat({navigation}) {
     }
 
     return (
-    <KeyboardAvoidingView style={{flex:1}} behavior="padding" keyboardVerticalOffset={windowHeightPercentUnit*5} >
+    <KeyboardAvoidingView style={{flex:1, paddingTop: windowHeightPercentUnit*5}} behavior="padding" keyboardVerticalOffset={windowHeightPercentUnit*5} >
         <View style={{flex: 1, flexDirection: 'column', backgroundColor: "white"}}>
 
             <Animated.View style={{ flex: animateCaseContainer, flexDirection: 'row', backgroundColor: "#4170f9"}}>

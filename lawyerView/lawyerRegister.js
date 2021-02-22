@@ -54,7 +54,10 @@ export default function LawyerRegister({navigation}) {
 
 
    const [registerBtnDisplayed, setRegisterBtnDisplayed] = useState(false);
-   const [flex, setFlex] = useState(0);// flex:{registerView:0 }
+   const [ingresaTextAnimation, setIngresaTextAnimation] = useState(new Animated.Value(windowHeightPercentUnit*4));
+   const [ingresaTextBoolean, setIngresaTextBoolean] = useState(true);
+
+   const [flex, setFlex] = useState(0);
    const [animate, setAnimate] = useState(new Animated.Value(0));
    const [letEnterBoolean, setLetEnterBoolean] = useState(false);
    const [account, setAccount] = useState("");
@@ -136,14 +139,50 @@ export default function LawyerRegister({navigation}) {
     const errorOne = useRef(null);
     const errorTwo = useRef(null);
 
+    useEffect(()=>{
+        console.disableYellowBox = true;
+        let animationLoop;
+
+        if(ingresaTextBoolean){
+
+
+        Animated.loop(Animated.sequence([
+                        	Animated.timing(ingresaTextAnimation, {
+                        		toValue: windowHeightPercentUnit*4,
+                        		duration: 2000
+                        	}),
+                        	Animated.timing(ingresaTextAnimation, {
+                        		toValue: windowHeightPercentUnit*4.4,
+                        		duration: 500
+                        	}),
+                            Animated.timing(ingresaTextAnimation, {
+                        		toValue: windowHeightPercentUnit*4,
+                        		duration: 200
+                        	}),
+                        	Animated.timing(ingresaTextAnimation, {
+                                toValue: windowHeightPercentUnit*4.4,
+                                duration: 500
+                            }),
+                            Animated.timing(ingresaTextAnimation, {
+                                toValue: windowHeightPercentUnit*4,
+                                duration: 200
+                            }),
+                        ])).start()
+                 }
+                 else{
+                    ingresaTextAnimation.stopAnimation(()=> {
+                        console.log("paramos el loop")
+                    })
+                 }
+    },[ingresaTextBoolean])
 
    useEffect(()=>{// ONLY IF THE USERDATA ARRIVES TO THE STORE THE NAVIGATOR IS UPDATED
 
        showAsyncStorageData(navigation)
        loaderOne.current.play()
-       errorOne.current.play()
+       ///errorOne.current.play()
        loaderTwo.current.play()
-       errorTwo.current.play()
+       //errorTwo.current.play()
 
        if( letEnterBoolean ){
 
@@ -154,7 +193,7 @@ export default function LawyerRegister({navigation}) {
                                  .then((data)=>{
                                   arrayOfCasesAndQueries.push(...data.resp)
 
-                                 fetch("http://patoexer.pythonanywhere.com/userByLawyers/5")// WE GET ALL NEW CLIENTS NOT TAKEN BY ANY OTRHER LAWYER
+                                 fetch("http://patoexer.pythonanywhere.com/userByLawyers/5")// WE GET ALL NEW CLIENTS NOT TAKEN BY ANY OTHER LAWYER
                                                                      .then(response =>{return response.json()})
                                                                      .then((data)=>{
                                                                      arrayOfCasesAndQueries.push(...data.resp)
@@ -394,6 +433,7 @@ export default function LawyerRegister({navigation}) {
                                        .catch(error => {
                                        console.log('error aca')
                                        setDisplayLoaderOne("none")
+                                       errorOne.current.play()
                                        setDisplayErrorOne("flex")
 
                                        })
@@ -414,10 +454,12 @@ export default function LawyerRegister({navigation}) {
 
   const showRegisterView = () => {
     if(!registerBtnDisplayed){
+       setIngresaTextBoolean(false)
        setRegisterBtnDisplayed(true)//this.setState({registerBtnDisplayed: true})
         Animated.timing(animate, {toValue: 3, duration: 500}).start()
     }
     else if(registerBtnDisplayed){
+       setIngresaTextBoolean(true)
        setRegisterBtnDisplayed(false)//this.setState({ registerBtnDisplayed: false})
        Animated.timing(animate, {toValue: 0, duration: 500}).start()
     }
@@ -515,17 +557,25 @@ export default function LawyerRegister({navigation}) {
                                                 dispatch({type: "USERDATA", doneAction: dataToDispatch});
 
                                                 if(dataToDispatch.lawyers_password==password){
-                                                save(dataToDispatch)
-                                                setLetEnterBoolean(true)
+
+                                                if(!dataToDispatch.approved){
+                                                    navigation.navigate('ThanksMsg')
+                                                }else if(dataToDispatch.approved){
+                                                    save(dataToDispatch)
+                                                    setLetEnterBoolean(true)
+                                                }
+
                                                 } else{
                                                 console.log("not verified2")
                                                 setDisplayLoaderTwo("none")
+                                                errorTwo.current.play()
                                                 setDisplayErrorTwo("flex")
 
                                                 }
                                             })
                                             .catch(error => {
                                             setDisplayLoaderTwo("none")
+                                            errorTwo.current.play()
                                             setDisplayErrorTwo("flex")
                                             console.log(error)
 
@@ -535,7 +585,7 @@ export default function LawyerRegister({navigation}) {
       }
 
     return (
-    <KeyboardAvoidingView behavior="height" keyboardVerticalOffset={-100} style={{flex: 1}}>
+    <KeyboardAvoidingView behavior="height" keyboardVerticalOffset={-100} style={{flex: 1,backgroundColor: "#4170f9", paddingTop: windowHeightPercentUnit*5}}>
       <View style={{flex: 1, flexDirection: 'column', backgroundColor: "#4170f9"}}>
 
         <View style={{flex:2, backgroundColor: "#4170f9"}}>
@@ -647,7 +697,7 @@ export default function LawyerRegister({navigation}) {
                   />
                  <LottieView
                    ref={errorOne}
-                   loop={true}
+                   loop={false}
                    style={{
                    height: windowHeightPercentUnit*10,
                    backgroundColor: '#4170f9',
@@ -706,7 +756,7 @@ export default function LawyerRegister({navigation}) {
                   />
              <LottieView
                   ref={errorTwo}
-                  loop={true}
+                  loop={false}
                   style={{
                   height: windowHeightPercentUnit*10,
                   backgroundColor: '#4170f9',
@@ -723,7 +773,7 @@ export default function LawyerRegister({navigation}) {
 
 
         <View style={{flex: 1, flexDirection: 'row', backgroundColor: "#4170f9"}}>
-                   <View style={{ marginTop: windowWidthPercentUnit, flex:windowWidthPercentUnit*6, flexDirection: 'column', backgroundColor: "#4170f9"}}><Text onPress={showRegisterView} style={[styles.instructions, {textAlign: 'center'}]}>*Si ya tienes cuenta <Text style={{fontSize: windowHeightPercentUnit*4}}>INGRESA!</Text></Text></View>
+                   <View style={{ marginTop: windowWidthPercentUnit, flex:windowWidthPercentUnit*6, flexDirection: 'column', backgroundColor: "#4170f9"}}><Text onPress={showRegisterView} style={[styles.instructions, {textAlign: 'center'}]}>*Si ya tienes cuenta <Animated.Text style={{fontSize: ingresaTextAnimation}}>INGRESA!</Animated.Text></Text></View>
         </View>
 
       </View>

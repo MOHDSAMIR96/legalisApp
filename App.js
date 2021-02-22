@@ -33,7 +33,7 @@ const instructions = Platform.select({
 
 const AppNavigator = createStackNavigator(
   {
-    Home: Home,
+    Home: {screen: Home},
     QueryChat: QueryChat,
     Query: Query,
     ClientRegister: ClientRegister,
@@ -47,6 +47,8 @@ const AppNavigator = createStackNavigator(
     LawyerProfile: LawyerProfile,
     LawyerCaseChat: LawyerCaseChat,
   },
+  {
+       headerMode: 'none',},
   {
     initialRouteName: 'Home',
   }
@@ -62,7 +64,6 @@ const AppNavigator = createStackNavigator(
 const AppContainer = createAppContainer(AppNavigator);
 
 export default function App() {
-
     return(
         <Provider store={store}>
             <AppContainer />

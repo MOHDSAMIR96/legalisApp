@@ -55,7 +55,7 @@ constructor(props) {
   render() {
     return (
 
-         <View style={{flex:windowHeight*1, flexDirection: 'column', backgroundColor: "#4170f9"}}>
+         <View style={{flex:windowHeight*1, flexDirection: 'column', backgroundColor: "#4170f9", paddingTop: windowHeightPercentUnit*30, paddingBottom: windowHeightPercentUnit*30 }}>
             <View style={{flex:windowHeight*2}}>
                 <View style={{flex:1, alignItems: 'center', justifyContent: 'center', backgroundColor:'#4170f9'}}>
                     <Image resizeMode="cover" source={require('../images/logo.png')}  style={styles.img}/>
