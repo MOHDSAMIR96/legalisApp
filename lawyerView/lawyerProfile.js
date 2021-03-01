@@ -53,17 +53,23 @@ export default function LawyerProfile({navigation}) {
         },[cases])
 
         useEffect(()=>{
-
                showAsyncStorageData();
                let casesTracker = setInterval(()=>{
 
                  let arrayOfCasesAndQueries = [];
-                 fetch("http://patoexer.pythonanywhere.com/userByLawyers/1")// WE GET ALL NEW CLIENTS NOT TAKEN BY ANY OTHER LAWYER
+                 let filteredArrayOfCasesAndQueries = [];// WE GET A NON FILTERED DATA FROM BACKEND, WE ERRASE THE REMINDED DATA, MAY BE THIS WIL BE CHANGED FOR MORE EFFICENCY
+                 fetch("http://patoexer.pythonanywhere.com/userByLawyers/1")// WE GET ALL NEW CLIENTS NOT TAKEN BY ANY OTHER LAWYER, BUT FILTERED BY FIELD SPECIALTY
                      .then(response =>{ return response.json()})
                      .then((data)=>{
                          arrayOfCasesAndQueries.push(...data.resp)
-                         dispatchListOfCases(arrayOfCasesAndQueries)
-                         setCases(arrayOfCasesAndQueries)
+                         arrayOfCasesAndQueries.forEach((item, index)=>{
+                            if(item.users_issue_subject == asyncStore.lawyers_field){
+
+                                filteredArrayOfCasesAndQueries.push(item);
+                            }
+                         })
+                         dispatchListOfCases(filteredArrayOfCasesAndQueries)
+                         setCases(filteredArrayOfCasesAndQueries)
 
                  })
                  .catch(error => console.log(error))
@@ -95,7 +101,7 @@ export default function LawyerProfile({navigation}) {
 
                 //RANDOM ICON ON PROFILE ONLY FOR JOKE
 
-                let randomIconArr = ['law', 'law', 'bug', 'law', 'rocket', 'law', 'law', 'octoface', 'law', 'law'];
+                let randomIconArr = [{type: 'octicon',icon: 'law'}, {type: 'octicon',icon: 'law'}, {type: 'octicon',icon: 'bug'}, {type: 'octicon',icon: 'law'}, {type: 'font-awesome',icon: 'rocket'} , {type: 'octicon',icon: 'law'}, {type: 'octicon',icon: 'law'}, {type: 'octicon',icon: 'octoface'}, {type: 'octicon',icon: 'law'},{type: 'octicon',icon: 'law'},{type: 'octicon',icon: 'law'}];
                 let randomPosition = Math.floor(Math.random() * 10);
                 setRandomIcon(randomIconArr[randomPosition]);
 
@@ -242,7 +248,8 @@ export default function LawyerProfile({navigation}) {
                     <Text> </Text>
                 </View>
                 <View style={{flex:2, flexDirection:'column'}}>
-                    <Icon rounded color='white' size='60' name={randomIcon} type='octicon' />
+                    {(Platform.OS === 'ios')?<Icon rounded color='white' size={60} name={randomIcon.icon} type={randomIcon.type}/>: <Icon rounded size={60}  color={'white'} name={randomIcon.icon} type={randomIcon.type}/>}
+
                 </View>
                 <View style={{flex:7, flexDirection:'column'}}>
                     <Text style={styles.welcome}>{asyncStore.lawyers_name }</Text>

@@ -1,9 +1,10 @@
 import React, {Component, useState, useEffect, useRef }  from 'react';
-import { KeyboardAvoidingView, TouchableOpacity, Alert, Platform, StyleSheet, Text, View, Button, Image, List, TextInput, FormLabel, FormInput, FormValidationMessage, ScrollView, PanResponder, Switch } from 'react-native';
+import { Picker, KeyboardAvoidingView, TouchableOpacity, Alert, Platform, StyleSheet, Text, View, Button, Image, List, TextInput, FormLabel, FormInput, FormValidationMessage, ScrollView, PanResponder, Switch } from 'react-native';
 import { CheckBox as iosCheckbox, ThemeProvider, Avatar, Card, ListItem, Icon, FlatList} from 'react-native-elements';
 import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 import RNPickerSelect from 'react-native-picker-select'; // DOCUMENTATION https://www.npmjs.com/package/react-native-picker-select
+import DropDownPicker from 'react-native-dropdown-picker'; // DOCUMENTATION https://www.npmjs.com/package/react-native-dropdown-picker
 
 import { useSelector, useDispatch } from 'react-redux';
 import {dispatchListOfCases, dispatchSelectCase} from '../redux/dispatcher.js'
@@ -20,7 +21,6 @@ const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 const windowHeightPercentUnit = parseInt(windowHeight/100);
 const windowWidthPercentUnit = parseInt(windowWidth/100);
-
 
 export default function LawyerRegister({navigation}) {
 
@@ -76,7 +76,7 @@ export default function LawyerRegister({navigation}) {
    const [registerRut, setNewRegisterRut] = useState("");
    const [registerRutAnimation, setNewRegisterRutAnimation] = useState(new Animated.Value(0));
 
-   const [registerField, setNewRegisterField] = useState("");
+   const [registerField, setNewRegisterField] = useState("DIVORCIOS");
    const [registerFieldAnimation, setNewRegisterFieldAnimation] = useState(new Animated.Value(0));
    const [registerBank, setNewRegisterBank] = useState("");
    const [registerBankAnimation, setNewRegisterBankAnimation] = useState(new Animated.Value(0));
@@ -100,8 +100,8 @@ export default function LawyerRegister({navigation}) {
    const [displayLoaderTwo, setDisplayLoaderTwo] = useState("none");
    const [displayErrorOne, setDisplayErrorOne] = useState("none");
    const [displayErrorTwo, setDisplayErrorTwo] = useState("none");
-
    const [lottieAnimationFile, setLottieAnimationFile] = useState("../assetsLottie/error-response.json");
+   const [flexDropDownPickerAnimation, setFlexDropDownPickerAnimation] = useState(new Animated.Value(2));
 
 
 
@@ -588,8 +588,8 @@ export default function LawyerRegister({navigation}) {
     <KeyboardAvoidingView behavior="height" keyboardVerticalOffset={-100} style={{flex: 1,backgroundColor: "#4170f9", paddingTop: windowHeightPercentUnit*5}}>
       <View style={{flex: 1, flexDirection: 'column', backgroundColor: "#4170f9"}}>
 
-        <View style={{flex:2, backgroundColor: "#4170f9"}}>
-            <Text style={styles.welcome}>Bienvendio a la red Legalis! Por favor ingresa tus datos</Text>
+        <View style={{flex:3, backgroundColor: "#4170f9"}}>
+            <Text style={[styles.welcome, {marginTop: windowHeightPercentUnit*4} ]}>Bienvenido a la red Legalis! Por favor ingresa tus datos</Text>
         </View>
 
             <View style={{flex: 1, flexDirection: 'row', backgroundColor: "#4170f9"}}>
@@ -615,7 +615,7 @@ export default function LawyerRegister({navigation}) {
             <View style={{flex: 1, flexDirection: 'row', backgroundColor: "#4170f9"}}>
               <View style={{flex:1, backgroundColor: "#4170f9"}}></View>
                 <Animated.View style={{flex:windowWidthPercentUnit*1, left: registerPhoneAnimation, flexDirection: 'row', backgroundColor: "#4170f9"}}>
-                   <TextInput keyboardType={"numeric"} onChangeText={x=> setNewRegisterPhone(x)} placeholder = "Teléfono" style={{ backgroundColor: inputColorValidation.registerPhone, height: windowHeightPercentUnit*5, width: "100%", borderColor: 'gray', borderWidth: 1, fontSize:windowHeightPercentUnit*3, borderRadius: 10, textAlign:'center' }}/>
+                   <TextInput keyboardType={"numeric"} onChangeText={x=> setNewRegisterPhone(x)} placeholder ={"Teléfono"} style={{ backgroundColor: inputColorValidation.registerPhone, height: windowHeightPercentUnit*5, width: "100%", borderColor: 'gray', borderWidth: 1, fontSize:windowHeightPercentUnit*3, borderRadius: 10, textAlign:'center' }}/>
                 </Animated.View>
               <View style={{flex:1}}></View>
             </View>
@@ -629,25 +629,62 @@ export default function LawyerRegister({navigation}) {
             </View>
 
 
-            <View style={{flex: 1, flexDirection: 'row', backgroundColor: "#4170f9"}}>
+            <Animated.View style={{flex: flexDropDownPickerAnimation, flexDirection: 'row', backgroundColor: "#4170f9"}}>
                 <View style={{flex:1, backgroundColor: "#4170f9"}}></View>
-                            <Animated.View style={{flex:windowWidthPercentUnit*1, left: registerFieldAnimation, flexDirection: 'row', backgroundColor: "#4170f9"}}>
-                               <TextInput onChangeText={x=> setNewRegisterField(x)} placeholder = " Especialidad Legal" style={{ backgroundColor: inputColorValidation.registerField, height: windowHeightPercentUnit*5, width: "100%", borderColor: 'gray', borderWidth: 1, fontSize:windowHeightPercentUnit*3, borderRadius: 10, textAlign:'center' }}/>
-                            </Animated.View>
+                            <View style={{textAlign:'center', marginBottom: 50, flex:windowWidthPercentUnit*1, flexDirection: 'row', backgroundColor: "#4170f9"}}>
+               {(Platform.OS=='ios')?
+                    <Picker
+                                       selectedValue={registerField}
+                                       style={Platform.OS=='ios'? {position: 'absolute', bottom: windowHeightPercentUnit*20, height: windowHeightPercentUnit/2, width: '100%'}: {height: windowHeightPercentUnit/2, width: '100%'}}
+                                       onValueChange={(itemValue) => setNewRegisterField(itemValue)}
+                                       >
+                                        <Picker.Item color={Platform.OS=='ios'? 'white':'red'} label="PROPIEDADES" value="propiedades" />
+                                        <Picker.Item color={Platform.OS=='ios'? 'white':'red'} label="HERENCIAS" value="herencias" />
+                                        <Picker.Item color={Platform.OS=='ios'? 'white':'red'} label="DIVORCIOS" value="divorcios" />
+                                        <Picker.Item color={Platform.OS=='ios'? 'white':'red'} label="DESPIDOS" value="despidos" />
+                                        <Picker.Item color={Platform.OS=='ios'? 'white':'red'} label="DEUDAS" value="deudas" />
+                                       </Picker>
+
+                :
+
+             <DropDownPicker
+                 items={[
+                     {label: 'PROPIEDADES', value: 'PROPIEDADES'},
+                     {label: 'HERENCIAS', value: 'HERENCIAS'},
+                     {label: 'DIVORCIOS', value: 'DIVORCIOS'},
+                     {label: 'DESPIDOS', value: 'DESPIDOS'},
+                     {label: 'DEUDAS', value: 'DEUDAS'},
+                     {label: 'DELITOS', value: 'DELITOS'},
+
+                 ]}
+                 containerStyle={{height: 60}}
+                 style={{backgroundColor: '#fafafa', width: windowWidthPercentUnit*70}}
+                 itemStyle={{
+                     justifyContent: 'center'
+                 }}
+                 dropDownStyle={{backgroundColor: '#fafafa'}}
+                 labelStyle={{
+                     textAlign: 'center',
+                     fontSize: 20
+                 }}
+                 placeholder="Especialidad"
+                 onOpen={()=>{
+                    Animated.timing(flexDropDownPickerAnimation, {toValue: 5, duration: 500}).start()
+                 }}
+                 onClose={()=>{
+                    Animated.timing(flexDropDownPickerAnimation, {toValue: 2, duration: 500}).start()
+                 }}
+                 onChangeItem={item => {
+                    setNewRegisterField(item.value)
+                                         } }
+             />
+                }
+
+                </View>
                 <View style={{flex:1}}></View>
-            </View>
+            </Animated.View>
 
-
-                        {/*<View style={{flex: 1, flexDirection: 'row', backgroundColor: "#4170f9"}}>
-            <RNPickerSelect
-                        onValueChange={(value) => setAccount(value)}
-                        items={[
-                            { label: 'Cuenta Corriente', value: 'cuenta corriente' },
-                            { label: 'Cuenta Vista', value: 'cuenta vista' },
-                        ]}
-                    /></View>*/}
-
-            <View style={{flex: 1, flexDirection: 'row', backgroundColor: "#4170f9"}}>
+            <View style={{flex: 1, elevation: -1, flexDirection: 'row', backgroundColor: "#4170f9"}}>
                <View style={{flex:1, backgroundColor: "#4170f9"}}></View>
                                         <Animated.View style={{flex:windowWidthPercentUnit*1, left: registerBankAnimation, flexDirection: 'row', backgroundColor: "#4170f9"}}>
                                            <TextInput onChangeText={x=> setNewRegisterBank(x)} placeholder = "Banco" style={{ backgroundColor: inputColorValidation.registerBank, height: windowHeightPercentUnit*5, width: "100%", borderColor: 'gray', borderWidth: 1, fontSize:windowHeightPercentUnit*3, borderRadius: 10, textAlign:'center' }}/>
@@ -657,7 +694,7 @@ export default function LawyerRegister({navigation}) {
 
 
 
-            <View style={{flex: 1, flexDirection: 'row', backgroundColor: "#4170f9"}}>
+            <View style={{flex: 1, elevation: -1, flexDirection: 'row', backgroundColor: "#4170f9"}}>
               <View style={{flex:1, backgroundColor: "#4170f9"}}></View>
                                         <Animated.View style={{flex:windowWidthPercentUnit*1, left: registerAccountAnimation,flexDirection: 'row', backgroundColor: "#4170f9"}}>
                                            <TextInput keyboardType={"numeric"} onChangeText={x=> setNewRegisterAccount(x)} placeholder = "Número de Cuenta" style={{ backgroundColor: inputColorValidation.registerAccount, height: windowHeightPercentUnit*5, width: "100%", borderColor: 'gray', borderWidth: 1, fontSize:windowHeightPercentUnit*3, borderRadius: 10, textAlign:'center' }}/>
@@ -665,7 +702,7 @@ export default function LawyerRegister({navigation}) {
               <View style={{flex:1}}></View>
             </View>
 
-            <View style={{flex: 1, flexDirection: 'row', backgroundColor: "#4170f9"}}>
+            <View style={{flex: 1, elevation: -1, flexDirection: 'row', backgroundColor: "#4170f9"}}>
                <View style={{flex:1, backgroundColor: "#4170f9"}}></View>
                  <Animated.View style={{flex:windowWidthPercentUnit*1, left: registerPasswordAnimation, flexDirection: 'row', backgroundColor: "#4170f9"}}>
                       <TextInput  secureTextEntry={(!toggleCheckBox)?true:false} onChangeText={x=> setNewRegisterPassword(x)} placeholder = "Clave" style={{ backgroundColor: inputColorValidation.registerPassword, height: windowHeightPercentUnit*5, width: "100%", borderColor: 'gray', borderWidth: 1, fontSize:windowHeightPercentUnit*3, borderRadius: 10, textAlign:'center' }}/>
@@ -677,7 +714,7 @@ export default function LawyerRegister({navigation}) {
                </View>
             </View>
 
-            <View style={{flex: 1, flexDirection: 'row', backgroundColor: "#4170f9"}}>
+            <View style={{flex: 1, elevation: -1, flexDirection: 'row', backgroundColor: "#4170f9"}}>
                <View style={{flex:1, backgroundColor: "#4170f9"}}></View>
                    <View style={{flex:windowWidthPercentUnit*1, flexDirection: 'column', backgroundColor: "#4170f9"}}>
                         <Button title="REGISTRARSE" color={Platform.OS === 'ios'?"white":"#747A87"} type="clear" style={{width: 100}} onPress={register}/>
@@ -773,7 +810,7 @@ export default function LawyerRegister({navigation}) {
 
 
         <View style={{flex: 1, flexDirection: 'row', backgroundColor: "#4170f9"}}>
-                   <View style={{ marginTop: windowWidthPercentUnit, flex:windowWidthPercentUnit*6, flexDirection: 'column', backgroundColor: "#4170f9"}}><Text onPress={showRegisterView} style={[styles.instructions, {textAlign: 'center'}]}>*Si ya tienes cuenta <Animated.Text style={{fontSize: ingresaTextAnimation}}>INGRESA!</Animated.Text></Text></View>
+                   <View style={{ marginTop: windowWidthPercentUnit, flex:windowWidthPercentUnit*6, flexDirection: 'column', backgroundColor: "#4170f9"}}><Text onPress={showRegisterView} style={[styles.instructions, {textAlign: 'center'}]}>Ya tienes cuenta? <Animated.Text style={{fontSize: ingresaTextAnimation}}>INGRESA!</Animated.Text></Text></View>
         </View>
 
       </View>

@@ -21,7 +21,7 @@ const windowWidthPercentUnit = parseInt(windowWidth/6);
 
 export default function Query({navigation}){//ESTA PARTE ES LA VISTA DE EL INICIO DE LA CONSULTA
 
-    const [subjects, setNewSubjects] = useState(['PROPIEDADES', 'HERENCIAS', 'DIVORCIOS', 'DESPIDOS', 'DEUDAS', 'OTRAS CONSULTAS']);
+    const [subjects, setNewSubjects] = useState(['PROPIEDADES', 'HERENCIAS', 'DIVORCIOS', 'DESPIDOS', 'DEUDAS','DELITOS' , 'OTRAS CONSULTAS']);
     const [activeSubject, setNewActiveSubject] = useState(0);
     const [activeSubjectCounter, setNewActiveSubjectCounter] = useState(0);
     const [animatePosition, setNewAnimatePosition] = useState(new Animated.Value(0));
@@ -74,7 +74,7 @@ export default function Query({navigation}){//ESTA PARTE ES LA VISTA DE EL INICI
 
 
                       if(lastAdviceUSer.users_name == userName){
-        console.log("true")
+
                             dispatch({type: "USERDATA", doneAction: lastAdviceUSer});
                             navigation.navigate('QueryChat');//navigation.reset([NavigationActions.navigate({routeName: 'QueryChat'})]);
 
@@ -170,7 +170,7 @@ export default function Query({navigation}){//ESTA PARTE ES LA VISTA DE EL INICI
           // responder. This typically means a gesture has succeeded
 
             if(gestureState.dx<0){
-                    if(subjects[activeSubjectCounter]!= "OTRAS CONSULTAS"){console.log(windowWidthPercentUnit)
+                    if(subjects[activeSubjectCounter]!= "OTRAS CONSULTAS"){
                          Animated.timing(animatePosition, {toValue: animatePosition.__getValue() - windowWidthPercentUnit, duration: 500}).start()
                          setNewActiveSubjectCounter(activeSubjectCounter + 1)
                     }
@@ -310,8 +310,6 @@ export default function Query({navigation}){//ESTA PARTE ES LA VISTA DE EL INICI
                            urlReturn = urlReturn.replace(/\n/g, "")
                            urlReturn = urlReturn.normalize("NFD").replace(/[\u0300-\u036f]/g, "")// WE PREVENT URL ERRORS NORMALIZING THE STRING
 
-                            console.log(urlReturn.slice(-1));
-                            console.log(urlReturn);
                            data = {
                                    email: "legalisproyect@gmail.com",// WE DON'T HAVE CLIENT EMAIL, SO WE LET OUR MAIL.
                                    urlreturn: urlReturn, //colocar un identificador de pago, hacer tabla de pagos, endpoint flask de tabla pagos
@@ -342,10 +340,10 @@ export default function Query({navigation}){//ESTA PARTE ES LA VISTA DE EL INICI
                                fetch(basePath, options)
                                .then( (resp)=>{return resp.json()})
                                .then( (data)=>{
-                                console.log("se setio el tracker");
                                 setPaymentTracker(true)
                                 Linking.openURL(data.url).catch(err => console.error("Couldn't load page", err));
                                 })
+                                .catch(error => console.log(error))
                   })
                   .catch(e => console.log("error" + e));
 
@@ -397,7 +395,7 @@ export default function Query({navigation}){//ESTA PARTE ES LA VISTA DE EL INICI
                     <Picker.Item color='white' label="DESPIDOS" value="despidos" />
                     <Picker.Item color='white' label="DEUDAS" value="deudas" />
                     <Picker.Item color='white' label="OTRAS CONSULTAS" value="otras consultas" />
-                  </Picker>
+            </Picker>
 
              </View  >
             <View   {..._panResponder.panHandlers} style={Platform.OS==='android'?{width: '100%', borderRadius: 10, flexDirection: 'row', height: windowHeightPercentUnit*10, backgroundColor:"white"}:{display: 'none'}}>
@@ -463,7 +461,7 @@ export default function Query({navigation}){//ESTA PARTE ES LA VISTA DE EL INICI
                               textarea.current.value = cutTheEnter
                               setNewCaseDescription(cutTheEnter)
                               Keyboard.dismiss()
-                              console.log(caseDescription.length)
+
                              }
                          }
                         }
