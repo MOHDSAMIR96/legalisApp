@@ -46,7 +46,28 @@ export default function LawyerProfile({navigation}) {
        const [casesCounting, setCasesCounting] = useState(0);
        const [notificationToken, setNotificationToken] = useState([]);
        const [randomIcon, setRandomIcon] = useState("")
+       
+       // starting of the code ... this code use for background and foreground notification 
+useEffect(() => {
+        const backgroundSubscription = Notifications.addNotificationResponseReceivedListener(
+            (response) => {
+                console.log(response);
+            }
+        );
 
+        const foregroundSubscription = Notifications.addNotificationReceivedListener(
+            (notification) => {
+                console.log(notification);
+            }
+        );
+
+        return () => {
+            backgroundSubscription.remove();
+            foregroundSubscription.remove();
+        };
+    }, []);
+    
+    // ending of the code...
         useEffect(()=>{
 
 
